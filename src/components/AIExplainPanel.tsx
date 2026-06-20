@@ -13,7 +13,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { explainSolution, type ExplainTurn } from '@/lib/ai/explainSolution';
-import MathText from '@/components/ui/MathText';
+import SolutionPanel from '@/components/tutor/SolutionPanel';
 
 interface AIExplainPanelProps {
   open: boolean;
@@ -223,8 +223,8 @@ export default function AIExplainPanel({
                 <div className="shrink-0 w-7 h-7 rounded-lg bg-primary/15 border border-primary/20 flex items-center justify-center text-primary-light text-xs font-bold mt-0.5">
                   AI
                 </div>
-                <div className="flex-1 rounded-2xl rounded-tl-sm bg-surface-light border border-border px-3.5 py-2.5 text-sm text-text-muted leading-relaxed">
-                  <MathText text={msg.text} />
+                <div className="flex-1 min-w-0">
+                  <SolutionPanel rawResponse={msg.text} />
                 </div>
               </div>
             ) : (

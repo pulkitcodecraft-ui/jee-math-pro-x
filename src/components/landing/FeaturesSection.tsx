@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import Reveal from '@/components/ui/Reveal';
 
 const features = [
   {
@@ -77,75 +77,61 @@ const features = [
   },
 ];
 
+const colDirection = ['left', 'up', 'right'] as const;
+
 export default function FeaturesSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in-up');
-            entry.target.classList.remove('animate-on-load');
-          }
-        });
-      },
-      { threshold: 0.05 }
-    );
-
-    const elements = sectionRef.current?.querySelectorAll('.animate-on-load');
-    elements?.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section ref={sectionRef} id="features" className="py-28 relative">
+    <section id="features" className="py-28 relative">
       {/* Background accent */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-6">
         {/* Section header */}
         <div className="text-center mb-16">
-          <p className="animate-on-load text-xs font-semibold uppercase tracking-widest text-primary-light mb-3">
-            Why JEE Math Pro?
-          </p>
-          <h2 className="animate-on-load delay-100 text-3xl sm:text-4xl font-bold tracking-tight">
-            Everything you need to{' '}
-            <span className="gradient-text">crack JEE Math</span>
-          </h2>
-          <p className="animate-on-load delay-200 text-text-muted mt-4 max-w-xl mx-auto">
-            A focused toolkit for JEE Advanced Mathematics — here&apos;s what makes
-            it different.
-          </p>
+          <Reveal direction="up">
+            <p className="text-xs font-semibold uppercase tracking-widest text-primary-light mb-3">
+              Why JEE Math Pro?
+            </p>
+          </Reveal>
+          <Reveal direction="up" delay={80}>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              Everything you need to{' '}
+              <span className="gradient-text">crack JEE Math</span>
+            </h2>
+          </Reveal>
+          <Reveal direction="up" delay={160}>
+            <p className="text-text-muted mt-4 max-w-xl mx-auto">
+              A focused toolkit for JEE Advanced Mathematics — here&apos;s what makes
+              it different.
+            </p>
+          </Reveal>
         </div>
 
         {/* Feature cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((feature, index) => (
-            <div
+            <Reveal
               key={feature.title}
               id={`feature-card-${index}`}
-              className={`animate-on-load delay-${(index + 1) * 100} group relative rounded-2xl p-6 bg-surface border border-border hover:border-border-light transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${feature.glow}`}
+              direction={colDirection[index % 3]}
+              delay={(index % 3) * 90 + Math.floor(index / 3) * 60}
+              className={`glow-card group relative rounded-2xl p-6 bg-surface border border-border hover:border-border-light transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl ${feature.glow}`}
             >
               {/* Icon */}
               <div
-                className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.accent} flex items-center justify-center text-white mb-4 shadow-lg`}
+                className={`relative z-10 w-11 h-11 rounded-xl bg-gradient-to-br ${feature.accent} flex items-center justify-center text-white mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3`}
               >
                 {feature.icon}
               </div>
 
               {/* Content */}
-              <h3 className="text-base font-semibold mb-2 text-foreground">
+              <h3 className="relative z-10 text-base font-semibold mb-2 text-foreground">
                 {feature.title}
               </h3>
-              <p className="text-sm text-text-muted leading-relaxed">
+              <p className="relative z-10 text-sm text-text-muted leading-relaxed">
                 {feature.description}
               </p>
-
-              {/* Hover gradient border effect */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>
