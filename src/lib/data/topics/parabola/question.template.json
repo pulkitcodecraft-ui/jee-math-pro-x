@@ -1,0 +1,24 @@
+{
+  "id": "parabola-template",
+  "subtopicId": "Tangents & Normals",
+  "difficulty": "medium",
+  "format": "mcq",
+  "statement": "REPLACE — Example: Find the focus of $y^2 = 8x$.",
+  "options": {
+    "A": "$option A$",
+    "B": "$option B$",
+    "C": "$option C$",
+    "D": "$option D$"
+  },
+  "correctOption": "A",
+  "commonMistakes": ["Common mistake 1"],
+  "commonTraps": ["Trap to watch for"],
+  "approaches": [
+    {
+      "label": "Official Solution",
+      "imageUrl": "/questions/parabola/sol-diagram.png",
+      "images": ["/questions/parabola/sol-step2.png"],
+      "content": "1. **Step one:** setup with $LaTeX$.\n\n2. **Step two:**\n$$block\\;equation$$\n\nAnswer: final value."
+    }
+  ]
+}

@@ -11,6 +11,37 @@ import {
   syllabusExtraQuestions,
   syllabusExtraApproaches,
 } from './syllabusContent';
+import { enrichApproachContent, enrichMathText } from './mathLatex';
+import type { McqOption } from '@/types/question';
+import {
+  topicBulkQuestions,
+  topicBulkApproaches,
+  getPassageById,
+  getPassagesByTopic,
+} from './topics';
+
+function enrichQuestion(q: Question): Question {
+  const options = q.options
+    ? (Object.fromEntries(
+        Object.entries(q.options).map(([k, v]) => [k, enrichMathText(v)])
+      ) as Partial<Record<McqOption, string>>)
+    : undefined;
+
+  return {
+    ...q,
+    statement: enrichMathText(q.statement),
+    options,
+    commonMistakes: q.commonMistakes.map(enrichMathText),
+    commonTraps: q.commonTraps.map(enrichMathText),
+  };
+}
+
+function enrichApproach(a: Approach): Approach {
+  return {
+    ...a,
+    content: enrichApproachContent(a.content),
+  };
+}
 
 // ===== TOPICS =====
 
@@ -78,7 +109,7 @@ export const mockTopics: Topic[] = [
 
 // ===== QUESTIONS =====
 
-export const mockQuestions: Question[] = [
+const baseQuestions: Question[] = [
   // Functions questions
   {
     id: 'func-q1',
@@ -195,12 +226,40 @@ export const mockQuestions: Question[] = [
     createdAt: new Date('2026-04-15'),
     updatedAt: new Date('2026-06-01'),
   },
+  // ── MCQ example (SRG Bank / workbook style) — Basic Maths ──
+  {
+    id: 'basic-maths-mcq2',
+    topicId: 'basic-maths',
+    subtopicId: 'Logarithms',
+    difficulty: 'hard',
+    format: 'mcq',
+    statement:
+      'If $25^{\\log_{10}(2\\sqrt{2})} + \\log_{|x|}\\left(\\dfrac{|x|-\\sqrt{3}}{\\sqrt{3}}\\right) = 25^{\\log_{10}(2\\sqrt{2})} + \\log_{|x|}\\left(\\dfrac{|x|+\\sqrt{3}}{\\sqrt{3}}\\right)$, then the number of real solutions of $x$ is',
+    options: {
+      A: '0',
+      B: '1',
+      C: '2',
+      D: '3',
+    },
+    correctOption: 'A',
+    approaches: ['basic-maths-mcq2-a1'],
+    commonMistakes: [
+      'Treating $\\log_{|x|}$ as $\\log x$ without enforcing $|x| > 0$ and $|x| \\neq 1$.',
+      'Forgetting that the logarithm argument must be positive before equating two log expressions.',
+    ],
+    commonTraps: [
+      'Both sides look identical at first glance — you must use $\\log a = \\log b \\Rightarrow a = b$ only when the arguments are valid.',
+    ],
+    createdAt: new Date('2026-06-20'),
+    updatedAt: new Date('2026-06-20'),
+  },
+  ...topicBulkQuestions,
   ...syllabusExtraQuestions,
 ];
 
-// ===== APPROACHES =====
+export const mockQuestions: Question[] = baseQuestions.map(enrichQuestion);
 
-export const mockApproaches: Approach[] = [
+const baseApproaches: Approach[] = [
   // func-q1 approaches
   {
     id: 'func-q1-a1',
@@ -310,7 +369,13 @@ export const mockApproaches: Approach[] = [
     questionId: 'cg-q1',
     label: 'Slope Form of the Normal',
     content:
-      'For y² = 4ax, compare with y² = 12x ⟹ 4a = 12 ⟹ **a = 3**.\n\nA line at 45° to the x-axis has slope m = tan 45° = 1.\n\nThe normal to y² = 4ax in slope form is:\n  y = mx − 2am − am³\n\nSubstitute a = 3, m = 1:\n  y = (1)x − 2(3)(1) − (3)(1)³ = x − 6 − 3\n\n**Normal: y = x − 9**',
+      '1. **Compare with standard form:** For $y^2 = 4ax$, compare with $y^2 = 12x$ $\\Rightarrow$ $4a = 12$ $\\Rightarrow$ $a = 3$.\n\n' +
+      '2. **Slope at 45°:** A line at $45^\\circ$ to the $x$-axis has slope $m = \\tan 45^\\circ = 1$.\n\n' +
+      '3. **Normal in slope form:** The normal to $y^2 = 4ax$ in slope form is\n' +
+      '$$y = mx - 2am - am^3$$\n\n' +
+      '4. **Substitute:** With $a = 3$, $m = 1$:\n' +
+      '$$y = x - 2(3)(1) - (3)(1)^3 = x - 6 - 3$$\n\n' +
+      'Answer: Normal $y = x - 9$.',
     status: 'official',
     submittedBy: 'admin',
     createdAt: new Date('2026-04-01'),
@@ -361,8 +426,31 @@ export const mockApproaches: Approach[] = [
     createdAt: new Date('2026-04-15'),
     updatedAt: new Date('2026-04-15'),
   },
+  // basic-maths MCQ solution — correct derivation (0 real solutions → option A)
+  {
+    id: 'basic-maths-mcq2-a1',
+    questionId: 'basic-maths-mcq2',
+    label: 'Official Solution',
+    content:
+      'The term $25^{\\log_{10}(2\\sqrt{2})}$ appears on both sides, so it cancels and only the logarithms remain.\n\n' +
+      '1. **Cancel the common term:**\n' +
+      '$$\\log_{|x|}\\left(\\frac{|x|-\\sqrt{3}}{\\sqrt{3}}\\right) = \\log_{|x|}\\left(\\frac{|x|+\\sqrt{3}}{\\sqrt{3}}\\right)$$\n' +
+      '2. **Equal logs with the same base force equal arguments** (valid only when $|x|>0$, $|x|\\neq 1$ and both arguments are positive):\n' +
+      '$$\\frac{|x|-\\sqrt{3}}{\\sqrt{3}} = \\frac{|x|+\\sqrt{3}}{\\sqrt{3}}$$\n' +
+      '3. **Simplify** by multiplying both sides by $\\sqrt{3}$:\n' +
+      '$$|x|-\\sqrt{3} = |x|+\\sqrt{3} \\;\\Rightarrow\\; -2\\sqrt{3} = 0$$\n' +
+      'This is a contradiction — no value of $x$ can ever satisfy it.\n\n' +
+      'Answer: $0$ real solutions — option (A).',
+    status: 'official',
+    submittedBy: 'admin',
+    createdAt: new Date('2026-06-20'),
+    updatedAt: new Date('2026-06-20'),
+  },
+  ...topicBulkApproaches,
   ...syllabusExtraApproaches,
 ];
+
+export const mockApproaches: Approach[] = baseApproaches.map(enrichApproach);
 
 // ===== HELPER FUNCTIONS =====
 
@@ -385,6 +473,8 @@ export function getApproachById(id: string): Approach | undefined {
 export function getApproachesByQuestion(questionId: string): Approach[] {
   return mockApproaches.filter((a) => a.questionId === questionId);
 }
+
+export { getPassageById, getPassagesByTopic };
 
 export interface PlatformStats {
   topicCount: number;

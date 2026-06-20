@@ -1,0 +1,36 @@
+{
+  "id": "parabola-passage-example",
+  "title": "Paragraph",
+  "passage": "Shared stem text with $LaTeX$. All sub-questions below use this context.",
+  "subtopicId": "Tangents & Normals",
+  "difficulty": "hard",
+  "questions": [
+    {
+      "id": "parabola-passage-example-q1",
+      "passageLabel": "1",
+      "statement": "First sub-question based on the paragraph above.",
+      "options": { "A": "$1$", "B": "$2$", "C": "$3$", "D": "$4$" },
+      "correctOption": "A",
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "images": ["/questions/parabola/sol-diagram.svg"],
+          "content": "1. **Step:** working...\n\nAnswer: (A)."
+        }
+      ]
+    },
+    {
+      "id": "parabola-passage-example-q2",
+      "passageLabel": "2",
+      "statement": "Second sub-question — refers to the previous part if needed.",
+      "options": { "A": "$10$", "B": "$20$", "C": "$30$", "D": "$40$" },
+      "correctOption": "B",
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "1. **Use Q1 result:** ...\n\nAnswer: (B)."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 360" fill="none">
+  <rect width="520" height="360" fill="#1a1a2e"/>
+  <text x="260" y="22" fill="#a5b4fc" font-family="system-ui,sans-serif" font-size="13" font-weight="600" text-anchor="middle">CÅ: y = (8/27)x≥  and  CÇ: y = (x+a)≤</text>
+  <line x1="50" y1="280" x2="480" y2="280" stroke="#4b5563"/>
+  <line x1="120" y1="40" x2="120" y2="300" stroke="#4b5563"/>
+  <!-- cubic -->
+  <path d="M 120 280 C 180 280, 200 200, 260 120 C 320 40, 400 40, 460 80" stroke="#818cf8" stroke-width="2" fill="none"/>
+  <text x="400" y="50" fill="#818cf8" font-size="11">CÅ cubic</text>
+  <!-- parabola C2 vertex at (-a,0) use a=4: vertex at x=-4 scaled -->
+  <path d="M 40 280 Q 200 40 460 280" stroke="#34d399" stroke-width="2" fill="none"/>
+  <text x="380" y="270" fill="#34d399" font-size="11">CÇ parabola (x+a)≤</text>
+  <line x1="80" y1="200" x2="400" y2="80" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <line x1="80" y1="120" x2="400" y2="240" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="260" y="330" fill="#9ca3af" font-size="11" text-anchor="middle">Common tangents (non-axis) exist when a  (Ω, ) \ {0}</text>
+</svg>

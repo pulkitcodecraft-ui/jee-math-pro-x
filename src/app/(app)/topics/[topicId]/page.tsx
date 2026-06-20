@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { mockTopics, getQuestionsByTopic } from '@/lib/data/mockData';
+import { mockTopics, getQuestionsByTopic, getPassagesByTopic } from '@/lib/data/mockData';
 import TopicTabs from './TopicTabs';
 
 interface TopicPageProps {
@@ -43,6 +43,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
   }
 
   const questions = getQuestionsByTopic(topicId);
+  const passages = getPassagesByTopic(topicId);
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
@@ -107,7 +108,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
       </div>
 
       {/* Tabbed content */}
-      <TopicTabs topic={topic} questions={questions} />
+      <TopicTabs topic={topic} questions={questions} passages={passages} />
     </div>
   );
 }

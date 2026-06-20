@@ -55,19 +55,27 @@ const seeds: TopicSeed[] = [
       {
         label: 'Symmetric Identities',
         content:
-          'Use the identities linking power sums to a+b and ab.\n\n1. From (a+b)² = a² + b² + 2ab:\n   16 = 10 + 2ab ⟹ ab = 3.\n2. Use a³ + b³ = (a+b)³ − 3ab(a+b):\n   = 4³ − 3·3·4 = 64 − 36 = 28.\n\nAnswer: a³ + b³ = 28.',
+          'Use the identities linking power sums to a+b and ab.\n\n' +
+          '1. **Find ab:** From (a+b)² = a² + b² + 2ab:\n' +
+          '   16 = 10 + 2ab ⟹ ab = 3.\n' +
+          '2. **Apply a³ + b³ identity:**\n' +
+          '   a³ + b³ = (a+b)³ − 3ab(a+b) = 4³ − 3·3·4 = 64 − 36.\n\n' +
+          'Answer: a³ + b³ = 28.',
       },
       {
         label: 'Smartest Method — Factor Form',
         content:
-          'Key insight: a³ + b³ = (a+b)(a² − ab + b²).\n\nWe already know a+b = 4 and a² + b² = 10, and ab = 3 (from (a+b)² − (a²+b²) = 2ab ⟹ 16 − 10 = 2ab).\n\nSo a³ + b³ = (a+b)(a² + b² − ab) = 4·(10 − 3) = 4·7 = 28.\n\nOne line once ab is known. Answer: 28.',
+          'Key insight: a³ + b³ = (a+b)(a² − ab + b²) — factor first, don\'t solve for a and b separately.\n\n' +
+          'We know a+b = 4, a² + b² = 10, and ab = 3 (from (a+b)² − (a²+b²) = 2ab ⟹ 16 − 10 = 2ab).\n\n' +
+          'So a³ + b³ = (a+b)(a² + b² − ab) = 4·(10 − 3) = 4·7.\n\n' +
+          'Answer: 28.',
       },
     ],
   },
   {
     slug: 'quadratic-equation',
     name: 'Quadratic Equation',
-    subtopics: ['Nature of Roots', 'Sum & Product of Roots', 'Common Roots', 'Quadratic Inequalities', 'Range of Rational Functions', 'Theory of Equations'],
+    subtopics: ['Nature of Roots', 'Sum & Product of Roots', 'Common Roots', 'Quadratic Inequalities', 'Common Roots & Inequalities', 'Range of Rational Functions', 'Theory of Equations', 'Roots of Unity', 'Equations Reducible to Quadratic', 'Functional Equations in Quadratics'],
     description: 'Roots, discriminants and sign analysis of quadratic and polynomial expressions — a JEE staple.',
     difficulty: 'medium',
     subtopicId: 'Nature of Roots',
@@ -84,7 +92,12 @@ const seeds: TopicSeed[] = [
       {
         label: 'Discriminant = 0',
         content:
-          'Equal roots ⟹ discriminant D = 0, with leading coefficient ≠ 0.\n\nHere a = k−2, b = 2(k−2), c = 4.\n\nD = b² − 4ac = 4(k−2)² − 16(k−2)\n  = 4(k−2)[(k−2) − 4] = 4(k−2)(k−6).\n\nSet D = 0 ⟹ k = 2 or k = 6.\nBut k = 2 makes a = 0 (not a quadratic), so reject it.\n\nAnswer: k = 6.',
+          'Equal roots $\\Rightarrow$ discriminant $D = 0$, with leading coefficient $\\neq 0$.\n\n' +
+          '1. **Coefficients:** Here $a = k-2$, $b = 2(k-2)$, $c = 4$.\n' +
+          '2. **Discriminant:**\n' +
+          '$$D = b^2 - 4ac = 4(k-2)^2 - 16(k-2) = 4(k-2)[(k-2) - 4] = 4(k-2)(k-6)$$\n' +
+          '3. **Solve and reject:** Set $D = 0 \\Rightarrow k = 2$ or $k = 6$. But $k = 2$ makes $a = 0$ (not a quadratic), so reject it.\n\n' +
+          'Answer: $k = 6$.',
       },
       {
         label: 'Smartest Method — Factor First',
@@ -214,7 +227,7 @@ const seeds: TopicSeed[] = [
   {
     slug: 'trigonometry',
     name: 'Trigonometry',
-    subtopics: ['Trigonometric Ratios & Identities', 'Compound Angles', 'Multiple & Sub-multiple Angles', 'Transformation Formulae', 'Trigonometric Equations', 'Conditional Identities'],
+    subtopics: ['Trigonometric Ratios & Identities', 'Trigonometric Identities', 'Compound Angles', 'Multiple & Sub-multiple Angles', 'Transformation Formulae', 'Trigonometric Equations', 'Trigonometric Series', 'Conditional Identities', 'Triangle Identities'],
     description: 'Ratios, identities and equations on angles — the language of periodic phenomena in JEE.',
     difficulty: 'medium',
     subtopicId: 'Multiple & Sub-multiple Angles',

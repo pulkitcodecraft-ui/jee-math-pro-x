@@ -4,10 +4,15 @@ import { useState } from 'react';
 import Link from 'next/link';
 import type { Topic } from '@/types/topic';
 import type { Question } from '@/types/question';
+import type { QuestionPassage } from '@/types/passage';
+import QuestionStatementPreview from '@/components/question/QuestionStatementPreview';
+import PassageBlock from '@/components/question/PassageBlock';
+import { buildQuestionListEntries } from '@/lib/data/questionList';
 
 interface TopicTabsProps {
   topic: Topic;
   questions: Question[];
+  passages: QuestionPassage[];
 }
 
 const tabs = [
@@ -24,7 +29,7 @@ const difficultyColors: Record<string, string> = {
   advanced: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
 };
 
-export default function TopicTabs({ topic, questions }: TopicTabsProps) {
+export default function TopicTabs({ topic, questions, passages }: TopicTabsProps) {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
@@ -53,7 +58,7 @@ export default function TopicTabs({ topic, questions }: TopicTabsProps) {
           <OverviewTab topic={topic} questions={questions} />
         )}
         {activeTab === 'questions' && (
-          <QuestionsTab topic={topic} questions={questions} />
+          <QuestionsTab topic={topic} questions={questions} passages={passages} />
         )}
         {activeTab === 'pyq' && <PYQTab topic={topic} />}
         {activeTab === 'resources' && <ResourcesTab topic={topic} />}
@@ -169,9 +174,7 @@ function OverviewTab({ topic, questions }: { topic: Topic; questions: Question[]
                 href={`/topics/${topic.id}/questions/${q.id}`}
                 className="block p-3 rounded-xl bg-surface-light border border-border hover:border-border-light transition-colors group"
               >
-                <p className="text-xs text-text-muted line-clamp-2 group-hover:text-foreground transition-colors">
-                  {q.statement}
-                </p>
+                <QuestionStatementPreview text={q.statement} clamp={2} variant="plain" className="mb-2" />
                 <div className="flex items-center gap-2 mt-2">
                   <span className={`px-2 py-0.5 text-[10px] font-medium rounded-md border ${difficultyColors[q.difficulty]}`}>
                     {q.difficulty}
@@ -188,47 +191,143 @@ function OverviewTab({ topic, questions }: { topic: Topic; questions: Question[]
 }
 
 // ===== Questions Tab =====
-function QuestionsTab({ topic, questions }: { topic: Topic; questions: Question[] }) {
+function QuestionsTab({
+  topic,
+  questions,
+  passages,
+}: {
+  topic: Topic;
+  questions: Question[];
+  passages: QuestionPassage[];
+}) {
+  const entries = buildQuestionListEntries(questions, passages);
+
   return (
     <div className="space-y-4">
-      {questions.length === 0 ? (
+      {entries.length === 0 ? (
         <div className="text-center py-16 text-text-dim">
           <p>No questions available yet for this topic.</p>
         </div>
       ) : (
-        questions.map((q, i) => (
-          <Link
-            key={q.id}
-            href={`/topics/${topic.id}/questions/${q.id}`}
-            id={`question-${q.id}`}
-            className="block rounded-2xl bg-surface border border-border p-5 hover:border-border-light transition-all duration-200 hover:-translate-y-0.5 group"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs text-text-dim font-mono">Q{i + 1}</span>
-                  <span className={`px-2 py-0.5 text-[10px] font-medium rounded-md border ${difficultyColors[q.difficulty]}`}>
-                    {q.difficulty}
-                  </span>
-                  <span className="text-[10px] text-text-dim">{q.subtopicId}</span>
-                </div>
-                <p className="text-sm text-text-muted group-hover:text-foreground transition-colors leading-relaxed">
-                  {q.statement}
-                </p>
-                <div className="flex items-center gap-4 mt-3 text-xs text-text-dim">
-                  <span>{q.approaches.length} approaches</span>
-                  <span>{q.commonMistakes.length} common mistakes</span>
-                  <span>{q.commonTraps.length} traps</span>
-                </div>
+        entries.map((entry, entryIndex) => {
+          if (entry.kind === 'standalone') {
+            return (
+              <StandaloneQuestionCard
+                key={entry.question.id}
+                topic={topic}
+                question={entry.question}
+                index={entryIndex + 1}
+              />
+            );
+          }
+
+          return (
+            <div
+              key={entry.passage.id}
+              className="rounded-2xl border border-violet-500/20 bg-surface overflow-hidden"
+            >
+              <div className="p-5 border-b border-border/60">
+                <PassageBlock
+                  title={entry.passage.title ?? 'Paragraph'}
+                  passage={entry.passage.passage}
+                />
               </div>
-              <svg className="w-4 h-4 text-text-dim group-hover:text-primary-light transition-colors shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+              <div className="p-4 space-y-3 bg-surface-light/20">
+                {entry.questions.map((q) => (
+                  <Link
+                    key={q.id}
+                    href={`/topics/${topic.id}/questions/${q.id}`}
+                    className="group block rounded-xl border border-border bg-surface p-4 hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5 transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center flex-wrap gap-2 mb-2">
+                          <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-violet-500/15 text-[11px] font-bold text-violet-300">
+                            {q.passageLabel ?? q.passageOrder}
+                          </span>
+                          <span className="px-2 py-0.5 text-[10px] font-medium rounded-md border bg-violet-500/10 text-violet-300 border-violet-500/20">
+                            Paragraph MCQ
+                          </span>
+                          <span className={`px-2 py-0.5 text-[10px] font-medium rounded-md border ${difficultyColors[q.difficulty]}`}>
+                            {q.difficulty}
+                          </span>
+                        </div>
+                        <QuestionStatementPreview text={q.statement} variant="plain" clamp={3} />
+                      </div>
+                      <span className="shrink-0 text-text-dim group-hover:text-violet-300 transition-colors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
-          </Link>
-        ))
+          );
+        })
       )}
     </div>
+  );
+}
+
+function StandaloneQuestionCard({
+  topic,
+  question: q,
+  index,
+}: {
+  topic: Topic;
+  question: Question;
+  index: number;
+}) {
+  return (
+    <Link
+      key={q.id}
+      href={`/topics/${topic.id}/questions/${q.id}`}
+      id={`question-${q.id}`}
+      className="group block rounded-2xl border border-border bg-surface p-5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 hover:-translate-y-0.5"
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center flex-wrap gap-2 mb-3">
+            <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary/15 text-[11px] font-bold text-primary-light">
+              {index}
+            </span>
+            <span className={`px-2 py-0.5 text-[10px] font-medium rounded-md border ${difficultyColors[q.difficulty]}`}>
+              {q.difficulty}
+            </span>
+            {(q.format === 'mcq' || q.format === 'paragraph-mcq' || q.options) && (
+              <span className="px-2 py-0.5 text-[10px] font-medium rounded-md border bg-cyan-500/10 text-cyan-400 border-cyan-500/20">
+                {q.correctOptions && q.correctOptions.length > 1 ? 'MCQ (multi)' : 'MCQ'}
+              </span>
+            )}
+            <span className="text-[10px] text-text-dim">{q.subtopicId}</span>
+          </div>
+
+          <QuestionStatementPreview
+            text={q.statement}
+            className="group-hover:border-border-light transition-colors"
+          />
+
+          <div className="flex items-center flex-wrap gap-3 mt-3 text-xs text-text-dim">
+            <span className="inline-flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-primary-light/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              {q.approaches.length} approaches
+            </span>
+            <span>{q.commonMistakes.length} mistakes</span>
+            <span>{q.commonTraps.length} traps</span>
+          </div>
+        </div>
+
+        <span className="shrink-0 flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-surface-light text-text-dim group-hover:border-primary/40 group-hover:text-primary-light group-hover:bg-primary/10 transition-all mt-1">
+          <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </span>
+      </div>
+    </Link>
   );
 }
 

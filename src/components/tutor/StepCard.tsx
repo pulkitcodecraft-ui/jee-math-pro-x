@@ -52,7 +52,7 @@ export default function StepCard({
           className={`px-3.5 pt-2.5 pb-1 text-[13px] font-semibold tracking-tight
             ${isAnswer ? 'text-primary-light' : 'text-foreground'}`}
         >
-          {step.title}
+          <MathText text={step.title} />
         </div>
         {step.body && (
           <div className="px-3.5 pb-3 pt-0.5 text-[13px] leading-relaxed text-text-muted">

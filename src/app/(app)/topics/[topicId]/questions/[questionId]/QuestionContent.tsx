@@ -5,6 +5,9 @@ import type { Question } from '@/types/question';
 import type { Approach } from '@/types/approach';
 import SubmitApproach from '@/components/question/SubmitApproach';
 import AIExplainButton from '@/components/AIExplainButton';
+import FigureImage from '@/components/question/FigureImage';
+import OfficialSolution from '@/components/question/OfficialSolution';
+import SolutionText from '@/components/question/SolutionText';
 import { getCommunityApproaches } from '@/lib/firebase/approachService';
 
 interface QuestionContentProps {
@@ -125,14 +128,12 @@ export default function QuestionContent({ question, approaches }: QuestionConten
             <div className="absolute top-0 right-0 w-40 h-40 bg-accent-secondary/5 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-4">
                 <span className="text-sm font-semibold text-accent-secondary">
                   {smartestApproach.label}
                 </span>
               </div>
-              <div className="text-sm text-text-muted leading-relaxed whitespace-pre-line">
-                {smartestApproach.content}
-              </div>
+              <OfficialSolution content={smartestApproach.content} />
             </div>
           </div>
         </section>
@@ -177,7 +178,9 @@ export default function QuestionContent({ question, approaches }: QuestionConten
                   <span className="text-xs font-bold text-red-400">{index + 1}</span>
                 </div>
                 <div>
-                  <p className="text-sm text-text-muted leading-relaxed">{mistake}</p>
+                  <p className="text-sm text-text-muted leading-relaxed">
+                    <SolutionText text={mistake} />
+                  </p>
                 </div>
               </div>
             ))}
@@ -266,7 +269,9 @@ export default function QuestionContent({ question, approaches }: QuestionConten
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-text-muted leading-relaxed">{trap}</p>
+                  <p className="text-sm text-text-muted leading-relaxed">
+                    <SolutionText text={trap} />
+                  </p>
                 </div>
               </div>
             ))}
@@ -290,75 +295,75 @@ function ApproachCard({
 }) {
   return (
     <div
-      className={`relative rounded-2xl border p-6 pb-14 transition-all duration-200 ${
+      className={`relative rounded-2xl border overflow-hidden transition-all duration-200 ${
         isSmartest
-          ? 'bg-accent-secondary/5 border-accent-secondary/20'
+          ? 'border-accent-secondary/25 bg-gradient-to-br from-accent-secondary/[0.06] to-surface'
           : 'bg-surface border-border'
       }`}
     >
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-4">
-        <h3 className="text-base font-semibold text-foreground">{approach.label}</h3>
-        {isSmartest && (
-          <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-accent-secondary/15 text-accent-secondary border border-accent-secondary/20">
-            ★ Smartest
-          </span>
-        )}
-        <span className={`ml-auto px-2 py-0.5 text-[10px] font-medium rounded-md border ${
-          approach.status === 'official'
-            ? 'bg-primary/10 text-primary-light border-primary/20'
-            : approach.status === 'approved'
-            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-            : 'bg-surface-light text-text-dim border-border'
-        }`}>
-          {approach.status}
-        </span>
-      </div>
-
-      {/* Content */}
-      <div className="text-sm text-text-muted leading-relaxed whitespace-pre-line">
-        {approach.content}
-      </div>
-
-      {/* Solution image(s) / diagram(s) */}
-      {(approach.imageUrl || (approach.images && approach.images.length > 0)) && (
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {[
-            ...(approach.imageUrl ? [approach.imageUrl] : []),
-            ...(approach.images ?? []),
-          ].map((src, i) => (
-            <a
-              key={`${src}-${i}`}
-              href={src}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block rounded-xl overflow-hidden border border-border bg-surface-light hover:border-border-light transition-colors"
-              title="Open full size"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={src}
-                alt={`Solution figure ${i + 1}`}
-                loading="lazy"
-                className="w-full h-auto max-h-80 object-contain"
-              />
-            </a>
-          ))}
-        </div>
+      {isSmartest && (
+        <div className="pointer-events-none absolute top-0 right-0 w-48 h-48 bg-accent-secondary/10 blur-3xl rounded-full" />
       )}
 
-      {/* Footer */}
-      <div className="mt-4 pt-3 border-t border-border/50 flex items-center gap-4 text-xs text-text-dim">
-        <span>Submitted by: {approach.submittedBy}</span>
-        <span>Status: {approach.status}</span>
-      </div>
+      <div className="relative p-6 pb-14">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-5 pb-4 border-b border-border/60">
+          <div
+            className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg ${
+              isSmartest
+                ? 'bg-gradient-to-br from-accent-secondary to-teal-500 shadow-accent-secondary/25'
+                : 'bg-gradient-to-br from-primary to-primary-light shadow-primary/25'
+            }`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base font-semibold text-foreground">{approach.label}</h3>
+            <p className="text-xs text-text-dim mt-0.5">
+              Step-by-step breakdown — read setup, then each step, then final answer.
+            </p>
+          </div>
+          {isSmartest && (
+            <span className="shrink-0 px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-accent-secondary/15 text-accent-secondary border border-accent-secondary/20">
+              ★ Smartest
+            </span>
+          )}
+          <span
+            className={`shrink-0 px-2 py-0.5 text-[10px] font-medium rounded-md border ${
+              approach.status === 'official'
+                ? 'bg-primary/10 text-primary-light border-primary/20'
+                : approach.status === 'approved'
+                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                  : 'bg-surface-light text-text-dim border-border'
+            }`}
+          >
+            {approach.status}
+          </span>
+        </div>
 
-      {/* AI Tutor entry point */}
-      <AIExplainButton
-        questionText={questionText ?? ''}
-        solutionText={approach.content}
-        imageUrl={approach.imageUrl ?? approach.images?.[0]}
-      />
+        {/* Premium structured solution (diagrams + steps) */}
+        <OfficialSolution
+          content={approach.content}
+          solutionImages={[
+            ...(approach.imageUrl ? [approach.imageUrl] : []),
+            ...(approach.images ?? []),
+          ]}
+        />
+
+        {/* Footer meta */}
+        <div className="mt-5 pt-3 border-t border-border/50 flex items-center gap-4 text-xs text-text-dim">
+          <span>By {approach.submittedBy}</span>
+        </div>
+
+        {/* AI Tutor */}
+        <AIExplainButton
+          questionText={questionText ?? ''}
+          solutionText={approach.content}
+          imageUrl={approach.imageUrl ?? approach.images?.[0]}
+        />
+      </div>
     </div>
   );
 }

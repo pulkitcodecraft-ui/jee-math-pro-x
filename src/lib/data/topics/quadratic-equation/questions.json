@@ -1,0 +1,306 @@
+{
+  "topicId": "quadratic-equation",
+  "questions": [
+    {
+      "id": "quad-bulk1-q1",
+      "subtopicId": "Nature of Roots",
+      "difficulty": "medium",
+      "format": "mcq",
+      "statement": "If $a \\in \\mathbb{R}^{-}$, $a \\neq -2$ then the equation $x^2 + a|x| + 1 = 0$:",
+      "options": {
+        "A": "can not have any real root",
+        "B": "must have exactly two real roots",
+        "C": "must have exactly two or no real roots",
+        "D": "must have either four real roots or no real roots"
+      },
+      "correctOptions": ["D"],
+      "commonMistakes": [
+        "Forgetting to split into cases $x \\ge 0$ and $x<0$ separately when an absolute value is present.",
+        "Missing that real roots always come in $\\pm$ pairs here because $|x|$ makes the equation symmetric in sign."
+      ],
+      "commonTraps": [
+        "It's tempting to say 'two roots' since it's a quadratic in $|x|$, but each valid root in $|x|$ actually produces **two** roots in $x$ (positive and negative), so the count is always a multiple of 2 — specifically 0 or 4 here, never 2."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Determine the possible number of real roots of $x^2+a|x|+1=0$ for $a<0$, $a\\neq-2$.\n\n1. **Use symmetry:** Since the equation only involves $|x|$, if $x_0$ is a root then $-x_0$ is automatically a root too (because $|x_0|=|-x_0|$). So real roots always come in $\\pm$ pairs — the total count of real roots is always **even**, and more specifically a multiple of $2$ for each distinct positive root.\n\n2. **Solve for $|x|$:** Let $t=|x|\\ge0$. The equation becomes\n$$t^2+at+1=0.$$\nFor this to give real $x$, we need $t\\ge0$.\n\n3. **Analyze using sum and product of roots (in $t$):** sum $=-a$, product $=1$. Since $a<0$, sum $=-a>0$. Since product $=1>0$, both roots of the $t$-quadratic (if real) have the **same sign**, and since their sum is positive, both must be **positive** — so both are valid values of $t=|x|$ whenever the discriminant allows.\n\n4. **Discriminant condition:**\n$$D = a^2-4 \\ge 0 \\;\\Rightarrow\\; a\\le-2 \\text{ or } a\\ge2.$$\nSince $a<0$, this means $a\\le-2$. Combined with $a\\neq-2$, we get $a<-2$.\n\n5. **Case-by-case count:**\n- If $-2<a<0$: $D<0$, no real $t$, so **no real roots** of the original equation.\n- If $a<-2$: $D>0$, **two distinct positive** values of $t$, each giving **two** values of $x$ ($\\pm t$) — so **four real roots** total.\n- ($a=-2$ is excluded by the problem, where $D=0$ would give a repeated root — not part of this case analysis.)\n\n6. **Conclusion:** For all valid $a<0,\\,a\\neq-2$, the equation has **either 0 or exactly 4 real roots** — never 1, 2, or 3.\n\nAnswer: **(D)**."
+        },
+        {
+          "label": "Smart Approach (AM-GM, no case-split)",
+          "content": "**Faster route — express $a$ as a function of $x$ directly.**\n\n1. **Isolate $a$:** From $x^2+a|x|+1=0$ (for $x\\neq0$, since $x=0$ gives $1=0$, impossible):\n$$a = -\\frac{x^2+1}{|x|}.$$\nSo for any real root $x\\neq0$ to exist for a given $a$, that $a$ must lie in the **range** of the function $g(x) = -\\dfrac{x^2+1}{|x|}$.\n\n2. **Find the range of $g$ using AM-GM:** For $t=|x|>0$,\n$$\\frac{t^2+1}{t} = t+\\frac1t \\ge 2 \\quad\\text{(AM-GM, equality at } t=1\\text{)}.$$\nSo $g(x) = -\\left(t+\\dfrac1t\\right) \\le -2$ for all $x\\neq0$, with the value $-2$ achieved exactly at $t=|x|=1$ (i.e. $x=\\pm1$), and $g(x)\\to-\\infty$ as $t\\to0^+$ or $t\\to\\infty$.\n\n3. **Read off the structure instantly:** The range of $g$ is $(-\\infty,-2]$.\n- If $-2<a<0$: $a$ is **not** in the range of $g$ → no real $x$ solves the equation → **0 roots**.\n- If $a=-2$: exactly **one** value of $t$ (namely $t=1$) works, giving $x=\\pm1$ → **2 roots** (this is the excluded case $a\\neq-2$).\n- If $a<-2$: $a$ is hit by **two** distinct values of $t$ (since $g$ first decreases then... actually $t+1/t$ is convex with minimum 2, so each value $a<-2$ corresponds to two distinct $t>0$) → each $t$ gives $x=\\pm t$ → **4 roots**.\n\n4. **Conclusion:** Without ever computing a discriminant, the range/AM-GM view immediately shows the root count is **0** or **4** (never 2, since $a\\neq-2$ is excluded) — matching option (D).\n\n**Why this is the smartest approach:** it sidesteps solving the quadratic in $|x|$ entirely, and reads the answer directly off the shape of $t+\\frac1t$, a function every JEE student already has memorized cold.\n\nAnswer: **(D)**."
+        }
+      ]
+    },
+    {
+      "id": "quad-bulk1-q2",
+      "subtopicId": "Theory of Equations",
+      "difficulty": "hard",
+      "format": "mcq",
+      "statement": "A monic quadratic trinomial $P(x)$ is such that $P(x)=0$ and $P(P(P(x)))=0$ have a common root, then:",
+      "options": {
+        "A": "$P(0)\\cdot P(1) > 0$",
+        "B": "$P(0)\\cdot P(1) < 0$",
+        "C": "$P(0)\\cdot P(1) = 0$",
+        "D": "Data insufficient"
+      },
+      "correctOptions": ["C"],
+      "commonMistakes": [
+        "Trying to expand $P(P(P(x)))$ fully as a degree-8 polynomial instead of using the fact that $P(r)=0$ collapses one layer immediately.",
+        "Forgetting that 'common root' means the **same** $r$ satisfies both $P(r)=0$ and $P(P(P(r)))=0$, which lets you simplify the second condition using the first."
+      ],
+      "commonTraps": [
+        "It looks like you'd need to fully factor a degree-8 polynomial, but the key shortcut is recognizing $P(P(P(r)))=P(P(0))$ once you know $P(r)=0$."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Let $P(x)=x^2+bx+c$ (monic) and suppose $r$ is a common root of $P(x)=0$ and $P(P(P(x)))=0$. Show $P(0)\\cdot P(1)=0$.\n\n1. **Collapse using the common root:** Since $P(r)=0$, substituting into the triple composition:\n$$P(P(P(r))) = P(P(0)).$$\nSo the condition $P(P(P(r)))=0$ is equivalent to $P(P(0))=0$.\n\n2. **Express in terms of $r$:** Since $r$ is a root, $r^2+br+c=0 \\Rightarrow c=-r^2-br = -r(b+r)$.\nSo $P(0)=c=-r(b+r)$.\n\n3. **Compute $P(P(0))$:** Let $y=P(0)=-r(b+r)$. Then\n$$P(P(0)) = P(y) = y^2+by+c.$$\nSubstituting and simplifying (expanding fully in terms of $r$ and $b$):\n$$P(P(0)) = r(b+r)(r-1)(b+r+1).$$\n\n4. **Compute $P(0)\\cdot P(1)$ directly:**\n$$P(0) = c = -r(b+r), \\qquad P(1) = 1+b+c = 1+b-r(b+r) = -br+b-r^2+1.$$\nMultiplying these out and simplifying:\n$$P(0)\\cdot P(1) = r(b+r)(r-1)(b+r+1),$$\nwhich is **exactly the same expression** as $P(P(0))$ from step 3!\n\n5. **Conclusion:** Since the given condition requires $P(P(0))=0$, and we've shown $P(0)\\cdot P(1)$ equals that same expression, the condition **forces**\n$$P(0)\\cdot P(1) = 0.$$\n\nAnswer: **(C)**."
+        },
+        {
+          "label": "Smart Approach (factor-matching, no full expansion)",
+          "content": "**Faster route — show directly that $0$ or $1$ must be a root of $P$, without expanding the quartic in full.**\n\n1. **Recall:** $r$ is a root of $P$, so $c = -r(b+r)$ (from $r^2+br+c=0$). Note this means:\n$$P(0) = c = -r(b+r).$$\nSo **$P(0)=0$ exactly when $r=0$ or $r=-b$.**\n\n2. **Now use the actual condition** $P(P(P(r)))=0 \\Leftrightarrow P(P(0))=0$ (same collapse as before). Write $y=P(0)=-r(b+r)$, and expand $P(y)=y^2+by+c=0$ directly using $y=-r(b+r)$ and $c=-r(b+r)=y$ — so the condition becomes:\n$$y^2+by+y = 0 \\quad\\Rightarrow\\quad y(y+b+1)=0.$$\nSo **either $y=P(0)=0$, or $y=-(b+1)$.**\n\n3. **Interpret the second case:** If $P(0) = -(b+1)$, recall $P(1)=1+b+c=1+b+y$. Substituting $y=-(b+1)$:\n$$P(1) = 1+b-(b+1) = 0.$$\nSo in this branch, **$P(1)=0$ instead.**\n\n4. **Conclusion:** Every solution branch forces either $P(0)=0$ or $P(1)=0$ — so in all cases,\n$$P(0)\\cdot P(1) = 0.$$\n\n**Why this is smarter:** instead of multiplying out a degree-4 polynomial in $r$ and $b$ and then comparing to $P(0)P(1)$ term-by-term, this approach directly shows *which* factor must vanish — making the conclusion almost immediate and far less error-prone under exam time pressure.\n\nAnswer: **(C)**."
+        }
+      ]
+    },
+    {
+      "id": "quad-bulk1-q3",
+      "subtopicId": "Theory of Equations",
+      "difficulty": "hard",
+      "format": "mcq",
+      "statement": "If $\\alpha, \\beta$ be the roots of the equation $x^2 + ax - \\dfrac{1}{2a^2} = 0$, $a$ being a real parameter, then find the least value of $[\\alpha^4+\\beta^4]$ (where $[\\,\\cdot\\,]$ represents the greatest integer function).",
+      "options": {
+        "A": "$4$",
+        "B": "$5$",
+        "C": "$3$",
+        "D": "$6$"
+      },
+      "correctOptions": ["C"],
+      "commonMistakes": [
+        "Forgetting that $a$ can be any nonzero real number (positive or negative), not just a fixed value — the expression must be minimized over all valid $a$.",
+        "Errors when expanding $\\alpha^4+\\beta^4$ in terms of $\\alpha+\\beta$ and $\\alpha\\beta$ — it requires two applications of the square identity."
+      ],
+      "commonTraps": [
+        "The least value of the expression itself is irrational ($2+\\sqrt2$), so don't round it — apply the greatest integer function only at the very end."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Minimize $\\alpha^4+\\beta^4$ where $\\alpha,\\beta$ are roots of $x^2+ax-\\dfrac{1}{2a^2}=0$, over all real $a\\neq0$.\n\n1. **Sum and product of roots:**\n$$\\alpha+\\beta = -a, \\qquad \\alpha\\beta = -\\frac{1}{2a^2}.$$\n\n2. **Express $\\alpha^2+\\beta^2$:**\n$$\\alpha^2+\\beta^2 = (\\alpha+\\beta)^2 - 2\\alpha\\beta = a^2 + \\frac{1}{a^2}.$$\n\n3. **Express $\\alpha^4+\\beta^4$:**\n$$\\alpha^4+\\beta^4 = (\\alpha^2+\\beta^2)^2 - 2(\\alpha\\beta)^2 = \\left(a^2+\\frac{1}{a^2}\\right)^2 - 2\\left(\\frac{1}{2a^2}\\right)^2 = \\left(a^2+\\frac1{a^2}\\right)^2 - \\frac{1}{2a^4}.$$\n\n4. **Simplify in terms of $u=a^2>0$:**\n$$f(u) = \\left(u+\\frac1u\\right)^2 - \\frac{1}{2u^2} = u^2+2+\\frac1{u^2} - \\frac{1}{2u^2} = u^2 + \\frac{1}{2u^2} + 2.$$\n\n5. **Minimize using AM-GM:** For $u>0$,\n$$u^2 + \\frac{1}{2u^2} \\ge 2\\sqrt{u^2\\cdot\\frac{1}{2u^2}} = 2\\cdot\\frac{1}{\\sqrt2} = \\sqrt2,$$\nwith equality when $u^2=\\dfrac{1}{2u^2} \\Rightarrow u^4=\\dfrac12 \\Rightarrow u=\\dfrac{1}{2^{1/4}}$ (achievable since $u=a^2$ can take this value).\n\n6. **Minimum value:**\n$$f(u)_{\\min} = \\sqrt2 + 2 \\approx 3.414.$$\n\n7. **Apply greatest integer function:**\n$$[\\alpha^4+\\beta^4]_{\\min} = [2+\\sqrt2] = [3.414\\ldots] = 3.$$\n\nAnswer: **(C)**."
+        },
+        {
+          "label": "Alternate Approach (Calculus / Derivative)",
+          "content": "**Same setup, different optimization tool — use calculus instead of AM-GM.**\n\n1. **From the main approach:** $\\alpha^4+\\beta^4 = f(u) = u^2+\\dfrac{1}{2u^2}+2$ where $u=a^2>0$.\n\n2. **Differentiate with respect to $u$ and set to zero:**\n$$f'(u) = 2u - \\frac{1}{u^3}.$$\nSetting $f'(u)=0$:\n$$2u = \\frac{1}{u^3} \\quad\\Rightarrow\\quad u^4 = \\frac12 \\quad\\Rightarrow\\quad u = \\frac{1}{2^{1/4}} \\;(\\text{taking the positive root since } u>0).$$\n\n3. **Confirm it's a minimum:** $f''(u) = 2+\\dfrac{3}{u^4} > 0$ for all $u>0$, so this critical point is indeed a **minimum** (not a saddle or maximum).\n\n4. **Evaluate $f$ at this point:**\n$$f\\left(\\frac{1}{2^{1/4}}\\right) = \\frac{1}{\\sqrt2} + \\frac{1}{2}\\cdot\\sqrt2 + 2 = \\frac{1}{\\sqrt2}+\\frac{\\sqrt2}{2}+2 = \\frac{\\sqrt2}{2}+\\frac{\\sqrt2}{2}+2 = \\sqrt2+2.$$\n(Same value as before, confirming the AM-GM result.)\n\n5. **Apply the greatest integer function:**\n$$[\\,\\sqrt2+2\\,] = [3.414\\ldots] = 3.$$\n\n**Why use this instead of AM-GM:** if you don't immediately spot the AM-GM pairing, straightforward differentiation always works as a fallback — it's slightly longer but completely mechanical and safe under time pressure.\n\nAnswer: **(C)**."
+        }
+      ]
+    },
+    {
+      "id": "quad-bulk1-q4",
+      "subtopicId": "Theory of Equations",
+      "difficulty": "advanced",
+      "format": "mcq",
+      "statement": "If $\\dfrac{1}{a+b+c} = \\dfrac{1}{a}+\\dfrac{1}{b}+\\dfrac{1}{c}$ then for what values of $n$ is the following equality holds: $\\dfrac{1}{a^n+b^n+c^n} = \\dfrac{1}{a^n}+\\dfrac{1}{b^n}+\\dfrac{1}{c^n}$ ($a,b,c\\neq0$, $a,b,c\\in\\mathbb{R}$)",
+      "options": {
+        "A": "$n=3$",
+        "B": "$n=4$",
+        "C": "$n=5$",
+        "D": "$n=6$"
+      },
+      "correctOptions": ["A", "C"],
+      "commonMistakes": [
+        "Trying to prove the result for general $n$ directly instead of first finding the hidden structural condition on $a,b,c$ implied by the $n=1$ case.",
+        "Forgetting that the conclusion depends on $n$ being **odd** — testing only specific even values and assuming a pattern without checking the algebraic reason."
+      ],
+      "commonTraps": [
+        "It's tempting to think the identity should hold for all $n$, or only for $n=1$ — but it actually holds for **every odd** $n>1$ too, because of how the condition on $a,b,c$ factors."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Find all $n$ for which $\\dfrac{1}{a^n+b^n+c^n}=\\dfrac1{a^n}+\\dfrac1{b^n}+\\dfrac1{c^n}$ given the same identity holds for $n=1$.\n\n1. **Decode the $n=1$ condition:** Cross-multiplying $\\dfrac1{a+b+c}=\\dfrac1a+\\dfrac1b+\\dfrac1c$ gives (after combining the right side over $abc$ and simplifying):\n$$abc = (ab+bc+ca)(a+b+c) - abc \\quad\\Longrightarrow\\quad (a+b)(b+c)(c+a) = 0.$$\nSo the condition is equivalent to: **at least one pair among $a,b,c$ sums to zero.**\n\n2. **WLOG say $a+b=0$, i.e. $b=-a$.** Substitute into the general expression for any power $n$:\n$$a^n+b^n+c^n = a^n+(-a)^n+c^n.$$\n\n3. **Case $n$ odd:** $(-a)^n=-a^n$, so $a^n+(-a)^n = 0$, giving\n$$a^n+b^n+c^n = c^n.$$\nAlso, $\\dfrac1{a^n}+\\dfrac1{b^n}+\\dfrac1{c^n} = \\dfrac1{a^n}+\\dfrac1{(-a)^n}+\\dfrac1{c^n} = \\dfrac1{a^n}-\\dfrac1{a^n}+\\dfrac1{c^n} = \\dfrac1{c^n}$ (using $n$ odd again).\nBoth sides reduce to $\\dfrac1{c^n}=\\dfrac1{a^n+b^n+c^n}$ — the identity **holds for every odd $n$**, in particular $n=3$ and $n=5$.\n\n4. **Case $n$ even:** $(-a)^n=a^n$, so $a^n+b^n+c^n=2a^n+c^n \\neq c^n$ in general, and the two sides do **not** match — the identity **fails** for even $n$ like $4$ or $6$.\n\n5. **Conclusion:** The equality holds precisely when $n$ is odd, so among the given options, $n=3$ and $n=5$ work.\n\nAnswer: **(A), (C)**."
+        },
+        {
+          "label": "Smartest Approach (plug in one concrete example)",
+          "content": "**Fastest route for an objective-type question — once you know the condition means $(a+b)(b+c)(c+a)=0$, just test ONE concrete triple satisfying it.**\n\n1. **Derive the condition quickly:** Cross-multiplying $\\dfrac1{a+b+c}=\\dfrac1a+\\dfrac1b+\\dfrac1c$ leads to the well-known factorization\n$$(a+b)(b+c)(c+a)=0.$$\n(This is a standard memorized result — don't re-derive it in the exam.)\n\n2. **Pick the simplest possible numbers satisfying this** — e.g. let $a+b=0$, so take $a=1,\\,b=-1$, and any convenient $c$, say $c=2$ (just avoid $c=0$ and avoid making any denominator zero).\n\n3. **Test each option directly by substitution** — no algebra needed, just arithmetic:\n\n| $n$ | $\\dfrac{1}{a^n}+\\dfrac1{b^n}+\\dfrac1{c^n}$ | $\\dfrac{1}{a^n+b^n+c^n}$ | Match? |\n|---|---|---|---|\n| $2$ | $1+1+\\frac14 = \\frac94$ | $\\frac{1}{1+1+4}=\\frac16$ | ✗ |\n| $3$ | $1-1+\\frac18 = \\frac18$ | $\\frac{1}{1-1+8}=\\frac18$ | ✓ |\n| $4$ | $1+1+\\frac1{16}=\\frac{33}{16}$ | $\\frac{1}{1+1+16}=\\frac1{18}$ | ✗ |\n| $5$ | $1-1+\\frac1{32}=\\frac1{32}$ | $\\frac1{1-1+32}=\\frac1{32}$ | ✓ |\n| $6$ | $1+1+\\frac1{64}=\\frac{129}{64}$ | $\\frac1{1+1+64}=\\frac1{66}$ | ✗ |\n\n4. **Read off the matches directly:** $n=3$ and $n=5$ work; $n=2,4,6$ don't.\n\n**Why this is the smartest approach for MCQ:** it completely avoids the algebraic proof of *why* odd powers work — you just need to remember the factored condition and then brute-force-check the 4 given options numerically in under a minute. This is the standard time-saving trick for 'which of these values works' style questions.\n\nAnswer: **(A), (C)**."
+        }
+      ]
+    },
+    {
+      "id": "quad-bulk1-q5",
+      "subtopicId": "Common Roots & Inequalities",
+      "difficulty": "hard",
+      "format": "mcq",
+      "statement": "If $\\dfrac{ax^2+bx+c}{Ax^2+Bx+C} \\le 0$ for all $x \\in \\mathbb{R}$ except for two distinct finite values of $x$ (where $aA\\neq0$), then:",
+      "options": {
+        "A": "$\\dfrac{a}{A}=\\dfrac{b}{B}>0$",
+        "B": "$\\dfrac{a}{A}=\\dfrac{b}{B}<0$",
+        "C": "$\\dfrac{a}{A}\\neq\\dfrac{b}{B}$",
+        "D": "$\\dfrac{c}{C}<0$"
+      },
+      "correctOptions": ["B", "D"],
+      "commonMistakes": [
+        "Treating the two 'excluded' values as places where the inequality fails, instead of realizing they are points where the expression is **undefined** (denominator zero).",
+        "Forgetting that for the inequality to hold everywhere else, the numerator and denominator must be **proportional** (same roots), forcing $a/A=b/B=c/C$."
+      ],
+      "commonTraps": [
+        "The two excluded points are exactly the real roots of the denominator $Ax^2+Bx+C$ — this is what makes the ratio undefined there, not a sign-change issue."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Determine what's forced when $\\dfrac{ax^2+bx+c}{Ax^2+Bx+C}\\le0$ holds for all real $x$ except two specific finite values.\n\n1. **Interpret 'except two distinct finite values':** A rational function is undefined exactly where its denominator is zero. So the denominator $Ax^2+Bx+C$ must have **two distinct real roots** — these are precisely the excluded points (not places where the inequality is violated).\n\n2. **Why the ratio must be a constant:** For the inequality $\\le 0$ to hold at **every other** real $x$ (with no exceptions for sign changes), the numerator must vanish at exactly the same two points as the denominator — otherwise, between a root of the numerator and a root of the denominator, the sign of the ratio would flip, violating the inequality somewhere. So $ax^2+bx+c$ and $Ax^2+Bx+C$ must have the **same pair of roots**, meaning they are proportional:\n$$ax^2+bx+c = k(Ax^2+Bx+C) \\quad\\text{for some constant } k.$$\nThis gives $\\dfrac{a}{A}=\\dfrac{b}{B}=\\dfrac{c}{C}=k$.\n\n3. **Determine the sign of $k$:** With this substitution, the ratio simplifies to the constant $k$ everywhere (except at the two undefined points):\n$$\\frac{ax^2+bx+c}{Ax^2+Bx+C} = k \\quad \\text{for all other } x.$$\nFor this to satisfy $k\\le0$ — and since equality $k=0$ would make the numerator identically zero (not a valid quadratic with the stated structure), we need strict inequality:\n$$k<0.$$\n\n4. **Conclude:**\n$$\\frac{a}{A}=\\frac{b}{B}=\\frac{c}{C}=k<0.$$\nSo $\\dfrac{a}{A}=\\dfrac{b}{B}<0$ — matches **(B)**. Also $\\dfrac{c}{C}=k<0$ — matches **(D)**.\nOptions (A) (positive ratio) and (C) (unequal ratios) both contradict this.\n\nAnswer: **(B), (D)**."
+        }
+      ]
+    },
+    {
+      "id": "quad-bulk1-q6",
+      "subtopicId": "Sum & Product of Roots",
+      "difficulty": "medium",
+      "format": "mcq",
+      "statement": "If $\\alpha$ and $\\beta$ are the two roots of the equation $\\dfrac{1}{x^2-10x-29} + \\dfrac{1}{x^2-10x-45} - \\dfrac{2}{x^2-10x-69} = 0$, then which of the following is/are correct?",
+      "options": {
+        "A": "$|\\alpha-\\beta|=16$",
+        "B": "$\\dfrac{|\\alpha\\beta|+1}{\\alpha+\\beta}=4$",
+        "C": "$\\dfrac{|\\alpha\\beta|+1}{\\alpha+\\beta}=8$",
+        "D": "None of these"
+      },
+      "correctOptions": ["A", "B"],
+      "commonMistakes": [
+        "Trying to clear denominators directly in $x$ instead of substituting $y=x^2-10x$ first, which turns this into a simple linear equation.",
+        "Forgetting to convert back from $y$ to the actual quadratic in $x$ before computing $\\alpha,\\beta$."
+      ],
+      "commonTraps": [
+        "All three denominators share the same quadratic part $x^2-10x$ — recognizing this substitution is the entire key to the problem."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Solve $\\dfrac{1}{x^2-10x-29}+\\dfrac{1}{x^2-10x-45}-\\dfrac{2}{x^2-10x-69}=0$ and analyze the roots.\n\n1. **Substitute $y=x^2-10x$:** The equation becomes\n$$\\frac{1}{y-29}+\\frac{1}{y-45}-\\frac{2}{y-69}=0.$$\n\n2. **Combine over a common denominator and simplify the numerator:**\n$$\\frac{(y-45)(y-69) + (y-29)(y-69) - 2(y-29)(y-45)}{(y-29)(y-45)(y-69)} = 0.$$\nSetting the numerator to zero and expanding (the cubic terms in $y$ cancel), the numerator simplifies to a **linear** expression:\n$$2496 - 64y = 0 \\quad\\Rightarrow\\quad y = 39.$$\n\n3. **Back-substitute:** $x^2-10x = 39 \\Rightarrow x^2-10x-39=0$.\n\n4. **Find $\\alpha,\\beta$:** Factor or use the quadratic formula:\n$$x^2-10x-39=0 \\;\\Rightarrow\\; (x-13)(x+3)=0 \\;\\Rightarrow\\; x=13 \\text{ or } x=-3.$$\nSo $\\alpha=13,\\,\\beta=-3$ (or vice versa).\n\n5. **Check option (A):**\n$$|\\alpha-\\beta| = |13-(-3)| = 16. \\quad\\checkmark$$\n\n6. **Check options (B) and (C):** $\\alpha+\\beta=10$, $\\alpha\\beta = -39$, so $|\\alpha\\beta|=39$:\n$$\\frac{|\\alpha\\beta|+1}{\\alpha+\\beta} = \\frac{39+1}{10} = \\frac{40}{10} = 4.$$\nThis matches **(B)**, not (C).\n\nAnswer: **(A), (B)**."
+        }
+      ]
+    },
+    {
+      "id": "quad-bulk1-q7",
+      "subtopicId": "Roots of Unity",
+      "difficulty": "medium",
+      "format": "mcq",
+      "statement": "If $a^4+a^3+a^2+a+1=0$, then the value of $a^{2010}+a^{2000}+1$ can not be:",
+      "options": {
+        "A": "Prime number",
+        "B": "Odd number",
+        "C": "Composite number",
+        "D": "Even number"
+      },
+      "correctOptions": ["C", "D"],
+      "commonMistakes": [
+        "Trying to solve for $a$ explicitly (it's complex) instead of using the algebraic structure $a^5=1$ directly.",
+        "Computing $2010 \\bmod 5$ or $2000 \\bmod 5$ incorrectly, leading to the wrong power reduction."
+      ],
+      "commonTraps": [
+        "The expression looks like it should depend on which root $a$ is chosen, but it actually evaluates to the **same constant** for every root."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Given $a^4+a^3+a^2+a+1=0$, find what $a^{2010}+a^{2000}+1$ can never equal.\n\n1. **Recognize the factorization:** Multiply both sides by $(a-1)$:\n$$(a-1)(a^4+a^3+a^2+a+1) = a^5-1.$$\nSince the left side is $0$ (given) and $a\\neq1$ (as $a=1$ doesn't satisfy the original equation: $1+1+1+1+1=5\\neq0$), we get\n$$a^5 = 1.$$\nSo $a$ is a primitive 5th root of unity.\n\n2. **Reduce the exponents using $a^5=1$:**\n$$2010 = 5\\times402 + 0 \\;\\Rightarrow\\; 2010 \\equiv 0 \\pmod 5 \\;\\Rightarrow\\; a^{2010} = (a^5)^{402} = 1.$$\n$$2000 = 5\\times400 \\;\\Rightarrow\\; 2000\\equiv0\\pmod5 \\;\\Rightarrow\\; a^{2000} = (a^5)^{400}=1.$$\n\n3. **Compute the expression:**\n$$a^{2010}+a^{2000}+1 = 1+1+1 = 3.$$\nThis holds for **every** root $a$ of the original equation (all four roots are primitive 5th roots of unity, and all satisfy $a^5=1$).\n\n4. **Classify the number $3$:**\n- $3$ **is** a prime number — so (A) is achievable, not the answer.\n- $3$ **is** odd — so (B) is achievable, not the answer.\n- $3$ is **not** composite (it has no divisors other than 1 and itself) — matches (C): cannot be composite.\n- $3$ is **not** even — matches (D): cannot be even.\n\nAnswer: **(C), (D)**."
+        },
+        {
+          "label": "Smartest Approach (plug in an explicit root of unity)",
+          "content": "**Fastest route — don't reduce exponents abstractly, just plug in an explicit 5th root of unity.**\n\n1. **Identify $a$ directly:** Since $a^4+a^3+a^2+a+1=0$ means $a$ is a primitive 5th root of unity, just take the most natural explicit one:\n$$a = e^{2\\pi i/5} = \\cos\\frac{2\\pi}{5} + i\\sin\\frac{2\\pi}{5}.$$\n\n2. **Use $a^5=1$ directly on the exponents** by writing $2010 = 5(402)$ and $2000=5(400)$ — both exact multiples of 5:\n$$a^{2010} = \\left(a^5\\right)^{402} = 1^{402} = 1, \\qquad a^{2000} = \\left(a^5\\right)^{400}=1^{400}=1.$$\n\n3. **Substitute directly:**\n$$a^{2010}+a^{2000}+1 = 1+1+1=3.$$\n\n4. **Sanity-check numerically** (optional, but reassuring under exam pressure): computing $e^{2\\pi i \\cdot 2010/5}$ directly via a calculator-style mental check — $2010/5=402$ exactly, so the angle is a whole multiple of $2\\pi$, confirming $a^{2010}=1$ with no leftover phase.\n\n5. **Classify $3$:** prime ✓, odd ✓, not composite, not even. So the expression **cannot** be composite or even.\n\n**Why this is just as fast but more concrete:** rather than reasoning abstractly about \"$a^5=1$ so reduce mod 5,\" plugging in the literal root makes the divisibility check ($2010\\div5$, $2000\\div5$) feel more natural and less likely to be fumbled under time pressure — both happen to be exact multiples of 5, which is the only fact that matters.\n\nAnswer: **(C), (D)**."
+        }
+      ]
+    },
+    {
+      "id": "quad-bulk1-q8",
+      "subtopicId": "Equations Reducible to Quadratic",
+      "difficulty": "advanced",
+      "format": "mcq",
+      "statement": "If $\\sqrt[3]{x-1} + \\sqrt[3]{x-3} + \\sqrt[3]{x-5} = 0$, then which of the following statement(s) is/are correct?",
+      "options": {
+        "A": "2 values of $x$ satisfy the equation",
+        "B": "Equation has only one odd solution",
+        "C": "Equation has only one prime solution",
+        "D": "Equation has no real solution"
+      },
+      "correctOptions": ["B", "C"],
+      "commonMistakes": [
+        "Assuming a sum of three cube roots set to zero must have multiple solutions, by analogy with polynomial equations of similar 'degree'.",
+        "Not checking that $x=3$ is the obvious symmetric solution first (the three terms become $\\sqrt[3]{2}+\\sqrt[3]0+\\sqrt[3]{-2}=0$), and instead trying to cube the whole expression blindly."
+      ],
+      "commonTraps": [
+        "Cubing a sum of three cube roots directly creates a messy higher-degree equation — recognizing the symmetric point $x=3$ first (where the three values are $2, 0, -2$, which sum to zero) shortcuts the whole problem and helps confirm uniqueness."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Solve $\\sqrt[3]{x-1}+\\sqrt[3]{x-3}+\\sqrt[3]{x-5}=0$ and determine how many real solutions exist.\n\n1. **Spot the symmetric solution:** Try $x=3$ (the average of $1,3,5$):\n$$\\sqrt[3]{3-1}+\\sqrt[3]{3-3}+\\sqrt[3]{3-5} = \\sqrt[3]{2}+0+\\sqrt[3]{-2} = \\sqrt[3]2 - \\sqrt[3]2 = 0. \\checkmark$$\nSo $x=3$ is a solution.\n\n2. **Check uniqueness using monotonicity:** Let $f(x)=\\sqrt[3]{x-1}+\\sqrt[3]{x-3}+\\sqrt[3]{x-5}$. Each term $\\sqrt[3]{x-k}$ is a **strictly increasing** function of $x$ (cube root is increasing everywhere, including through zero). The sum of strictly increasing functions is itself **strictly increasing**, so $f(x)=0$ can have **at most one** real solution.\n\n3. **Combined with step 1:** Since $x=3$ works and $f$ is strictly increasing (hence injective), $x=3$ is the **unique** real solution.\n\n4. **Check each option:**\n- (A) '2 values satisfy the equation' — **false**, there is exactly **one**.\n- (B) 'only one odd solution' — **true**, since $x=3$ is odd and it's the only solution.\n- (C) 'only one prime solution' — **true**, since $x=3$ is prime and it's the only solution.\n- (D) 'no real solution' — **false**, since $x=3$ works.\n\nAnswer: **(B), (C)**."
+        },
+        {
+          "label": "Smartest Approach (algebraic identity, no calculus)",
+          "content": "**Faster, fully algebraic route using the identity: if $p+q+r=0$ then $p^3+q^3+r^3=3pqr$.**\n\n1. **Set up the substitution:** Let\n$$p=\\sqrt[3]{x-1}, \\quad q=\\sqrt[3]{x-3}, \\quad r=\\sqrt[3]{x-5}.$$\nThe given equation is exactly $p+q+r=0$.\n\n2. **Apply the standard algebraic identity:** Whenever $p+q+r=0$, it's always true that\n$$p^3+q^3+r^3 = 3pqr.$$\n(This follows from the factorization $p^3+q^3+r^3-3pqr=(p+q+r)(p^2+q^2+r^2-pq-qr-rp)$, which vanishes when $p+q+r=0$.)\n\n3. **Compute both sides using known values:**\n- $p^3+q^3+r^3 = (x-1)+(x-3)+(x-5) = 3x-9$.\n- $pqr = \\sqrt[3]{(x-1)(x-3)(x-5)}$.\n\nSo the identity gives:\n$$3x-9 = 3\\sqrt[3]{(x-1)(x-3)(x-5)} \\quad\\Rightarrow\\quad x-3 = \\sqrt[3]{(x-1)(x-3)(x-5)}.$$\n\n4. **Cube both sides to eliminate the cube root:**\n$$(x-3)^3 = (x-1)(x-3)(x-5).$$\n\n5. **Factor out $(x-3)$ from both sides** (valid as long as we track $x=3$ separately, but it appears on both sides naturally):\n$$(x-3)\\Big[(x-3)^2 - (x-1)(x-5)\\Big] = 0.$$\nExpand the bracket: $(x-3)^2 = x^2-6x+9$ and $(x-1)(x-5)=x^2-6x+5$, so the bracket is $9-5=4 \\neq 0$ — it's a **nonzero constant**, never zero.\n\n6. **Conclusion:** The only solution is $x-3=0 \\Rightarrow x=3$, confirming this is the **unique** real root — matching the monotonicity argument from Approach 1, but reaching it through pure algebra instead of a calculus-flavored injectivity argument.\n\n7. **Final check of options:** $x=3$ is odd and prime, and is the only solution — so (B) and (C) are true; (A) and (D) are false.\n\n**Why this is the expected approach:** the identity $p+q+r=0 \\Rightarrow p^3+q^3+r^3=3pqr$ is a standard JEE algebra tool specifically taught for this exact style of cube-root equation — most coaching material would present this as the primary method, with the monotonicity argument as a quick sanity check.\n\nAnswer: **(B), (C)**."
+        }
+      ]
+    }
+  ],
+  "passages": [
+    {
+      "id": "quad-bulk1-passage-functional",
+      "title": "Paragraph",
+      "passage": "Let $P(x)$ be a quadratic polynomial with real coefficients such that for all real $x$ the relation $2(1+P(x)) = P(x-1)+P(x+1)$ holds. If $P(0)=8$ and $P(2)=32$ then",
+      "subtopicId": "Functional Equations in Quadratics",
+      "difficulty": "hard",
+      "questions": [
+        {
+          "id": "quad-bulk1-passage-functional-q1",
+          "passageLabel": "1",
+          "statement": "Sum of all the coefficients of $P(x)$ is",
+          "options": {
+            "A": "$20$",
+            "B": "$19$",
+            "C": "$17$",
+            "D": "$15$"
+          },
+          "correctOption": "B",
+          "commonMistakes": [
+            "Forgetting that the 'sum of all coefficients' of a polynomial $P(x)=ax^2+bx+c$ is simply $P(1)=a+b+c$.",
+            "Not first determining that the leading coefficient must be exactly $1$ from the functional equation, before using the two given point conditions."
+          ],
+          "commonTraps": [
+            "The functional equation alone doesn't pin down $P(x)$ completely — it only forces the leading coefficient; you still need both $P(0)$ and $P(2)$ to find $b$ and $c$."
+          ],
+          "approaches": [
+            {
+              "label": "Official Solution",
+              "content": "**Setup:** Let $P(x)=ax^2+bx+c$.\n\n1. **Use the functional equation to find $a$:** Substitute into $2(1+P(x))=P(x-1)+P(x+1)$:\n$$2+2(ax^2+bx+c) = a(x-1)^2+b(x-1)+c + a(x+1)^2+b(x+1)+c.$$\nThe right side simplifies (the linear terms in $x$ from $(x-1)$ and $(x+1)$ cancel symmetrically):\n$$a(x-1)^2+a(x+1)^2 = 2ax^2+2a, \\qquad b(x-1)+b(x+1)=2bx.$$\nSo RHS $= 2ax^2+2bx+2a+2c$. Equating with LHS $2ax^2+2bx+2c+2$:\n$$2ax^2+2bx+2c+2 = 2ax^2+2bx+2a+2c \\;\\Rightarrow\\; 2=2a \\;\\Rightarrow\\; a=1.$$\nSo $P(x)$ is monic: $P(x)=x^2+bx+c$.\n\n2. **Apply $P(0)=8$:**\n$$P(0)=c=8.$$\n\n3. **Apply $P(2)=32$:**\n$$P(2) = 4+2b+c = 32 \\;\\Rightarrow\\; 4+2b+8=32 \\;\\Rightarrow\\; 2b=20 \\;\\Rightarrow\\; b=10.$$\n\n4. **So $P(x) = x^2+10x+8$.**\n\n5. **Sum of all coefficients** $= P(1) = 1+10+8 = 19$.\n\nAnswer: **(B)**."
+            }
+          ]
+        },
+        {
+          "id": "quad-bulk1-passage-functional-q2",
+          "passageLabel": "2",
+          "statement": "If the range of $P(x)$ is $[m, \\infty)$ then the value of $m$ is",
+          "options": {
+            "A": "$-12$",
+            "B": "$-15$",
+            "C": "$-17$",
+            "D": "$-5$"
+          },
+          "correctOption": "C",
+          "commonMistakes": [
+            "Forgetting that the minimum value of an upward-opening parabola occurs at its vertex, $x=-b/2a$, not at $x=0$.",
+            "Carrying forward an error from the previous sub-question's value of $b$ or $c$."
+          ],
+          "commonTraps": [
+            "This question depends directly on the $P(x)$ found in the previous part — re-derive or reuse $P(x)=x^2+10x+8$ carefully."
+          ],
+          "approaches": [
+            {
+              "label": "Official Solution",
+              "content": "**Setup:** From the previous part, $P(x) = x^2+10x+8$, which opens upward (leading coefficient $1>0$), so its range is $[m,\\infty)$ where $m$ is the minimum value at the vertex.\n\n1. **Find the vertex $x$-coordinate:**\n$$x_{\\text{vertex}} = -\\frac{b}{2a} = -\\frac{10}{2(1)} = -5.$$\n\n2. **Evaluate $P(-5)$ to get the minimum value:**\n$$P(-5) = (-5)^2+10(-5)+8 = 25-50+8 = -17.$$\n\n3. **Conclusion:** The range of $P(x)$ is $[-17,\\infty)$, so $m=-17$.\n\nAnswer: **(C)**."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
