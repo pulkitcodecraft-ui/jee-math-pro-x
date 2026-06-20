@@ -19,7 +19,7 @@ export default function LoginPage() {
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { signIn, signUp, signInWithGoogle, firebaseUser, loading, isConfigured } = useAuth();
+  const { signIn, signUp, signInWithGoogle, resendVerification, firebaseUser, loading, isConfigured } = useAuth();
 
   const [mode, setMode] = useState<Mode>(
     searchParams.get('mode') === 'signup' ? 'signup' : 'login'
@@ -29,8 +29,12 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // When set, we show the "verify your email" panel for this address.
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
+  const [resendState, setResendState] = useState<'idle' | 'sending' | 'sent'>('idle');
 
   const redirectTo = searchParams.get('next') || '/topics';
+  const justVerified = searchParams.get('verified') === '1';
 
   // Already-logged-in users shouldn't see the login page
   useEffect(() => {
@@ -39,22 +43,60 @@ function LoginForm() {
     }
   }, [loading, firebaseUser, router, redirectTo]);
 
+  function errorCode(err: unknown): string {
+    return typeof err === 'object' && err !== null && 'code' in err
+      ? String((err as { code: unknown }).code)
+      : '';
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setSubmitting(true);
     try {
       if (mode === 'signup') {
-        await signUp(email.trim(), password, displayName.trim());
+        const res = await signUp(email.trim(), password, displayName.trim());
+        if (res.needsVerification) {
+          // Don't log in — wait for the user to verify via the emailed link.
+          setPendingEmail(res.email);
+          setResendState('sent');
+          return;
+        }
+        router.replace(redirectTo);
       } else {
         await signIn(email.trim(), password);
+        router.replace(redirectTo);
       }
-      router.replace(redirectTo);
     } catch (err) {
-      setError(friendlyAuthError(err));
+      if (errorCode(err) === 'auth/email-not-verified') {
+        setPendingEmail(email.trim());
+        setResendState('idle');
+      } else {
+        setError(friendlyAuthError(err));
+      }
     } finally {
       setSubmitting(false);
     }
+  }
+
+  async function handleResend() {
+    if (!pendingEmail) return;
+    setError(null);
+    setResendState('sending');
+    try {
+      await resendVerification(pendingEmail, password);
+      setResendState('sent');
+    } catch (err) {
+      setResendState('idle');
+      setError(friendlyAuthError(err));
+    }
+  }
+
+  function backToLogin() {
+    setPendingEmail(null);
+    setResendState('idle');
+    setError(null);
+    setMode('login');
   }
 
   function switchMode(next: Mode) {
@@ -79,6 +121,56 @@ function LoginForm() {
 
         <div className="relative z-10 w-full max-w-md">
           <div className="rounded-2xl glass border border-border p-8">
+            {pendingEmail ? (
+              /* ===== Verify-email panel ===== */
+              <div className="text-center">
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-7 h-7 text-primary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h1 className="text-2xl font-bold tracking-tight mb-2">Verify your email</h1>
+                <p className="text-sm text-text-muted mb-1">We sent a verification link to</p>
+                <p className="text-sm font-medium text-foreground mb-5 break-all">{pendingEmail}</p>
+                <p className="text-xs text-text-dim mb-6 leading-relaxed">
+                  Click the link in that email to activate your account, then come back and log in.
+                  If the address doesn&apos;t actually exist, you won&apos;t receive anything — that&apos;s how
+                  we keep fake emails out.
+                </p>
+
+                {resendState === 'sent' && !error && (
+                  <div className="mb-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 text-xs text-emerald-300">
+                    Verification email sent. Check your inbox (and your spam folder).
+                  </div>
+                )}
+                {error && (
+                  <div className="mb-4 rounded-xl bg-red-500/10 border border-red-500/20 p-3 text-xs text-red-300">
+                    {error}
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  disabled={resendState === 'sending'}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl
+                             bg-gradient-to-r from-primary to-primary-light text-white font-medium text-sm
+                             disabled:opacity-50 disabled:cursor-not-allowed
+                             hover:shadow-lg hover:shadow-primary/25 transition-all duration-200"
+                >
+                  {resendState === 'sending' ? 'Sending…' : 'Resend verification email'}
+                </button>
+                <button
+                  type="button"
+                  onClick={backToLogin}
+                  className="w-full mt-3 px-6 py-3 rounded-xl bg-surface border border-border
+                             hover:border-border-light text-sm font-medium text-foreground transition-all duration-200"
+                >
+                  Back to log in
+                </button>
+              </div>
+            ) : (
+            <>
             {/* Heading */}
             <h1 className="text-2xl font-bold tracking-tight mb-1">
               {mode === 'login' ? 'Welcome back' : 'Create your account'}
@@ -114,6 +206,13 @@ function LoginForm() {
                 Sign up
               </button>
             </div>
+
+            {/* Just-verified success notice */}
+            {justVerified && (
+              <div className="mb-5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 text-xs text-emerald-300 leading-relaxed">
+                Your email is verified — you can log in now.
+              </div>
+            )}
 
             {/* Not-configured notice */}
             {!isConfigured && (
@@ -267,6 +366,8 @@ function LoginForm() {
                 </>
               )}
             </p>
+            </>
+            )}
           </div>
 
           {/* Back to browsing */}

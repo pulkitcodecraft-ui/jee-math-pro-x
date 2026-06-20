@@ -92,6 +92,30 @@ export default async function QuestionPage({ params }: QuestionPageProps) {
           <h1 className="text-lg font-semibold leading-relaxed text-foreground">
             {question.statement}
           </h1>
+
+          {/* Question figure(s) / diagram(s) */}
+          {question.images && question.images.length > 0 && (
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {question.images.map((src, i) => (
+                <a
+                  key={`${src}-${i}`}
+                  href={src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-xl overflow-hidden border border-border bg-surface-light hover:border-border-light transition-colors"
+                  title="Open full size"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={src}
+                    alt={`Question figure ${i + 1}`}
+                    loading="lazy"
+                    className="w-full h-auto max-h-80 object-contain"
+                  />
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import type { Question } from '@/types/question';
 import type { Approach } from '@/types/approach';
 import SubmitApproach from '@/components/question/SubmitApproach';
+import AIExplainButton from '@/components/AIExplainButton';
 import { getCommunityApproaches } from '@/lib/firebase/approachService';
 
 interface QuestionContentProps {
@@ -87,7 +88,11 @@ export default function QuestionContent({ question, approaches }: QuestionConten
             key={approach.id}
             className={`${activeApproach === approach.id ? 'block' : 'hidden'}`}
           >
-            <ApproachCard approach={approach} isSmartest={approach.id === smartestApproach?.id} />
+            <ApproachCard
+              approach={approach}
+              isSmartest={approach.id === smartestApproach?.id}
+              questionText={question.statement}
+            />
           </div>
         ))}
 
@@ -196,7 +201,12 @@ export default function QuestionContent({ question, approaches }: QuestionConten
           </div>
           <div className="space-y-4">
             {communityApproaches.map((approach) => (
-              <ApproachCard key={approach.id} approach={approach} isSmartest={false} />
+              <ApproachCard
+                key={approach.id}
+                approach={approach}
+                isSmartest={false}
+                questionText={question.statement}
+              />
             ))}
           </div>
         </section>
@@ -269,10 +279,18 @@ export default function QuestionContent({ question, approaches }: QuestionConten
 }
 
 // ===== Approach Card Component =====
-function ApproachCard({ approach, isSmartest }: { approach: Approach; isSmartest: boolean }) {
+function ApproachCard({
+  approach,
+  isSmartest,
+  questionText,
+}: {
+  approach: Approach;
+  isSmartest: boolean;
+  questionText?: string;
+}) {
   return (
     <div
-      className={`rounded-2xl border p-6 transition-all duration-200 ${
+      className={`relative rounded-2xl border p-6 pb-14 transition-all duration-200 ${
         isSmartest
           ? 'bg-accent-secondary/5 border-accent-secondary/20'
           : 'bg-surface border-border'
@@ -302,12 +320,30 @@ function ApproachCard({ approach, isSmartest }: { approach: Approach; isSmartest
         {approach.content}
       </div>
 
-      {/* Image if present */}
-      {approach.imageUrl && (
-        <div className="mt-4 rounded-xl overflow-hidden border border-border">
-          <div className="bg-surface-light p-4 text-center text-xs text-text-dim">
-            📷 Approach image: {approach.imageUrl}
-          </div>
+      {/* Solution image(s) / diagram(s) */}
+      {(approach.imageUrl || (approach.images && approach.images.length > 0)) && (
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {[
+            ...(approach.imageUrl ? [approach.imageUrl] : []),
+            ...(approach.images ?? []),
+          ].map((src, i) => (
+            <a
+              key={`${src}-${i}`}
+              href={src}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-xl overflow-hidden border border-border bg-surface-light hover:border-border-light transition-colors"
+              title="Open full size"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={src}
+                alt={`Solution figure ${i + 1}`}
+                loading="lazy"
+                className="w-full h-auto max-h-80 object-contain"
+              />
+            </a>
+          ))}
         </div>
       )}
 
@@ -316,6 +352,13 @@ function ApproachCard({ approach, isSmartest }: { approach: Approach; isSmartest
         <span>Submitted by: {approach.submittedBy}</span>
         <span>Status: {approach.status}</span>
       </div>
+
+      {/* AI Tutor entry point */}
+      <AIExplainButton
+        questionText={questionText ?? ''}
+        solutionText={approach.content}
+        imageUrl={approach.imageUrl ?? approach.images?.[0]}
+      />
     </div>
   );
 }

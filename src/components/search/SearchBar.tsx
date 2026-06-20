@@ -3,26 +3,48 @@
 import { useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { interpretSearchQuery } from '@/lib/ai/aiClient';
+import { classifySearch } from '@/lib/ai/classifySearch';
 import type { SearchResult } from '@/lib/ai/types';
+import { topicNameToSlug } from '@/lib/data/mockData';
+
+/** Below this confidence we ask the student to disambiguate instead of guessing. */
+const CONFIDENCE_THRESHOLD = 0.6;
 
 /**
  * Maps the topic name returned by the AI client to a URL slug.
- * When a real AI API is plugged in, this map stays the same —
- * just ensure the AI returns one of these topic names.
+ * Built from the full topic list so every syllabus topic is reachable.
  */
-const topicSlugMap: Record<string, string> = {
-  Functions: 'functions',
-  Probability: 'probability',
-  'Coordinate Geometry': 'coordinate-geometry',
-};
+const topicSlugMap: Record<string, string> = topicNameToSlug;
 
 export default function SearchBar() {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<SearchResult | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
+  // Low-confidence disambiguation: holds the normalized text to act on.
+  const [ambiguous, setAmbiguous] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  /** Run the existing topic-search experience with already-normalized text. */
+  const runTopicSearch = useCallback(async (normalized: string) => {
+    setAmbiguous(null);
+    setLoading(true);
+    try {
+      const res = await interpretSearchQuery(normalized);
+      setResult(res);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  /** Hand the (normalized) doubt off to the AI Explain / Doubt Solver page. */
+  const goToDoubtSolver = useCallback(
+    (normalized: string) => {
+      router.push(`/explain?q=${encodeURIComponent(normalized)}&autosolve=1`);
+    },
+    [router]
+  );
 
   const handleSearch = useCallback(async () => {
     const trimmed = query.trim();
@@ -30,21 +52,51 @@ export default function SearchBar() {
 
     setLoading(true);
     setResult(null);
+    setAmbiguous(null);
     setHasSearched(true);
 
+    // Step 1: classify intent (fast Gemini Flash). Fall back to topic search.
+    let classification;
     try {
-      const res = await interpretSearchQuery(trimmed);
+      classification = await classifySearch(trimmed);
+    } catch {
+      classification = {
+        intent: 'TOPIC_SEARCH' as const,
+        normalized_query: trimmed,
+        confidence: 1,
+      };
+    }
+
+    const { intent, normalized_query, confidence } = classification;
+    const normalized = normalized_query || trimmed;
+
+    // Step 2: low confidence → let the student choose, don't guess.
+    if (confidence < CONFIDENCE_THRESHOLD) {
+      setAmbiguous(normalized);
+      setLoading(false);
+      return;
+    }
+
+    // Step 3: auto-route.
+    if (intent === 'DOUBT_SOLVE') {
+      goToDoubtSolver(normalized); // keep the spinner during navigation
+      return;
+    }
+
+    try {
+      const res = await interpretSearchQuery(normalized);
       setResult(res);
     } finally {
       setLoading(false);
     }
-  }, [query]);
+  }, [query, goToDoubtSolver]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter') handleSearch();
     if (e.key === 'Escape') {
       setQuery('');
       setResult(null);
+      setAmbiguous(null);
       setHasSearched(false);
     }
   }
@@ -67,6 +119,7 @@ export default function SearchBar() {
   function handleClear() {
     setQuery('');
     setResult(null);
+    setAmbiguous(null);
     setHasSearched(false);
     inputRef.current?.focus();
   }
@@ -96,7 +149,7 @@ export default function SearchBar() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder='Try "Functions", "Probability", "I need help with Circles"…'
+            placeholder={'Search a topic or type your doubt… e.g. "Probability" or "solve x²-5x+6=0"'}
             className="w-full pl-12 pr-10 py-4 rounded-2xl bg-surface border border-border
                        focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20
                        text-foreground placeholder:text-text-dim text-sm transition-all"
@@ -142,12 +195,14 @@ export default function SearchBar() {
         </button>
       </div>
 
-      {/* ── Loading skeleton ── */}
+      {/* ── Loading skeleton (with "understanding" micro-state) ── */}
       {loading && (
         <div className="mt-4 rounded-2xl glass border border-primary/20 p-5 space-y-3">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-primary/40 animate-pulse" />
-            <div className="h-4 w-40 rounded-md bg-surface-lighter animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-accent-secondary animate-pulse" />
+            <span className="text-sm font-medium text-text-muted">
+              Understanding your question…
+            </span>
           </div>
           <div className="flex flex-wrap gap-2">
             {[120, 90, 110, 80, 100].map((w) => (
@@ -157,6 +212,33 @@ export default function SearchBar() {
                 style={{ width: w }}
               />
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Low-confidence disambiguation ── */}
+      {!loading && ambiguous && (
+        <div className="mt-4 rounded-2xl glass border border-primary/20 p-5 animate-fade-in-up">
+          <p className="text-sm text-text-muted mb-3">
+            Hmm, not totally sure what you meant. Did you want to:
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => runTopicSearch(ambiguous)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-light border border-border
+                         hover:border-primary/40 hover:bg-primary/10 text-sm text-text-muted hover:text-primary-light
+                         transition-all duration-200"
+            >
+              <span>🔍</span> Search Topics
+            </button>
+            <button
+              onClick={() => goToDoubtSolver(ambiguous)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary to-primary-light
+                         text-white text-sm font-medium hover:shadow-lg hover:shadow-primary/25
+                         hover:-translate-y-0.5 transition-all duration-200"
+            >
+              <span>🤔</span> Solve this Doubt
+            </button>
           </div>
         </div>
       )}
@@ -246,7 +328,7 @@ export default function SearchBar() {
       {/* ── No-match state (searched but result is empty suggestedOptions) ── */}
       {!loading && hasSearched && result && result.suggestedOptions.length === 0 && (
         <div className="mt-4 p-4 rounded-xl bg-surface border border-border text-sm text-text-muted text-center">
-          No matching topics found. Try searching for "Functions", "Probability", or "Coordinate Geometry".
+          No matching topics found. Try a topic name like "Quadratic Equation", "Integration", "Circle", or "Trigonometry".
         </div>
       )}
     </div>

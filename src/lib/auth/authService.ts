@@ -15,6 +15,8 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   updateProfile,
+  sendEmailVerification,
+  reload,
   type User as FirebaseUser,
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
@@ -33,6 +35,23 @@ export const isFirebaseConfigured: boolean = (() => {
 
 const NOT_CONFIGURED_MESSAGE =
   'Firebase is not configured yet. Add your Firebase keys to .env.local to enable sign in.';
+
+/**
+ * Where Firebase sends the user after they click the verification link.
+ * The link opens Firebase's "email verified" handler, which then shows a
+ * Continue button back to this URL. The domain must be listed under
+ * Authentication → Settings → Authorized domains in the Firebase console.
+ */
+function verificationSettings() {
+  const origin =
+    typeof window !== 'undefined'
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_SITE_URL ?? '';
+  return {
+    url: `${origin}/login?verified=1`,
+    handleCodeInApp: false,
+  };
+}
 
 /** Shape stored in Firestore (timestamps are server-generated). */
 interface UserDoc {
@@ -85,36 +104,130 @@ async function createUserProfile(
   });
 }
 
-/** Register a new email/password account and its profile document. */
+/** Result returned after a successful sign-up. */
+export interface SignUpResult {
+  /** Always true for email/password sign-up — the user must verify before login. */
+  needsVerification: boolean;
+  email: string;
+}
+
+/** Build an Error carrying a Firebase-style code so friendlyAuthError can map it. */
+function codedError(code: string, message: string): Error {
+  const err = new Error(message) as Error & { code: string };
+  err.code = code;
+  return err;
+}
+
+/**
+ * Register a new email/password account, create its profile document, send a
+ * verification email, then sign the user back out.
+ *
+ * We intentionally do NOT keep the user signed in: they must click the link in
+ * their inbox first. This is what guarantees the email address actually exists —
+ * a fake/non-existent address never receives the link, so the account can never
+ * be used to log in.
+ */
 export async function signUp(
   email: string,
   password: string,
   displayName: string
-): Promise<User> {
+): Promise<SignUpResult> {
   if (!isFirebaseConfigured) throw new Error(NOT_CONFIGURED_MESSAGE);
 
-  const cred = await createUserWithEmailAndPassword(auth, email, password);
+  let cred;
+  try {
+    cred = await createUserWithEmailAndPassword(auth, email, password);
+  } catch (err) {
+    // If the email already exists but was never verified (e.g. an abandoned
+    // earlier sign-up), don't dead-end the user — quietly resend the link and
+    // send them to the verify screen, provided the password matches.
+    if (
+      typeof err === 'object' &&
+      err !== null &&
+      'code' in err &&
+      String((err as { code: unknown }).code) === 'auth/email-already-in-use'
+    ) {
+      try {
+        const existing = await signInWithEmailAndPassword(auth, email, password);
+        await reload(existing.user);
+        if (existing.user.emailVerified) {
+          // Genuinely registered & verified — they should just log in.
+          await firebaseSignOut(auth);
+          throw codedError(
+            'auth/email-already-in-use',
+            'An account already exists with that email. Try logging in instead.'
+          );
+        }
+        // Exists but unverified: resend and route to the verify panel.
+        await sendEmailVerification(existing.user, verificationSettings());
+        await firebaseSignOut(auth);
+        return { needsVerification: true, email };
+      } catch (innerErr) {
+        // Wrong password (or some other issue) — surface the original message.
+        if (
+          typeof innerErr === 'object' &&
+          innerErr !== null &&
+          'code' in innerErr &&
+          String((innerErr as { code: unknown }).code) === 'auth/email-already-in-use'
+        ) {
+          throw innerErr;
+        }
+        throw err;
+      }
+    }
+    throw err;
+  }
+
   await updateProfile(cred.user, { displayName });
   await createUserProfile(cred.user, displayName);
 
-  const profile = await getUserProfile(cred.user.uid);
-  if (profile) return profile;
+  // Send the confirmation link, then sign out until they verify.
+  await sendEmailVerification(cred.user, verificationSettings());
+  await firebaseSignOut(auth);
 
-  // Fallback if the read-after-write hasn't propagated
-  return {
-    id: cred.user.uid,
-    email,
-    displayName,
-    role: 'student',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+  return { needsVerification: true, email };
 }
 
-/** Sign in with an existing email/password account. */
+/**
+ * Sign in with an existing email/password account.
+ * Rejects (and signs back out) if the email has not been verified yet.
+ */
 export async function signIn(email: string, password: string): Promise<void> {
   if (!isFirebaseConfigured) throw new Error(NOT_CONFIGURED_MESSAGE);
-  await signInWithEmailAndPassword(auth, email, password);
+  const cred = await signInWithEmailAndPassword(auth, email, password);
+
+  // Make sure we have the freshest verification status.
+  await reload(cred.user);
+
+  if (!cred.user.emailVerified) {
+    await firebaseSignOut(auth);
+    throw codedError(
+      'auth/email-not-verified',
+      'Please verify your email before logging in.'
+    );
+  }
+}
+
+/**
+ * Re-send the verification email for an account that exists but is unverified.
+ * Signs in temporarily to obtain the user, sends the link, then signs out.
+ */
+export async function resendVerificationEmail(
+  email: string,
+  password: string
+): Promise<void> {
+  if (!isFirebaseConfigured) throw new Error(NOT_CONFIGURED_MESSAGE);
+  const cred = await signInWithEmailAndPassword(auth, email, password);
+  await reload(cred.user);
+
+  if (cred.user.emailVerified) {
+    // Already verified — nothing to resend.
+    await firebaseSignOut(auth);
+    return;
+  }
+
+  await sendEmailVerification(cred.user, verificationSettings());
+  await firebaseSignOut(auth);
 }
 
 /**
@@ -166,6 +279,8 @@ export function friendlyAuthError(err: unknown): string {
     case 'auth/wrong-password':
     case 'auth/user-not-found':
       return 'Incorrect email or password.';
+    case 'auth/email-not-verified':
+      return 'Please verify your email first. Check your inbox for the confirmation link.';
     case 'auth/too-many-requests':
       return 'Too many attempts. Please wait a moment and try again.';
     case 'auth/operation-not-allowed':

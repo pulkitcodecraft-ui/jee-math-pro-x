@@ -34,3 +34,47 @@ export interface ExplanationResult {
   /** Optional summary/takeaway */
   summary?: string;
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Gemini-powered multi-method solver (used by the /explain page).
+ * The shape mirrors the JSON response schema sent to the model.
+ * ──────────────────────────────────────────────────────────────────────── */
+
+export type SolveDifficulty = 'Easy' | 'Medium' | 'Hard';
+
+export interface SolveStep {
+  /** 1-indexed step number within a method */
+  step_number: number;
+  /** Short title of the step */
+  title: string;
+  /** Detailed explanation; LaTeX inline as \( ... \), display as \[ ... \] */
+  explanation: string;
+  /** The "why this works" insight for this step */
+  key_insight: string;
+  /** A common student mistake at this step, or null if none */
+  common_mistake: string | null;
+}
+
+export interface SolveMethod {
+  /** e.g. "Direct Substitution", "Graphical Approach" */
+  method_name: string;
+  /** e.g. "Fastest for MCQs", "Best for building intuition" */
+  best_for: string;
+  /** Ordered solving steps for this method */
+  steps: SolveStep[];
+  /** The final answer, in LaTeX */
+  final_answer: string;
+}
+
+export interface SolveResult {
+  /** Detected topic of the question */
+  topic: string;
+  /** Difficulty estimate */
+  difficulty: SolveDifficulty;
+  /** One entry per reasonable solving method */
+  methods: SolveMethod[];
+  /** Index into `methods` of the best method under exam conditions */
+  recommended_method_index: number;
+  /** Optional exam-strategy tip, or null */
+  exam_tip: string | null;
+}

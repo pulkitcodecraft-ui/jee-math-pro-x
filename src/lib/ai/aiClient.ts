@@ -14,6 +14,7 @@
  */
 
 import type { SearchResult, ExplanationResult } from './types';
+import { searchableTopics } from '@/lib/data/mockData';
 
 /**
  * Interprets a natural-language search query and returns structured results.
@@ -27,65 +28,61 @@ import type { SearchResult, ExplanationResult } from './types';
  */
 export async function interpretSearchQuery(query: string): Promise<SearchResult> {
   // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 400));
 
-  // Simple keyword matching for mock purposes
-  const lowerQuery = query.toLowerCase();
+  const q = query.trim().toLowerCase();
 
-  if (lowerQuery.includes('function')) {
+  let best: { name: string; subtopics: string[]; matchedSub: string | null } | null = null;
+  let bestScore = 0;
+
+  for (const topic of searchableTopics) {
+    const name = topic.name.toLowerCase();
+    let score = 0;
+    let matchedSub: string | null = null;
+
+    // Match against the topic name (either direction handles plurals like "circles")
+    if (q.length >= 3 && (q.includes(name) || name.includes(q))) {
+      score = Math.max(score, name.length);
+    }
+
+    // Match against subtopics — a subtopic hit is the most specific signal
+    for (const sub of topic.subtopics) {
+      const s = sub.toLowerCase();
+      if (q.length >= 3 && (q.includes(s) || s.includes(q))) {
+        if (s.length + 1 > score) {
+          score = s.length + 1;
+          matchedSub = sub;
+        }
+      }
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      best = { name: topic.name, subtopics: topic.subtopics, matchedSub };
+    }
+  }
+
+  if (best) {
     return {
-      topic: 'Functions',
-      subtopic: null,
+      topic: best.name,
+      subtopic: best.matchedSub,
       difficultyLevel: null,
-      suggestedOptions: [
-        'Domain and Range',
-        'Composition of Functions',
-        'Inverse Functions',
-        'Graphical Transformations',
-        'Functional Equations',
-      ],
+      suggestedOptions: best.subtopics.slice(0, 6),
     };
   }
 
-  if (lowerQuery.includes('probability')) {
-    return {
-      topic: 'Probability',
-      subtopic: null,
-      difficultyLevel: null,
-      suggestedOptions: [
-        'Conditional Probability',
-        'Bayes\' Theorem',
-        'Random Variables',
-        'Binomial Distribution',
-        'Probability Distributions',
-      ],
-    };
-  }
-
-  if (lowerQuery.includes('coordinate') || lowerQuery.includes('geometry')) {
-    return {
-      topic: 'Coordinate Geometry',
-      subtopic: null,
-      difficultyLevel: null,
-      suggestedOptions: [
-        'Straight Lines',
-        'Circles',
-        'Parabola',
-        'Ellipse',
-        'Hyperbola',
-      ],
-    };
-  }
-
-  // Default fallback
+  // Default fallback — surface a spread of core topics to pick from
   return {
     topic: 'General Mathematics',
     subtopic: null,
     difficultyLevel: null,
     suggestedOptions: [
       'Functions',
-      'Probability',
-      'Coordinate Geometry',
+      'Quadratic Equation',
+      'Trigonometry',
+      'Integration',
+      'Circle',
+      'Vectors and 3D Geometry',
     ],
   };
 }

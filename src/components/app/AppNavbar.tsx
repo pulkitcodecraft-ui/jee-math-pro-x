@@ -22,6 +22,9 @@ export default function AppNavbar() {
   const name = profile?.displayName || firebaseUser?.displayName || 'Student';
   const initial = name.charAt(0).toUpperCase();
 
+  // History is only relevant (and accessible) once signed in.
+  const links = isLoggedIn ? [...navLinks, { href: '/history', label: 'History' }] : navLinks;
+
   async function handleSignOut() {
     setMenuOpen(false);
     setMobileOpen(false);
@@ -37,7 +40,7 @@ export default function AppNavbar() {
 
         {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
+          {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -139,7 +142,7 @@ export default function AppNavbar() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-border px-6 py-4 flex flex-col gap-3 bg-surface">
-          {navLinks.map((link) => (
+          {links.map((link) => (
             <Link key={link.href} href={link.href}
               className={`text-sm ${pathname.startsWith(link.href) ? 'text-primary-light' : 'text-text-muted'}`}
               onClick={() => setMobileOpen(false)}>

@@ -8,4 +8,6 @@ export {
   friendlyAuthError,
   getUserProfile,
   signInWithGoogle,
+  resendVerificationEmail,
 } from './authService';
+export type { SignUpResult } from './authService';

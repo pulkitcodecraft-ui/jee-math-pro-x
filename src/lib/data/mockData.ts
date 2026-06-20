@@ -6,6 +6,11 @@
 import type { Topic } from '@/types/topic';
 import type { Question } from '@/types/question';
 import type { Approach } from '@/types/approach';
+import {
+  syllabusExtraTopics,
+  syllabusExtraQuestions,
+  syllabusExtraApproaches,
+} from './syllabusContent';
 
 // ===== TOPICS =====
 
@@ -67,6 +72,8 @@ export const mockTopics: Topic[] = [
     createdAt: new Date('2026-01-01'),
     updatedAt: new Date('2026-06-01'),
   },
+  // Full JEE syllabus topics (Algebra, Trig, Calculus, Coordinate Geometry, Vectors & 3D)
+  ...syllabusExtraTopics,
 ];
 
 // ===== QUESTIONS =====
@@ -188,6 +195,7 @@ export const mockQuestions: Question[] = [
     createdAt: new Date('2026-04-15'),
     updatedAt: new Date('2026-06-01'),
   },
+  ...syllabusExtraQuestions,
 ];
 
 // ===== APPROACHES =====
@@ -353,6 +361,7 @@ export const mockApproaches: Approach[] = [
     createdAt: new Date('2026-04-15'),
     updatedAt: new Date('2026-04-15'),
   },
+  ...syllabusExtraApproaches,
 ];
 
 // ===== HELPER FUNCTIONS =====
@@ -394,3 +403,26 @@ export function getPlatformStats(): PlatformStats {
     questionCount: mockQuestions.length,
   };
 }
+
+/** Map of exact topic name → slug (id), built from all topics. */
+export const topicNameToSlug: Record<string, string> = Object.fromEntries(
+  mockTopics.map((t) => [t.name, t.id])
+);
+
+/** Resolve a topic name to its detail-page slug, or undefined if unknown. */
+export function getSlugForTopicName(name: string): string | undefined {
+  return topicNameToSlug[name];
+}
+
+export interface SearchableTopic {
+  name: string;
+  slug: string;
+  subtopics: string[];
+}
+
+/** Flat index used by the AI search bar to match queries to topic pages. */
+export const searchableTopics: SearchableTopic[] = mockTopics.map((t) => ({
+  name: t.name,
+  slug: t.id,
+  subtopics: t.subtopics,
+}));

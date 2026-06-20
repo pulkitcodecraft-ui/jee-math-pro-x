@@ -14,6 +14,8 @@ export interface Question {
   subtopicId: string;
   difficulty: Difficulty;
   statement: string;
+  /** Optional figure(s)/diagram(s) for the question (Firebase Storage URLs or /public paths). */
+  images?: string[];
   /** Array of Approach document IDs */
   approaches: string[];
   commonMistakes: string[];

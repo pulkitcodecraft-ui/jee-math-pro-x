@@ -18,8 +18,10 @@ export interface Approach {
   status: ApproachStatus;
   /** UID of the user who submitted this approach */
   submittedBy: string;
-  /** Optional image URL (Firebase Storage) for handwritten/visual approaches */
+  /** Optional single image (Firebase Storage URL or /public path) for a visual/handwritten solution */
   imageUrl?: string;
+  /** Optional multiple images (diagrams/steps). Both imageUrl and images render. */
+  images?: string[];
   createdAt: Date;
   updatedAt: Date;
 }

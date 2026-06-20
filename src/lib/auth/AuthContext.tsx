@@ -27,7 +27,9 @@ import {
   signUp as svcSignUp,
   signOut as svcSignOut,
   signInWithGoogle as svcSignInWithGoogle,
+  resendVerificationEmail as svcResendVerification,
   isFirebaseConfigured,
+  type SignUpResult,
 } from './authService';
 
 interface AuthContextValue {
@@ -40,8 +42,13 @@ interface AuthContextValue {
   /** Whether Firebase keys are present */
   isConfigured: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, displayName: string) => Promise<void>;
+  signUp: (
+    email: string,
+    password: string,
+    displayName: string
+  ) => Promise<SignUpResult>;
   signInWithGoogle: () => Promise<void>;
+  resendVerification: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -59,6 +66,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+      // Block email/password accounts that haven't verified their email yet.
+      // (Google accounts always come back as verified.) This also kicks out any
+      // stale, previously-created unverified sessions.
+      if (fbUser && !fbUser.emailVerified) {
+        const isPasswordUser = fbUser.providerData.some(
+          (p) => p.providerId === 'password'
+        );
+        if (isPasswordUser) {
+          await svcSignOut().catch(() => {});
+          setFirebaseUser(null);
+          setProfile(null);
+          setLoading(false);
+          return;
+        }
+      }
+
       setFirebaseUser(fbUser);
       if (fbUser) {
         try {
@@ -82,8 +105,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = useCallback(
     async (email: string, password: string, displayName: string) => {
-      const newProfile = await svcSignUp(email, password, displayName);
-      setProfile(newProfile);
+      // Sign-up sends a verification email and signs the user back out, so we
+      // don't set a profile here — they log in after verifying.
+      return svcSignUp(email, password, displayName);
     },
     []
   );
@@ -91,6 +115,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signInWithGoogle = useCallback(async () => {
     await svcSignInWithGoogle();
   }, []);
+
+  const resendVerification = useCallback(
+    async (email: string, password: string) => {
+      await svcResendVerification(email, password);
+    },
+    []
+  );
 
   const signOut = useCallback(async () => {
     await svcSignOut();
@@ -107,6 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signIn,
         signUp,
         signInWithGoogle,
+        resendVerification,
         signOut,
       }}
     >
