@@ -8,6 +8,7 @@ import {
   reviewApproach,
 } from '@/lib/firebase/approachService';
 import type { Approach } from '@/types/approach';
+import SolutionText from '@/components/question/SolutionText';
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -219,10 +220,10 @@ function PendingCard({
       </button>
 
       {expanded && (
-        <div className="px-5 pb-5 border-t border-border pt-4 space-y-3">
-          <p className="text-sm text-text-muted leading-relaxed whitespace-pre-line">
-            {approach.content}
-          </p>
+        <div className="px-5 pb-5 border-t border-border pt-4 space-y-3 max-w-full overflow-x-auto">
+          <div className="text-sm text-text-muted leading-relaxed">
+            <SolutionText text={approach.content} />
+          </div>
           {approach.imageUrl && (
             <div className="rounded-xl overflow-hidden border border-border">
               {/* eslint-disable-next-line @next/next/no-img-element */}

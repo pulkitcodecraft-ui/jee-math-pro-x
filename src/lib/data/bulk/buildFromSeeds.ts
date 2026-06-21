@@ -1,7 +1,7 @@
 import type { QuestionPassage } from '@/types/passage';
 import type { Approach } from '@/types/approach';
 import type { Question } from '@/types/question';
-import { enrichMathText } from '@/lib/data/mathLatex';
+import { enrichApproachContent, enrichMathText } from '@/lib/data/mathLatex';
 import type {
   BulkPassageSeed,
   BulkQuestionSeed,
@@ -54,7 +54,7 @@ function pushQuestion(
       id: approachId,
       questionId: seed.id,
       label: a.label,
-      content: a.content,
+      content: enrichApproachContent(a.content),
       status: 'official',
       submittedBy: 'admin',
       imageUrl: a.imageUrl,
@@ -70,7 +70,7 @@ function pushQuestion(
     subtopicId: seed.subtopicId,
     difficulty: seed.difficulty,
     format: seed.format ?? (seed.passageId ? 'paragraph-mcq' : undefined),
-    statement: seed.statement,
+    statement: enrichMathText(seed.statement),
     passageId: seed.passageId,
     passageOrder: seed.passageOrder,
     passageLabel: seed.passageLabel,

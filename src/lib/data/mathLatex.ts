@@ -70,6 +70,12 @@ function replaceSuperSub(text: string): string {
 function enrichPlainSegment(text: string): string {
   let s = replaceSuperSub(text);
   s = s
+    .replace(/α/g, '$\\alpha$')
+    .replace(/β/g, '$\\beta$')
+    .replace(/γ/g, '$\\gamma$')
+    .replace(/δ/g, '$\\delta$')
+    .replace(/θ/g, '$\\theta$')
+    .replace(/π/g, '$\\pi$')
     .replace(/⟹/g, '$\\Rightarrow$')
     .replace(/⟺/g, '$\\Leftrightarrow$')
     .replace(/≠/g, '$\\neq$')
@@ -113,4 +119,88 @@ export function enrichApproachContent(content: string): string {
   let s = enrichMathText(content);
   s = s.replace(/\nAnswer:\s*/g, '\n\nAnswer: ');
   return s;
+}
+
+export type MathSegmentKind = 'text' | 'inline' | 'block';
+
+export interface MathSegment {
+  type: MathSegmentKind;
+  value: string;
+}
+
+/**
+ * Split mixed prose + LaTeX into renderable segments. Scanner-based so inline
+ * math can span lines and `$$` blocks are never confused with paired `$`.
+ */
+export function parseMathSegments(input: string): MathSegment[] {
+  const segments: MathSegment[] = [];
+  const text = input ?? '';
+  let i = 0;
+  const n = text.length;
+
+  while (i < n) {
+    // Block math: $$ ... $$
+    if (text[i] === '$' && text[i + 1] === '$') {
+      const end = text.indexOf('$$', i + 2);
+      if (end !== -1) {
+        segments.push({ type: 'block', value: text.slice(i + 2, end) });
+        i = end + 2;
+        continue;
+      }
+    }
+
+    // Block math: \[ ... \]
+    if (text.startsWith('\\[', i)) {
+      const end = text.indexOf('\\]', i + 2);
+      if (end !== -1) {
+        segments.push({ type: 'block', value: text.slice(i + 2, end) });
+        i = end + 2;
+        continue;
+      }
+    }
+
+    // Inline math: \( ... \)
+    if (text.startsWith('\\(', i)) {
+      const end = text.indexOf('\\)', i + 2);
+      if (end !== -1) {
+        segments.push({ type: 'inline', value: text.slice(i + 2, end) });
+        i = end + 2;
+        continue;
+      }
+    }
+
+    // Inline math: $ ... $ (allows newlines inside)
+    if (text[i] === '$' && text[i + 1] !== '$') {
+      let j = i + 1;
+      let closed = false;
+      while (j < n) {
+        if (text[j] === '$' && text[j - 1] !== '\\') {
+          if (text[j + 1] === '$') {
+            j++;
+            continue;
+          }
+          segments.push({ type: 'inline', value: text.slice(i + 1, j) });
+          i = j + 1;
+          closed = true;
+          break;
+        }
+        j++;
+      }
+      if (closed) continue;
+    }
+
+    // Plain text until the next delimiter
+    let j = i + 1;
+    while (j < n) {
+      if (text[j] === '$') break;
+      if (text.startsWith('\\[', j) || text.startsWith('\\(', j)) break;
+      j++;
+    }
+    if (j > i) {
+      segments.push({ type: 'text', value: text.slice(i, j) });
+    }
+    i = j === i ? i + 1 : j;
+  }
+
+  return segments.length ? segments : [{ type: 'text', value: text }];
 }

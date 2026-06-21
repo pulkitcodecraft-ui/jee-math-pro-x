@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import type { HistoryItem } from '@/types/history';
+import SolutionText from '@/components/question/SolutionText';
 
 const difficultyStyles: Record<string, string> = {
   Easy: 'bg-accent-secondary/10 text-accent-secondary border-accent-secondary/30',
@@ -64,7 +65,9 @@ export default function HistoryCard({
         </div>
 
         {/* Question snippet */}
-        <p className="text-sm text-foreground leading-relaxed line-clamp-3 pr-8">{item.question}</p>
+        <div className="text-sm text-foreground leading-relaxed line-clamp-3 pr-8 max-w-full overflow-hidden">
+          <SolutionText text={item.question} />
+        </div>
 
         {/* Footer */}
         <div className="mt-3 flex items-center gap-3 text-xs text-text-dim">

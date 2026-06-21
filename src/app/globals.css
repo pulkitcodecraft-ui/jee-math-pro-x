@@ -142,6 +142,15 @@ body {
 
 .math-content .katex {
   font-size: 1em;
+  color: inherit;
+}
+
+.math-content .katex .base,
+.math-content .katex .mord,
+.math-content .katex .mop,
+.math-content .katex .mbin,
+.math-content .katex .mrel {
+  color: inherit;
 }
 
 @media (max-width: 640px) {

@@ -3,73 +3,27 @@
 import { useMemo } from 'react';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
+import { enrichMathText, parseMathSegments } from '@/lib/data/mathLatex';
 
 /**
- * Renders a string that mixes plain text with LaTeX. Supported delimiters:
- *   - `$$ ... $$` and `\[ ... \]`  → display/block math
- *   - `$ ... $`   and `\( ... \)`  → inline math
- *
- * Many models emit dollar-delimited LaTeX (e.g. `$\frac{4}{7}$`), so we
- * handle both the TeX `$`/`$$` style and the `\(`/`\[` style to avoid ever
- * leaking raw LaTeX source into the UI.
- *
- * Math segments are rendered with KaTeX; everything else is rendered as
- * plain text. KaTeX output inherits `currentColor`, so it stays readable
- * on the dark theme instead of defaulting to black.
+ * Renders mixed prose + LaTeX via KaTeX. Dollar delimiters (`$…$`, `$$…$$`),
+ * `\(...\)`, and `\[...\]` are parsed and rendered — raw `$` syntax should
+ * never appear in the UI for well-formed content.
  */
 
-interface MathSegment {
-  type: 'text' | 'inline' | 'block';
-  value: string;
-}
-
-// Order matters: match the longer/greedier block delimiters ($$, \[) before
-// the inline ones ($, \() so a `$$` is never mistaken for two `$`. Group map:
-//   1 → $$...$$ (block)   2 → \[...\] (block)
-//   3 → $...$   (inline)  4 → \(...\) (inline)
-const MATH_DELIMITERS =
-  /\$\$([\s\S]+?)\$\$|\\\[([\s\S]+?)\\\]|\$(?!\s)([^$\n]+?)(?<!\s)\$|\\\((.+?)\\\)/g;
-
-function parseSegments(input: string): MathSegment[] {
-  const segments: MathSegment[] = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-
-  MATH_DELIMITERS.lastIndex = 0;
-  while ((match = MATH_DELIMITERS.exec(input)) !== null) {
-    if (match.index > lastIndex) {
-      segments.push({ type: 'text', value: input.slice(lastIndex, match.index) });
-    }
-    if (match[1] !== undefined) {
-      segments.push({ type: 'block', value: match[1] });
-    } else if (match[2] !== undefined) {
-      segments.push({ type: 'block', value: match[2] });
-    } else if (match[3] !== undefined) {
-      segments.push({ type: 'inline', value: match[3] });
-    } else if (match[4] !== undefined) {
-      segments.push({ type: 'inline', value: match[4] });
-    }
-    lastIndex = match.index + match[0].length;
-  }
-
-  if (lastIndex < input.length) {
-    segments.push({ type: 'text', value: input.slice(lastIndex) });
-  }
-
-  return segments;
-}
-
 function renderMath(tex: string, displayMode: boolean): string {
+  const trimmed = tex.trim();
+  if (!trimmed) return '';
   try {
-    return katex.renderToString(tex.trim(), {
+    return katex.renderToString(trimmed, {
       displayMode,
       throwOnError: false,
       output: 'htmlAndMathml',
       trust: false,
+      strict: 'ignore',
     });
   } catch {
-    // Fall back to showing the raw LaTeX rather than crashing the render.
-    return tex;
+    return trimmed;
   }
 }
 
@@ -80,12 +34,16 @@ export default function MathText({
   text: string;
   className?: string;
 }) {
-  const segments = useMemo(() => parseSegments(text ?? ''), [text]);
+  const segments = useMemo(() => {
+    const prepared = enrichMathText(text ?? '');
+    return parseMathSegments(prepared);
+  }, [text]);
 
   return (
     <span className={`math-content max-w-full ${className ?? ''}`}>
       {segments.map((seg, i) => {
         if (seg.type === 'text') {
+          if (!seg.value) return null;
           return (
             <span key={i} className="whitespace-pre-wrap break-words">
               {seg.value}
@@ -94,6 +52,7 @@ export default function MathText({
         }
         const isBlock = seg.type === 'block';
         const html = renderMath(seg.value, isBlock);
+        if (!html) return null;
         return (
           <span
             key={i}
