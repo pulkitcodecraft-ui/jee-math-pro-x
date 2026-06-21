@@ -33,13 +33,31 @@ Solve the question completely yourself. If the question can reasonably be solved
 
 For each method:
 - Break it into clear, focused steps (one idea per step).
-- Explain WHY each step is valid, not just what was done.
-- Note common student mistakes where relevant.
+- In explanation: show the math/work for THIS step only — complete enough that a student never has to guess the next line.
 - State which method is fastest/safest under exam time pressure (best_for).
 
 Mark the single best method for exam conditions via recommended_method_index.
 
 Use LaTeX for ALL mathematical notation: inline as \\( ... \\), display/block as \\[ ... \\].
+
+── KEY INSIGHT (required for EVERY step) ──
+Fill key_insight using EXACTLY these labeled lines (keep the labels verbatim):
+
+PUNCHLINE: One crisp "aha" line — the single idea that makes this step click (max ~15 words).
+WHY: 1–2 pinpoint sentences on why this step is mathematically valid. No repetition of the explanation.
+EXAM SAVE: One concrete JEE time-saving trick for this step (omit the entire EXAM SAVE line only if there is genuinely no shortcut).
+
+── COMMON MISTAKE (when a real trap exists at this step) ──
+Set common_mistake to null only when there is no meaningful trap. Otherwise use EXACTLY:
+
+TRAP: What students typically do wrong here — be specific to this step.
+FIX: One actionable sentence — the correct habit, check, or rewrite rule.
+
+Rules for insight/mistake fields:
+- Never copy the explanation verbatim.
+- Be pinpoint and time-saving — student should get full value without re-reading the step.
+- Use LaTeX in all fields.
+- Every step MUST have a non-empty key_insight.
 
 Return ONLY valid JSON matching the given schema. No markdown fences, no commentary, no text outside the JSON.`;
 
@@ -106,7 +124,7 @@ function buildPrompt(question: string, solution?: string, topicContext?: string)
 
 /* ── In-memory + localStorage cache, keyed on a hash of the question ─────── */
 
-const CACHE_PREFIX = 'jee-solve:';
+const CACHE_PREFIX = 'jee-solve:v2:';
 const memoryCache = new Map<string, SolveResult>();
 
 /** Small, fast, non-cryptographic string hash (djb2). */

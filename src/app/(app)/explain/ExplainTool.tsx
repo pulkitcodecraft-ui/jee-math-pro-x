@@ -13,6 +13,11 @@ import type { HistoryAttachment } from '@/types/history';
 import MathText from '@/components/ui/MathText';
 import FileUploadButton from '@/components/explain/FileUploadButton';
 import FileChip from '@/components/explain/FileChip';
+import ExplainStepCard from '@/components/explain/ExplainStepCard';
+import {
+  formatKeyInsightForExport,
+  formatMistakeForExport,
+} from '@/lib/ai/parseStepExtras';
 
 const sampleQuestion =
   'Find the domain of f(x) = √(log₂(log₃(log₅(x² - 1)))). Express your answer in interval notation.';
@@ -46,9 +51,11 @@ function buildMarkdown(result: SolveResult): string {
       lines.push(`### Step ${step.step_number}: ${step.title}`);
       lines.push(step.explanation);
       lines.push('');
-      lines.push(`> **Key insight:** ${step.key_insight}`);
+      if (step.key_insight) {
+        lines.push(`> **Key insight**\n> ${formatKeyInsightForExport(step.key_insight).replace(/\n/g, '\n> ')}`);
+      }
       if (step.common_mistake) {
-        lines.push(`> **Common mistake:** ${step.common_mistake}`);
+        lines.push(`> **Watch out**\n> ${formatMistakeForExport(step.common_mistake).replace(/\n/g, '\n> ')}`);
       }
       lines.push('');
     });
@@ -639,47 +646,14 @@ export default function ExplainTool({
             )}
 
             {/* Steps */}
-            <div className="space-y-4">
-              {method.steps.map((step) => (
-                <div key={step.step_number} className="flex gap-3">
-                  <div className="shrink-0 w-8 h-8 rounded-lg bg-primary/15 border border-primary/20 flex items-center justify-center">
-                    <span className="text-xs font-bold text-primary-light">{step.step_number}</span>
-                  </div>
-                  <div className="flex-1 pb-1 min-w-0 overflow-x-auto">
-                    <h3 className="text-sm font-semibold text-foreground mb-1">{step.title}</h3>
-                    <div className="text-sm text-text-muted leading-relaxed">
-                      <MathText text={step.explanation} />
-                    </div>
-
-                    {step.key_insight && (
-                      <div className="mt-3 rounded-xl bg-primary/5 border border-primary/20 p-3">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <svg className="w-3.5 h-3.5 text-primary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m0 13a5 5 0 003.536-8.536A5 5 0 1012 17z" />
-                          </svg>
-                          <span className="text-[11px] font-bold uppercase tracking-wide text-primary-light">Key Insight</span>
-                        </div>
-                        <div className="text-sm text-text-muted leading-relaxed">
-                          <MathText text={step.key_insight} />
-                        </div>
-                      </div>
-                    )}
-
-                    {step.common_mistake && (
-                      <div className="mt-2 rounded-xl bg-amber-400/5 border border-amber-400/20 p-3">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <svg className="w-3.5 h-3.5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4a2 2 0 00-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z" />
-                          </svg>
-                          <span className="text-[11px] font-bold uppercase tracking-wide text-amber-300">Common Mistake</span>
-                        </div>
-                        <div className="text-sm text-text-muted leading-relaxed">
-                          <MathText text={step.common_mistake} />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
+            <div className="space-y-1">
+              {method.steps.map((step, idx) => (
+                <ExplainStepCard
+                  key={step.step_number}
+                  step={step}
+                  index={idx}
+                  isLast={idx === method.steps.length - 1}
+                />
               ))}
             </div>
 

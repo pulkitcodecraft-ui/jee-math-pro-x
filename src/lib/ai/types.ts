@@ -49,9 +49,9 @@ export interface SolveStep {
   title: string;
   /** Detailed explanation; LaTeX inline as \( ... \), display as \[ ... \] */
   explanation: string;
-  /** The "why this works" insight for this step */
+  /** The "why this works" insight — structured with PUNCHLINE / WHY / EXAM SAVE labels */
   key_insight: string;
-  /** A common student mistake at this step, or null if none */
+  /** Trap + fix for this step (TRAP / FIX labels), or null if none */
   common_mistake: string | null;
 }
 
