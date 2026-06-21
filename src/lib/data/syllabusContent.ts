@@ -109,7 +109,7 @@ const seeds: TopicSeed[] = [
   {
     slug: 'sequence-and-series',
     name: 'Sequence and Series',
-    subtopics: ['Arithmetic Progression', 'Geometric Progression', 'Harmonic Progression', 'AM–GM–HM Inequalities', 'Sum to n Terms', 'Arithmetico-Geometric Series'],
+    subtopics: ['Arithmetic Progression', 'Geometric Progression', 'Harmonic Progression', 'AM–GM–HM Inequalities', 'Inequalities (AM-GM)', 'Sum to n Terms', 'Arithmetico-Geometric Series', 'Recurrence Relations', 'Binomial Identities', 'Infinite Series', 'Telescoping Series', 'Arithmetic Mean & Series'],
     description: 'Patterns, progressions and their sums — from AP/GP basics to mean inequalities.',
     difficulty: 'medium',
     subtopicId: 'Sum to n Terms',
@@ -167,7 +167,7 @@ const seeds: TopicSeed[] = [
   {
     slug: 'binomial-theorem',
     name: 'Binomial Theorem',
-    subtopics: ['General Term', 'Middle Term', 'Term Independent of x', 'Greatest Coefficient', 'Properties of Coefficients', 'Binomial Series'],
+    subtopics: ['General Term', 'Middle Term', 'Term Independent of x', 'Greatest Coefficient', 'Greatest Term & Coefficient', 'Properties of Coefficients', 'Binomial Series', 'Binomial Sums', 'Irrational Powers & Conjugates', 'Coefficient Counting', 'Logarithmic Differentiation Sums', 'Combinatorial Sums', 'Coefficient Extraction', 'Alternating Binomial Sums'],
     description: 'Expansions of (a + b)ⁿ and the structure of their general term, coefficients and special terms.',
     difficulty: 'medium',
     subtopicId: 'Term Independent of x',

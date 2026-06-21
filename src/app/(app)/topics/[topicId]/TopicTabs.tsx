@@ -301,6 +301,11 @@ function StandaloneQuestionCard({
                 {q.correctOptions && q.correctOptions.length > 1 ? 'MCQ (multi)' : 'MCQ'}
               </span>
             )}
+            {q.format === 'numerical' && (
+              <span className="px-2 py-0.5 text-[10px] font-medium rounded-md border bg-orange-500/10 text-orange-300 border-orange-500/20">
+                Numerical
+              </span>
+            )}
             <span className="text-[10px] text-text-dim">{q.subtopicId}</span>
           </div>
 

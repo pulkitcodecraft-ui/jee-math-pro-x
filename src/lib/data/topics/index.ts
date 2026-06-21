@@ -9,12 +9,16 @@ import type { Question } from '@/types/question';
 import parabolaPack from './parabola/questions.json';
 import trigonometryPack from './trigonometry/questions.json';
 import quadraticEquationPack from './quadratic-equation/questions.json';
+import sequenceAndSeriesPack from './sequence-and-series/questions.json';
+import binomialTheoremPack from './binomial-theorem/questions.json';
 import type { TopicBulkPack } from '@/lib/data/bulk/types';
 
 const packs: TopicBulkPack[] = [
   parabolaPack as TopicBulkPack,
   trigonometryPack as TopicBulkPack,
   quadraticEquationPack as TopicBulkPack,
+  sequenceAndSeriesPack as TopicBulkPack,
+  binomialTheoremPack as TopicBulkPack,
 ];
 
 function flattenBuilt(): {

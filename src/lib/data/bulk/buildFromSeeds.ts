@@ -77,6 +77,7 @@ function pushQuestion(
     options: seed.options,
     correctOption: seed.correctOption,
     correctOptions: seed.correctOptions,
+    correctAnswer: seed.correctAnswer,
     images: seed.images,
     approaches: approachIds,
     commonMistakes: seed.commonMistakes ?? [],

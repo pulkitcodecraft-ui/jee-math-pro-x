@@ -21,6 +21,7 @@ export interface BulkQuestionSeed {
   options?: Partial<Record<McqOption, string>>;
   correctOption?: McqOption;
   correctOptions?: McqOption[];
+  correctAnswer?: string;
   images?: string[];
   commonMistakes?: string[];
   commonTraps?: string[];

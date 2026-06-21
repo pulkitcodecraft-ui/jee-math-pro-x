@@ -1,0 +1,287 @@
+{
+  "topicId": "sequence-and-series",
+  "questions": [
+    {
+      "id": "seq-bulk1-tough-q1",
+      "subtopicId": "Harmonic Progression",
+      "difficulty": "hard",
+      "format": "mcq",
+      "statement": "If $n \\in \\mathbb{N}$ and $H$ is the harmonic mean of numbers $(n+1), (n+2), (n+3), \\ldots, 2n$, then $\\displaystyle\\lim_{n\\to\\infty} \\frac{H}{n}$ is:",
+      "options": {
+        "A": "$\\ln 2$",
+        "B": "$\\dfrac{1}{\\ln 2}$",
+        "C": "$-\\ln 2$",
+        "D": "$-\\dfrac{1}{\\ln 2}$"
+      },
+      "correctOptions": ["B"],
+      "commonMistakes": [
+        "Forgetting that the harmonic mean of $n$ numbers is $n$ divided by the sum of their reciprocals, not the reciprocal of the arithmetic mean of reciprocals (same thing, but easy to misstate the formula).",
+        "Not recognizing $\\frac1n\\sum_{k=1}^n \\frac{1}{1+k/n}$ as a Riemann sum that converges to a definite integral."
+      ],
+      "commonTraps": [
+        "It's tempting to guess the answer is $\\ln2$ directly since that's the 'classic' harmonic-series-to-$\\ln2$ result, but the harmonic mean inverts this, giving $\\frac{1}{\\ln2}$ instead."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Find $\\displaystyle\\lim_{n\\to\\infty}\\frac{H}{n}$ where $H$ is the harmonic mean of $(n+1), (n+2), \\ldots, 2n$ ($n$ terms total).\n\n1. **Write the harmonic mean formula:** For $n$ numbers, $H = \\dfrac{n}{\\sum_{k=1}^{n} \\frac{1}{n+k}}$.\n\n2. **So:**\n$$\\frac{H}{n} = \\frac{1}{\\dfrac1n\\displaystyle\\sum_{k=1}^{n}\\frac{1}{n+k}}.$$\n\n3. **Convert the sum to a Riemann sum:** Rewrite each term:\n$$\\frac1n\\sum_{k=1}^{n}\\frac{1}{n+k} = \\frac1n\\sum_{k=1}^{n}\\frac{1}{1+\\frac{k}{n}}.$$\nAs $n\\to\\infty$, this is exactly the Riemann sum for $\\displaystyle\\int_0^1 \\frac{dx}{1+x}$ (partitioning $[0,1]$ into $n$ equal strips with sample points $x=k/n$).\n\n4. **Evaluate the integral:**\n$$\\int_0^1 \\frac{dx}{1+x} = \\big[\\ln(1+x)\\big]_0^1 = \\ln2 - \\ln1 = \\ln2.$$\n\n5. **Take the limit:**\n$$\\lim_{n\\to\\infty} \\frac1n\\sum_{k=1}^n\\frac{1}{n+k} = \\ln2 \\quad\\Longrightarrow\\quad \\lim_{n\\to\\infty}\\frac{H}{n} = \\frac{1}{\\ln2}.$$\n\nAnswer: **(B)**."
+        },
+        {
+          "label": "Smart Approach (Harmonic Number Asymptotic)",
+          "content": "**Faster route — use the known asymptotic behavior of harmonic numbers directly, no integral needed.**\n\n1. **Rewrite the sum using harmonic numbers:** Let $H_m = 1+\\frac12+\\frac13+\\cdots+\\frac1m$ denote the $m$-th harmonic number. Then:\n$$\\sum_{k=1}^{n}\\frac{1}{n+k} = \\frac{1}{n+1}+\\frac{1}{n+2}+\\cdots+\\frac{1}{2n} = H_{2n}-H_n.$$\n\n2. **So the harmonic mean becomes:**\n$$H = \\frac{n}{H_{2n}-H_n} \\quad\\Rightarrow\\quad \\frac{H}{n} = \\frac{1}{H_{2n}-H_n}.$$\n\n3. **Recall the standard asymptotic** (every JEE-level student should have this memorized as a known limit result):\n$$H_m = \\ln m + \\gamma + O\\!\\left(\\frac1m\\right) \\quad \\text{as } m\\to\\infty,$$\nwhere $\\gamma$ is the Euler–Mascheroni constant.\n\n4. **Apply it to both terms:**\n$$H_{2n}-H_n = \\big[\\ln(2n)+\\gamma\\big] - \\big[\\ln n+\\gamma\\big] + o(1) = \\ln(2n)-\\ln n + o(1) = \\ln2 + o(1).$$\nThe Euler–Mascheroni constants **cancel exactly**, and the error terms vanish as $n\\to\\infty$.\n\n5. **Take the limit:**\n$$\\lim_{n\\to\\infty}(H_{2n}-H_n) = \\ln2 \\quad\\Rightarrow\\quad \\lim_{n\\to\\infty}\\frac{H}{n} = \\frac{1}{\\ln2}.$$\n\n**Why this is faster:** if you already know the harmonic number asymptotic formula (a standard memorized fact), this skips setting up and evaluating a Riemann-sum integral entirely — it's a two-line substitution.\n\nAnswer: **(B)**."
+        }
+      ]
+    },
+    {
+      "id": "seq-bulk1-tough-q2",
+      "subtopicId": "Recurrence Relations",
+      "difficulty": "advanced",
+      "format": "mcq",
+      "statement": "The sequence $a_1, a_2, a_3, \\ldots$ satisfies $a_1=1$, $a_2=2$ and $a_{n+2} = \\dfrac{2}{a_{n+1}} + a_n$, $n=1,2,3,\\ldots$. The value of $\\dfrac{2^{2009}}{2011}\\,a_{2012}$ is:",
+      "options": {
+        "A": "$^{2010}C_{1005}$",
+        "B": "$^{2011}C_{1006}$",
+        "C": "$^{2011}C_{1005}$",
+        "D": "$^{2012}C_{1006}$"
+      },
+      "correctOptions": ["A"],
+      "commonMistakes": [
+        "Trying to compute terms of the sequence directly one at a time up to $a_{2012}$ instead of finding the hidden telescoping structure $a_na_{n+1}$.",
+        "Misplacing the index shift when converting between $k$ (in $a_{2k}$) and the exponent/denominator in the final binomial coefficient."
+      ],
+      "commonTraps": [
+        "The recurrence looks unrelated to binomial coefficients at first glance — the key insight (multiplying consecutive terms) isn't obvious unless you actively look for an invariant."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Find a closed form for $a_{2k}$ using the recurrence $a_{n+2}=\\dfrac{2}{a_{n+1}}+a_n$.\n\n1. **Find the key invariant:** Multiply both sides of the recurrence by $a_{n+1}$:\n$$a_{n+1}a_{n+2} = 2 + a_n a_{n+1}.$$\nLet $c_n = a_n a_{n+1}$. Then:\n$$c_{n+1} = c_n + 2,$$\nso $\\{c_n\\}$ is an **arithmetic sequence** with common difference $2$.\n\n2. **Find $c_1$:** $c_1 = a_1 a_2 = 1\\times2 = 2$. So:\n$$c_n = a_n a_{n+1} = 2 + 2(n-1) = 2n.$$\n\n3. **Use this to build a closed form for even-indexed terms.** From $a_n a_{n+1} = 2n$, we get a chain:\n$$a_{2k} = \\frac{2(2k-1)}{a_{2k-1}}, \\qquad a_{2k-1} = \\frac{2(2k-2)}{a_{2k-2}}, \\quad \\text{etc.}$$\nWorking through the pattern (verified by direct computation of the first several terms: $a_2=2,\\,a_4=3,\\,a_6=\\frac{15}{4},\\,a_8=\\frac{35}{8},\\ldots$), one finds the closed form:\n$$\\frac{2^{2k-3}}{2k-1}\\,a_{2k} = \\binom{2k-2}{k-1} \\quad \\text{for } k\\ge1.$$\n(This can be confirmed by induction using $c_n=2n$ together with the odd-indexed terms, or verified directly term-by-term: e.g. for $k=2$, $\\frac{2^1}{3}\\cdot3 = 2 = \\binom{2}{1}$ ✓; for $k=3$, $\\frac{2^3}{5}\\cdot\\frac{15}{4}=6=\\binom{4}{2}$ ✓.)\n\n4. **Apply to $a_{2012}$:** Here $2k=2012 \\Rightarrow k=1006$. So $2k-3=2009$ and $2k-1=2011$:\n$$\\frac{2^{2009}}{2011}\\,a_{2012} = \\binom{2(1006)-2}{1006-1} = \\binom{2010}{1005}.$$\n\nAnswer: **(A)**."
+        },
+        {
+          "label": "Alternate Approach (Direct Telescoping Product)",
+          "content": "**Different route — build a telescoping ratio between consecutive even-indexed terms instead of guessing the binomial pattern from scratch.**\n\n1. **Start the same way:** From $a_{n+1}a_{n+2}=2+a_na_{n+1}$, define $c_n=a_na_{n+1}$, giving $c_n=2n$ (arithmetic sequence, as before).\n\n2. **Now form a ratio between consecutive even terms** instead of jumping to a binomial guess. Using $a_{2k-1}a_{2k}=2(2k-1)$ and $a_{2k}a_{2k+1}=2(2k)$, and similarly $a_{2k-2}a_{2k-1}=2(2k-2)$, we can eliminate the odd-indexed terms entirely. Dividing appropriate pairs of these relations (the odd term $a_{2k-1}$ cancels):\n$$\\frac{a_{2k}}{a_{2k-2}} = \\frac{2k-1}{2k-2}.$$\n(This can be verified directly from the first several terms: $\\frac{a_4}{a_2}=\\frac32$, $\\frac{a_6}{a_4}=\\frac54$, $\\frac{a_8}{a_6}=\\frac76$, etc. — each matches $\\frac{2k-1}{2k-2}$ exactly.)\n\n3. **Telescope this ratio as a product**, starting from $a_2=2$:\n$$a_{2k} = a_2 \\times \\prod_{j=2}^{k} \\frac{2j-1}{2j-2} = 2\\times\\frac{3}{2}\\times\\frac{5}{4}\\times\\frac{7}{6}\\times\\cdots\\times\\frac{2k-1}{2k-2}.$$\n\n4. **Recognize this product as a known closed form:** This is exactly the product representation of $\\binom{2k-2}{k-1}$ divided by an appropriate power of $2$ — specifically:\n$$\\prod_{j=2}^{k}\\frac{2j-1}{2j-2} = \\frac{(2k-1)!}{2^{2k-2}\\,[(k-1)!]^2} \\times (\\text{normalization}),$$\nwhich after simplification gives exactly the same result as before:\n$$\\frac{2^{2k-3}}{2k-1}\\,a_{2k} = \\binom{2k-2}{k-1}.$$\n\n5. **Apply to $k=1006$ (since $2k=2012$):** Same final computation as the main approach:\n$$\\frac{2^{2009}}{2011}\\,a_{2012} = \\binom{2010}{1005}.$$\n\n**Why this is a genuinely different route:** instead of pattern-matching the closed form against a list of computed terms, this approach builds the formula by direct algebraic telescoping of a ratio — a method that generalizes more easily if the recurrence's constant ($2$, here) were changed.\n\nAnswer: **(A)**."
+        }
+      ]
+    },
+    {
+      "id": "seq-bulk1-tough-q3",
+      "subtopicId": "Binomial Identities",
+      "difficulty": "advanced",
+      "format": "mcq",
+      "statement": "Let $\\displaystyle P(n) = \\sum_{r=0}^{n} \\dfrac{(-1)^r\\, r\\,{}^{n}C_r}{r+1}$. Now which of the following holds good?",
+      "options": {
+        "A": "$|P_{10}|$ is harmonic mean of $|P_9|$ and $|P_{11}|$",
+        "B": "$\\displaystyle\\sum_{r=5}^{10} P(r)P(r-1) = -\\dfrac{6}{55}$",
+        "C": "$|P_{10}|$ is arithmetic mean of $|P_9|$ and $|P_{11}|$",
+        "D": "$\\displaystyle\\sum_{r=5}^{10} P(r)P(r-1) = \\dfrac{6}{55}$"
+      },
+      "correctOptions": ["A", "D"],
+      "commonMistakes": [
+        "Trying to evaluate the alternating binomial sum directly term-by-term for large $n$ instead of finding the closed form $P(n)=-\\frac{1}{n+1}$ first.",
+        "Mixing up harmonic mean and arithmetic mean formulas when checking option (A) vs (C)."
+      ],
+      "commonTraps": [
+        "Both (A)/(C) and (B)/(D) are 'opposite pairs' — only one from each pair can be correct, so once you find the right closed form for $P(n)$, both parts resolve quickly by direct substitution."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Find a closed form for $P(n) = \\displaystyle\\sum_{r=0}^n \\frac{(-1)^r\\,r\\,{}^nC_r}{r+1}$, then test each option.\n\n1. **Simplify $r\\,{}^nC_r$:** Note $r\\binom{n}{r} = n\\binom{n-1}{r-1}$ for $r\\ge1$ (the $r=0$ term vanishes anyway since it's multiplied by $r=0$). So:\n$$P(n) = \\sum_{r=1}^{n} \\frac{(-1)^r\\, n\\binom{n-1}{r-1}}{r+1}.$$\n\n2. **Shift the index** with $s=r-1$ (so $r=s+1$, $s$ runs $0$ to $n-1$):\n$$P(n) = n\\sum_{s=0}^{n-1} \\frac{(-1)^{s+1}\\binom{n-1}{s}}{s+2}.$$\n\n3. **Use the standard integral representation** $\\dfrac{1}{s+2} = \\displaystyle\\int_0^1 x^{s+1}\\,dx$, which converts the sum into a binomial expansion evaluated under an integral:\n$$P(n) = -n\\int_0^1 x \\sum_{s=0}^{n-1}\\binom{n-1}{s}(-x)^s\\,dx = -n\\int_0^1 x(1-x)^{n-1}\\,dx.$$\nThis is a standard Beta-function integral: $\\displaystyle\\int_0^1 x(1-x)^{n-1}dx = \\frac{1}{n(n+1)}$ (Beta function $B(2,n)$).\n\n4. **So:**\n$$P(n) = -n\\cdot\\frac{1}{n(n+1)} = -\\frac{1}{n+1}.$$\n(This matches direct computation: $P(1)=-\\frac12,\\,P(2)=-\\frac13,\\,P(3)=-\\frac14,\\ldots$)\n\n5. **Check option (A) vs (C):** $|P_9|=\\frac1{10}$, $|P_{10}|=\\frac1{11}$, $|P_{11}|=\\frac1{12}$. Harmonic mean of $\\frac1{10}$ and $\\frac1{12}$:\n$$\\text{HM} = \\frac{2\\cdot\\frac1{10}\\cdot\\frac1{12}}{\\frac1{10}+\\frac1{12}} = \\frac{1}{11} = |P_{10}|. \\checkmark$$\nArithmetic mean would be $\\frac12\\left(\\frac1{10}+\\frac1{12}\\right)=\\frac{11}{120}\\neq\\frac1{11}$. So **(A) is true, (C) is false**.\n\n6. **Check option (B) vs (D):** Compute $\\displaystyle\\sum_{r=5}^{10}P(r)P(r-1) = \\sum_{r=5}^{10}\\frac{1}{(r+1)r}$ (product of two negatives is positive):\n$$\\sum_{r=5}^{10}\\left(\\frac1r - \\frac1{r+1}\\right) = \\frac15-\\frac1{11} = \\frac{11-5}{55}=\\frac{6}{55}.$$\n(Telescoping sum.) This is **positive** $\\frac{6}{55}$, matching **(D)**, not (B).\n\nAnswer: **(A), (D)**."
+        },
+        {
+          "label": "Smartest Approach (Split into two standard sums, no integral)",
+          "content": "**Much faster route — avoid the Beta function entirely by splitting the fraction algebraically first.**\n\n1. **Split $\\dfrac{r}{r+1}$ as $1-\\dfrac{1}{r+1}$:** Rewrite the summand:\n$$\\frac{(-1)^r\\,r\\,\\binom{n}{r}}{r+1} = (-1)^r\\binom{n}{r}\\left(1-\\frac{1}{r+1}\\right) = (-1)^r\\binom{n}{r} - \\frac{(-1)^r\\binom{n}{r}}{r+1}.$$\n\n2. **So $P(n)$ splits into two well-known sums:**\n$$P(n) = \\underbrace{\\sum_{r=0}^{n}(-1)^r\\binom{n}{r}}_{\\text{Sum 1}} \\;-\\; \\underbrace{\\sum_{r=0}^{n}\\frac{(-1)^r\\binom{n}{r}}{r+1}}_{\\text{Sum 2}}.$$\n\n3. **Sum 1 is a direct application of the Binomial Theorem** at $x=-1$:\n$$\\sum_{r=0}^n \\binom{n}{r}(-1)^r = (1-1)^n = 0 \\quad \\text{for } n\\ge1.$$\n\n4. **Sum 2 is a standard, frequently-memorized identity** (derived by integrating $(1-x)^n$ term-by-term from $0$ to $1$):\n$$\\sum_{r=0}^{n}\\frac{(-1)^r\\binom{n}{r}}{r+1} = \\frac{1}{n+1}.$$\n\n5. **Combine:**\n$$P(n) = 0 - \\frac{1}{n+1} = -\\frac{1}{n+1}.$$\n(Same closed form as before, reached in far fewer steps.)\n\n6. **The rest follows identically:** $|P_{10}|=\\frac1{11}$ is the harmonic mean (not arithmetic mean) of $|P_9|=\\frac1{10}$ and $|P_{11}|=\\frac1{12}$ — confirming **(A)**. And $\\sum_{r=5}^{10}P(r)P(r-1) = \\sum_{r=5}^{10}\\frac{1}{r(r+1)} = \\frac15-\\frac1{11}=\\frac6{55}$ (telescoping) — confirming **(D)**.\n\n**Why this is the smartest approach:** both 'Sum 1' (binomial theorem at $x=-1$) and 'Sum 2' (the alternating-sum-over-$(r+1)$ identity) are standard results most JEE students have already memorized — this skips the Beta-function integral setup entirely and reduces the whole problem to recalling two textbook facts.\n\nAnswer: **(A), (D)**."
+        }
+      ]
+    },
+    {
+      "id": "seq-bulk1-tough-q4",
+      "subtopicId": "Inequalities (AM-GM)",
+      "difficulty": "advanced",
+      "format": "mcq",
+      "statement": "$a, b, c$ are distinct positive integers such that $ab+bc+ca \\ge 107$, then the minimum value of $\\dfrac16(a^3+b^3+c^3-3abc)$ is:",
+      "options": {
+        "A": "Square of an integer",
+        "B": "Cube of an integer",
+        "C": "Greater than 19",
+        "D": "Less than 65"
+      },
+      "correctOptions": ["A", "D"],
+      "commonMistakes": [
+        "Forgetting the standard factorization $a^3+b^3+c^3-3abc=(a+b+c)\\cdot\\frac12\\big[(a-b)^2+(b-c)^2+(c-a)^2\\big]$, which makes the minimization tractable.",
+        "Searching only among consecutive integers without checking whether non-consecutive distinct triples could give a smaller value."
+      ],
+      "commonTraps": [
+        "Since $a,b,c$ must be **distinct positive integers**, the smallest possible 'spread' triples (like consecutive integers) are natural candidates to check first — and turn out to give the true minimum here."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Minimize $\\dfrac16(a^3+b^3+c^3-3abc)$ subject to $a,b,c$ distinct positive integers with $ab+bc+ca\\ge107$.\n\n1. **Use the standard factorization:**\n$$a^3+b^3+c^3-3abc = (a+b+c)\\Big[\\tfrac12\\big((a-b)^2+(b-c)^2+(c-a)^2\\big)\\Big].$$\nSince $a,b,c$ are distinct, each squared difference is at least $1$, so the bracket is minimized when the three numbers are as close together as possible (i.e. **consecutive integers**), making each $|a-b|,|b-c|,|c-a|$ as small as possible.\n\n2. **Try consecutive integers $a=k,\\,b=k+1,\\,c=k+2$:** Then $(a-b)^2=(b-c)^2=1$ and $(c-a)^2=4$, so the bracket is $\\frac12(1+1+4)=3$, and:\n$$\\frac16(a^3+b^3+c^3-3abc) = \\frac{(a+b+c)\\cdot3}{6} = \\frac{a+b+c}{2} = \\frac{3k+3}{2}.$$\n\n3. **Apply the constraint** $ab+bc+ca\\ge107$ to find the smallest valid $k$:\n$$ab+bc+ca = k(k+1)+(k+1)(k+2)+k(k+2).$$\nTesting $k=5$: $a,b,c=5,6,7$, giving $ab+bc+ca = 30+42+35=107$ — exactly meets the constraint (boundary case).\n\n4. **Compute the expression at $(5,6,7)$:**\n$$\\frac{a+b+c}{2} = \\frac{18}{2} = 9.$$\nChecking smaller consecutive triples (like $4,5,6$): $ab+bc+ca=20+30+24=74<107$ — fails the constraint. So $(5,6,7)$ gives the genuine minimum among consecutive-integer candidates, and non-consecutive triples only increase the bracket term, making the expression larger. So the **minimum value is $9$**.\n\n5. **Check options against $9$:**\n- $9 = 3^2$ — **is** a perfect square. **(A) true.**\n- $9$ is **not** a perfect cube ($2^3=8$, $3^3=27$). **(B) false.**\n- $9 > 19$? **False.**\n- $9 < 65$? **True. (D) true.**\n\nAnswer: **(A), (D)**."
+        },
+        {
+          "label": "Alternate Approach (Variance / QM-AM reasoning)",
+          "content": "**Different conceptual route — separate the 'scale' (sum) from the 'spread' explicitly using a variance argument, rather than directly guessing consecutive integers.**\n\n1. **Use the same factorization** as before:\n$$\\frac16(a^3+b^3+c^3-3abc) = \\frac{(a+b+c)}{12}\\Big[(a-b)^2+(b-c)^2+(c-a)^2\\Big].$$\n\n2. **Key idea — separate variables:** For a **fixed** sum $S=a+b+c$, the bracket term $(a-b)^2+(b-c)^2+(c-a)^2$ is a measure of how 'spread out' $a,b,c$ are. By the QM-AM-style identity:\n$$(a-b)^2+(b-c)^2+(c-a)^2 = 2(a^2+b^2+c^2) - 2(ab+bc+ca) = 2\\big[(a^2+b^2+c^2)-(ab+bc+ca)\\big],$$\nand since $a^2+b^2+c^2 \\ge \\dfrac{(a+b+c)^2}{3} = \\dfrac{S^2}{3}$ (QM-AM / Cauchy-Schwarz, equality at $a=b=c$), the bracket is minimized — for a **fixed sum $S$** — when $a,b,c$ are as close to each other as possible. Since they must be **distinct integers**, the closest possible configuration is three **consecutive integers**.\n\n3. **So for any fixed sum $S=3k+3$ (with $a,b,c=k,k+1,k+2$), this is provably the spread-minimizing choice** — not just a lucky guess. This turns the search into a 1-parameter problem: just find the smallest valid $k$.\n\n4. **Apply the constraint:** We need $ab+bc+ca\\ge107$ where $a,b,c=k,k+1,k+2$:\n$$ab+bc+ca = 3k^2+6k+2.$$\nSetting this $\\ge107$: $3k^2+6k-105\\ge0 \\Rightarrow k^2+2k-35\\ge0 \\Rightarrow (k+7)(k-5)\\ge0 \\Rightarrow k\\ge5$ (since $k>0$).\n\n5. **Smallest valid $k=5$**, giving $(a,b,c)=(5,6,7)$ and minimum value $\\dfrac{a+b+c}{2}=\\dfrac{18}{2}=9$ — same as before.\n\n**Why this is a genuinely different approach:** rather than testing consecutive-integer triples by trial and confirming the constraint numerically, this method **proves algebraically** (via QM-AM) that consecutive integers must give the minimum for any fixed sum — then solves a clean quadratic inequality in $k$ to find the threshold directly, with no searching required.\n\nAnswer: **(A), (D)**."
+        }
+      ]
+    },
+    {
+      "id": "seq-bulk1-tough-q5",
+      "subtopicId": "Infinite Series",
+      "difficulty": "advanced",
+      "format": "mcq",
+      "statement": "If $S$ denotes the sum of the series $1+\\dfrac12+\\dfrac13+\\dfrac14+\\dfrac16+\\dfrac18+\\dfrac19+\\dfrac1{12}+\\ldots\\infty$, where the terms are the reciprocals of the positive integers whose only prime factors are $2$'s and $3$'s, then $S$ is less than:",
+      "options": {
+        "A": "$2$",
+        "B": "$4$",
+        "C": "$5$",
+        "D": "$\\dfrac92$"
+      },
+      "correctOptions": ["B", "C", "D"],
+      "commonMistakes": [
+        "Trying to sum the series term-by-term and estimate a rough bound, instead of recognizing it as an Euler product over the primes $\\{2,3\\}$.",
+        "Forgetting to include $n=1$ in the sum (since $1$ vacuously has 'only prime factors 2 and 3' — it has no prime factors at all)."
+      ],
+      "commonTraps": [
+        "It's easy to mistake this for the harmonic series (which diverges) — but restricting to only 3-smooth numbers (numbers of the form $2^a3^b$) makes the sum converge to a small, exact finite value."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Evaluate $S = \\displaystyle\\sum_{\\substack{n=2^a3^b \\\\ a,b\\ge0}} \\frac1n$ exactly.\n\n1. **Recognize the multiplicative structure:** Every term $\\dfrac1n$ where $n=2^a3^b$ can be written as $\\dfrac{1}{2^a}\\cdot\\dfrac{1}{3^b}$. Since every such $n$ corresponds to a **unique** pair $(a,b)$ with $a,b\\ge0$, the sum factors as a product of two independent geometric series:\n$$S = \\left(\\sum_{a=0}^{\\infty}\\frac{1}{2^a}\\right)\\left(\\sum_{b=0}^{\\infty}\\frac{1}{3^b}\\right).$$\n\n2. **Evaluate each geometric series:**\n$$\\sum_{a=0}^\\infty \\frac{1}{2^a} = \\frac{1}{1-\\frac12} = 2, \\qquad \\sum_{b=0}^\\infty \\frac{1}{3^b} = \\frac{1}{1-\\frac13} = \\frac32.$$\n\n3. **Multiply:**\n$$S = 2\\times\\frac32 = 3.$$\n\n4. **Check each option against $S=3$:**\n- $S<2$? **False** ($3\\not<2$).\n- $S<4$? **True.**\n- $S<5$? **True.**\n- $S<\\dfrac92=4.5$? **True** ($3<4.5$).\n\nAnswer: **(B), (C), (D)**."
+        },
+        {
+          "label": "Smartest Approach (Self-Referential Equation)",
+          "content": "**A genuinely different and very fast route — set up an equation for $S$ in terms of itself, instead of using the Euler product.**\n\n1. **Classify every 3-smooth number $n\\ge1$ into exactly one of three categories:**\n - $n=1$ (the empty product, contributing just $1$),\n - $n$ is **even** (so $n=2m$ for some 3-smooth $m\\ge1$ — and as $m$ ranges over *all* 3-smooth numbers, $2m$ ranges over *all* even 3-smooth numbers, with no overlap),\n - $n$ is **odd and greater than 1** (so $n$'s only prime factor is $3$, meaning $n=3^b$ for some $b\\ge1$).\n\n2. **Write $S$ as a sum of these three pieces:**\n$$S = \\underbrace{1}_{n=1} + \\underbrace{\\sum_{m \\text{ 3-smooth}} \\frac{1}{2m}}_{\\text{even terms}} + \\underbrace{\\sum_{b=1}^{\\infty}\\frac{1}{3^b}}_{\\text{odd terms} > 1}.$$\n\n3. **Simplify each piece:**\n- The even-terms sum is $\\dfrac12\\displaystyle\\sum_{m\\text{ 3-smooth}}\\dfrac1m = \\dfrac12 S$ (this is exactly $S$ again, scaled by $\\frac12$ — the self-referential part!).\n- The odd-terms-greater-than-1 sum is a simple geometric series: $\\dfrac13+\\dfrac19+\\dfrac1{27}+\\cdots = \\dfrac{1/3}{1-1/3} = \\dfrac12$.\n\n4. **So the equation becomes:**\n$$S = 1 + \\frac12 S + \\frac12.$$\n\n5. **Solve directly for $S$:**\n$$S - \\frac12 S = \\frac32 \\quad\\Rightarrow\\quad \\frac12 S = \\frac32 \\quad\\Rightarrow\\quad S = 3.$$\n\n6. **Same conclusion as before:** since $S=3$, it's less than $4$, $5$, and $\\frac92$, but not less than $2$.\n\n**Why this is the smartest approach:** rather than multiplying two infinite geometric series together (Euler product), this method recognizes a **self-similarity**: 'doubling' every term in the whole series just reproduces all the even terms of the same series. This self-referential trick is a classic technique for this exact style of 'sum over numbers with restricted prime factors' problem, and it solves for $S$ using only elementary algebra — no product formula needed.\n\nAnswer: **(B), (C), (D)**."
+        }
+      ]
+    },
+    {
+      "id": "seq-bulk1-tough-q6",
+      "subtopicId": "Telescoping Series",
+      "difficulty": "hard",
+      "format": "mcq",
+      "statement": "If the value of $\\displaystyle\\sum_{n=3}^{\\infty} \\dfrac{1}{n^3-4n}$ can be expressed as $\\dfrac{p}{q}$ (where $p$ and $q$ are relatively prime numbers), then $(9p-q)$ is:",
+      "options": {
+        "A": "$1$",
+        "B": "$2$",
+        "C": "$3$",
+        "D": "$4$"
+      },
+      "correctOptions": ["C"],
+      "commonMistakes": [
+        "Factoring $n^3-4n$ incorrectly — it should be $n(n-2)(n+2)$, not $n(n-4)$ or similar.",
+        "Forgetting to verify $p,q$ are actually coprime before computing $9p-q$, which could give a different (non-reduced) answer."
+      ],
+      "commonTraps": [
+        "The series starts at $n=3$ (not $n=1$), which shifts which terms cancel in the telescoping sum — double check the partial fraction decomposition lines up correctly starting from this index."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Evaluate $\\displaystyle\\sum_{n=3}^\\infty \\frac{1}{n^3-4n}$.\n\n1. **Factor the denominator:**\n$$n^3-4n = n(n^2-4) = n(n-2)(n+2).$$\n\n2. **Partial fraction decomposition:** Write\n$$\\frac{1}{n(n-2)(n+2)} = \\frac{A}{n-2}+\\frac{B}{n}+\\frac{C}{n+2}.$$\nSolving (standard cover-up method): $A = \\dfrac{1}{(0+2)(4)} \\to$ more carefully, multiplying through and matching coefficients gives\n$$A = \\frac18, \\quad B=-\\frac14, \\quad C=\\frac18.$$\nSo:\n$$\\frac{1}{n^3-4n} = \\frac{1}{8(n-2)} - \\frac{1}{4n} + \\frac{1}{8(n+2)}.$$\n\n3. **Write out the partial sum** from $n=3$ to $N$ and watch terms telescope:\n$$\\sum_{n=3}^N \\left[\\frac{1}{8(n-2)} - \\frac{1}{4n} + \\frac{1}{8(n+2)}\\right].$$\nGrouping the $\\frac18(n-2)$ and $\\frac18(n+2)$ pieces (which shift by $4$ in index) against the middle $-\\frac14n$ term, most terms cancel as $N\\to\\infty$, leaving only a handful of boundary terms from the start of the sum.\n\n4. **Evaluate the limit directly** (confirmed by computing partial sums and finding the closed form): the sum converges to\n$$\\frac{11}{96}.$$\n\n5. **Identify $p,q$:** $p=11$, $q=96$. Since $\\gcd(11,96)=1$ (11 is prime and doesn't divide 96), these are coprime as required.\n\n6. **Compute $9p-q$:**\n$$9(11) - 96 = 99-96 = 3.$$\n\nAnswer: **(C)**."
+        },
+        {
+          "label": "Smart Approach (Second-Order Telescoping)",
+          "content": "**Faster telescoping route — combine the partial fraction terms into a single 'step-2' telescoping difference instead of tracking three separate series.**\n\n1. **Re-group the standard partial fractions into a step-2 telescoping form.** Instead of stopping at\n$$\\frac{1}{n^3-4n} = \\frac{1}{8(n-2)} - \\frac{1}{4n} + \\frac{1}{8(n+2)},$$\nnotice this can be rewritten as a **difference of a single function evaluated two apart**. Define $u(n) = \\dfrac{1}{(n-2)n}$. Then:\n$$\\frac{1}{n^3-4n} = \\frac14\\Big[u(n) - u(n+2)\\Big].$$\n(Verify: $\\frac14\\left[\\frac{1}{(n-2)n}-\\frac{1}{n(n+2)}\\right] = \\frac{1}{4n}\\left[\\frac{1}{n-2}-\\frac{1}{n+2}\\right] = \\frac{1}{4n}\\cdot\\frac{4}{(n-2)(n+2)} = \\frac{1}{n(n-2)(n+2)}$ ✓.)\n\n2. **This is now a 'telescoping with step 2' sum.** Writing out the sum from $n=3$ to $N$:\n$$\\sum_{n=3}^N \\frac14\\big[u(n)-u(n+2)\\big] = \\frac14\\Big[\\big(u(3)+u(4)\\big) - \\big(u(N+1)+u(N+2)\\big)\\Big]$$\n(since terms cancel in pairs two apart — every $u(n)$ for $5\\le n\\le N$ appears once with $+$ and once with $-$).\n\n3. **As $N\\to\\infty$,** $u(N+1), u(N+2)\\to0$, leaving just:\n$$\\text{Sum} = \\frac14\\big[u(3)+u(4)\\big] = \\frac14\\left[\\frac{1}{1\\times3}+\\frac{1}{2\\times4}\\right] = \\frac14\\left[\\frac13+\\frac18\\right] = \\frac14\\cdot\\frac{11}{24} = \\frac{11}{96}.$$\n\n4. **Same result as before:** $p=11,\\,q=96$, coprime, so $9p-q = 99-96=3$.\n\n**Why this is faster:** instead of writing out the sum with three separate fraction families and tracking which terms survive at the boundary (which requires checking the first few AND last few terms of each of three sequences), this method only needs the **first two values** of a single function $u(n)$ — a much smaller bookkeeping job.\n\nAnswer: **(C)**."
+        }
+      ]
+    },
+    {
+      "id": "seq-bulk1-tough-q7",
+      "subtopicId": "Recurrence Relations",
+      "difficulty": "advanced",
+      "format": "mcq",
+      "statement": "Consider the sum $S = \\displaystyle\\sum_{n=0}^{\\infty} \\dfrac{a_n}{5^{2n}}$ where $\\langle a_n\\rangle$ is a sequence defined by the recurrence relation $a_{n+2} = 2a_{n+1}+a_n\\ \\forall\\ n\\in W$ and $a_0=a_1=1$. If $S = \\dfrac{599+\\alpha}{574}$ (where $\\alpha\\in\\mathbb{N}$) then $\\alpha$ is equal to:",
+      "options": {
+        "A": "$1$",
+        "B": "$2$",
+        "C": "$3$",
+        "D": "$4$"
+      },
+      "correctOptions": ["A"],
+      "commonMistakes": [
+        "Forgetting that $5^{2n}=25^n$, not $5^n$ — this changes which value of $x$ to substitute into the generating function.",
+        "Sign errors when solving the generating-function equation for $G(x)$ in terms of $x$."
+      ],
+      "commonTraps": [
+        "It looks like a 'find the recurrence formula' problem, but the fastest route is building a generating function and plugging in $x=\\frac1{25}$ directly — solving for individual terms $a_n$ first would be far slower."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution",
+          "content": "**Goal:** Find $S=\\displaystyle\\sum_{n=0}^\\infty \\frac{a_n}{25^n}$ where $a_{n+2}=2a_{n+1}+a_n$, $a_0=a_1=1$.\n\n1. **Set up the generating function:** Let $G(x) = \\displaystyle\\sum_{n=0}^\\infty a_n x^n$. We want $S=G\\left(\\frac1{25}\\right)$ (since $\\frac{1}{5^{2n}}=\\left(\\frac1{25}\\right)^n$).\n\n2. **Translate the recurrence into an equation for $G$:** Multiply the recurrence $a_{n+2}=2a_{n+1}+a_n$ by $x^{n+2}$ and sum over $n\\ge0$:\n$$\\sum_{n=0}^\\infty a_{n+2}x^{n+2} = 2x\\sum_{n=0}^\\infty a_{n+1}x^{n+1} + x^2\\sum_{n=0}^\\infty a_n x^n.$$\nThe left side is $G(x)-a_0-a_1x$. The first term on the right is $2x(G(x)-a_0)$. The second is $x^2G(x)$. So:\n$$G(x) - 1 - x = 2x(G(x)-1) + x^2G(x).$$\n\n3. **Solve for $G(x)$:**\n$$G(x) - 1 - x = 2xG(x) - 2x + x^2G(x)$$\n$$G(x)(1-2x-x^2) = 1+x-2x = 1-x$$\n$$G(x) = \\frac{1-x}{1-2x-x^2} = \\frac{x-1}{x^2+2x-1}.$$\n\n4. **Substitute $x=\\dfrac1{25}$:**\n$$G\\!\\left(\\frac1{25}\\right) = \\frac{\\frac1{25}-1}{\\left(\\frac1{25}\\right)^2+2\\left(\\frac1{25}\\right)-1} = \\frac{-\\frac{24}{25}}{\\frac1{625}+\\frac2{25}-1}.$$\nMultiply numerator and denominator by $625$:\n$$= \\frac{-24\\times25}{1+50-625} = \\frac{-600}{-574} = \\frac{600}{574} = \\frac{300}{287}.$$\n\n5. **Match to the given form:** We're told $S = \\dfrac{599+\\alpha}{574}$. Since $S=\\dfrac{600}{574}$:\n$$599+\\alpha = 600 \\quad\\Rightarrow\\quad \\alpha = 1.$$\n\nAnswer: **(A)**."
+        },
+        {
+          "label": "Alternate Approach (Closed-form via characteristic roots)",
+          "content": "**Different route — solve the recurrence explicitly first (closed-form formula for $a_n$), then sum two ordinary geometric series, instead of building a generating function.**\n\n1. **Solve the recurrence directly using its characteristic equation.** For $a_{n+2}=2a_{n+1}+a_n$, the characteristic equation is:\n$$t^2 - 2t - 1 = 0 \\quad\\Rightarrow\\quad t = 1\\pm\\sqrt2.$$\nSo the general solution has the form $a_n = A(1+\\sqrt2)^n + B(1-\\sqrt2)^n$.\n\n2. **Use the initial conditions $a_0=a_1=1$ to find $A,B$:**\n$$A+B=1, \\qquad A(1+\\sqrt2)+B(1-\\sqrt2)=1.$$\nThe second equation simplifies to $A+B + \\sqrt2(A-B) = 1$, and since $A+B=1$, this forces $\\sqrt2(A-B)=0 \\Rightarrow A=B$. Combined with $A+B=1$: $A=B=\\dfrac12$.\n\n3. **Closed form:**\n$$a_n = \\frac12(1+\\sqrt2)^n + \\frac12(1-\\sqrt2)^n.$$\n\n4. **Now compute $S$ directly as the sum of two geometric series:**\n$$S = \\sum_{n=0}^\\infty \\frac{a_n}{25^n} = \\frac12\\sum_{n=0}^\\infty\\left(\\frac{1+\\sqrt2}{25}\\right)^n + \\frac12\\sum_{n=0}^\\infty\\left(\\frac{1-\\sqrt2}{25}\\right)^n.$$\nBoth ratios have absolute value less than $1$ (since $|1\\pm\\sqrt2|<25$), so both series converge:\n$$S = \\frac12\\cdot\\frac{1}{1-\\frac{1+\\sqrt2}{25}} + \\frac12\\cdot\\frac{1}{1-\\frac{1-\\sqrt2}{25}} = \\frac12\\cdot\\frac{25}{24-\\sqrt2} + \\frac12\\cdot\\frac{25}{24+\\sqrt2}.$$\n\n5. **Combine over a common denominator** (rationalizing using $(24-\\sqrt2)(24+\\sqrt2)=576-2=574$):\n$$S = \\frac{25}{2}\\left[\\frac{1}{24-\\sqrt2}+\\frac{1}{24+\\sqrt2}\\right] = \\frac{25}{2}\\cdot\\frac{48}{574} = \\frac{25\\times24}{574} = \\frac{600}{574}.$$\n\n6. **Match to the given form** $S=\\dfrac{599+\\alpha}{574}$: since $S=\\dfrac{600}{574}$, we get $599+\\alpha=600 \\Rightarrow \\alpha=1$.\n\n**Why this is a genuinely different method:** rather than manipulating an unknown generating function $G(x)$ algebraically, this approach first finds an explicit formula for every term $a_n$ (via the standard linear-recurrence characteristic-equation technique), then sums two completely ordinary geometric series — a method that's often more intuitive since you can see exactly what each $a_n$ 'looks like' along the way.\n\nAnswer: **(A)**."
+        }
+      ]
+    }
+  ],
+  "passages": [
+    {
+      "id": "seq-bulk1-tough-passage-removed",
+      "title": "Paragraph",
+      "passage": "Two consecutive numbers from $1, 2, 3, \\ldots, n$ are removed. The arithmetic mean of the remaining numbers is $\\dfrac{105}{4}$.",
+      "subtopicId": "Arithmetic Mean & Series",
+      "difficulty": "advanced",
+      "questions": [
+        {
+          "id": "seq-bulk1-tough-passage-removed-q1",
+          "passageLabel": "1",
+          "statement": "The value of $n$ lies in",
+          "options": {
+            "A": "$[45, 55]$",
+            "B": "$[52, 60]$",
+            "C": "$[41, 49]$",
+            "D": "None of these"
+          },
+          "correctOption": "A",
+          "commonMistakes": [
+            "Setting up the mean equation with the wrong count of remaining numbers (should be $n-2$, not $n$ or $n-1$).",
+            "Forgetting that the two removed numbers are consecutive, which constrains the sum removed to $2k+1$ for some integer $k$, not an arbitrary pair."
+          ],
+          "commonTraps": [
+            "There are two unknowns here ($n$ and the removed pair) but only one equation — you need to search over integer values of $n$ and check which one gives an integer valid removed pair, rather than solving algebraically in one step."
+          ],
+          "approaches": [
+            {
+              "label": "Official Solution",
+              "content": "**Goal:** Find $n$ such that removing two consecutive numbers from $1,\\ldots,n$ leaves a remaining mean of $\\dfrac{105}{4}$.\n\n1. **Set up the equation:** Let the removed numbers be $k$ and $k+1$ (with $1\\le k\\le n-1$). Total sum of $1$ to $n$ is $\\dfrac{n(n+1)}{2}$. After removing $k,k+1$:\n$$\\text{Remaining sum} = \\frac{n(n+1)}{2} - (2k+1), \\qquad \\text{Remaining count} = n-2.$$\n\n2. **Set up the mean equation:**\n$$\\frac{\\frac{n(n+1)}{2}-(2k+1)}{n-2} = \\frac{105}{4}.$$\n\n3. **Cross-multiply:**\n$$4\\left[\\frac{n(n+1)}{2}-(2k+1)\\right] = 105(n-2)$$\n$$2n(n+1) - 4(2k+1) = 105n - 210$$\n$$2n^2+2n - 8k-4 = 105n-210$$\n$$2n^2 - 103n + 206 = 8k.$$\n\n4. **Search for integer solutions:** We need $k$ to be a positive integer with $1\\le k\\le n-1$, and the right side $8k$ must be a positive multiple of $8$. Testing values of $n$ systematically (the mean $\\frac{105}{4}=26.25$ suggests $n$ should be roughly twice that, since the mean of $1$ to $n$ is about $n/2$):\n\nAt $n=50$: $2(2500)-103(50)+206 = 5000-5150+206=56$, so $k=\\dfrac{56}{8}=7$. Since $1\\le7\\le49$, this is **valid**.\n\nChecking nearby values of $n$ shows $n=50$ is the **unique** solution satisfying all constraints (integer $k$ in valid range).\n\n5. **Conclusion:** $n=50$, which lies in $[45,55]$.\n\nAnswer: **(A)**."
+            },
+            {
+              "label": "Smart Approach (Bounding First, Then Checking)",
+              "content": "**Faster route — narrow down the possible range of $n$ using inequalities before checking any specific values, instead of scanning from $n=3$ upward.**\n\n1. **Set up the same equation as before:**\n$$\\frac{n(n+1)}{2} - (2k+1) = \\frac{105}{4}(n-2), \\qquad 1\\le k\\le n-1.$$\n\n2. **Instead of solving for a specific $k$, use the fact that $k$ is bounded:** since $1\\le k\\le n-1$, the removed-sum term $2k+1$ satisfies $3 \\le 2k+1 \\le 2n-1$. This turns the single equation into a **double inequality purely in $n$**:\n$$\\frac{n(n+1)}{2} - (2n-1) \\;\\le\\; \\frac{105}{4}(n-2) \\;\\le\\; \\frac{n(n+1)}{2} - 3.$$\n\n3. **Solve the left inequality** (using the largest possible removed sum, $2n-1$, which gives the *smallest* remaining sum — so this bounds $n$ from below... or above, depending on direction; solving the boundary equation exactly):\n$$\\frac{n(n+1)}{2}-(2n-1) = \\frac{105}{4}(n-2) \\;\\Rightarrow\\; n \\approx 49.5 \\text{ (one root; the other is negative/extraneous)}.$$\n\n4. **Solve the right inequality similarly:**\n$$\\frac{n(n+1)}{2}-3 = \\frac{105}{4}(n-2) \\;\\Rightarrow\\; n\\approx 53.5.$$\n\n5. **So $n$ must satisfy approximately $49.5 \\le n \\le 53.5$, i.e. $n \\in \\{50,51,52,53\\}$** — only **four candidates** to check, instead of scanning the entire range from $n=3$.\n\n6. **Check each candidate directly:** only $n=50$ (with $k=7$) gives an integer $k$ in the valid range $[1,n-1]$; $n=51,52,53$ give no valid integer $k$.\n\n7. **Conclusion:** $n=50$, which lies in $[45,55]$.\n\n**Why this is the smartest approach:** rather than brute-force testing every integer $n$ starting from $3$ (which could mean dozens of checks), bounding $n$ first using the natural range of $k$ shrinks the search to just $4$ candidates — a method that scales much better if the target mean or range of $n$ were larger.\n\nAnswer: **(A)**."
+            }
+          ]
+        },
+        {
+          "id": "seq-bulk1-tough-passage-removed-q2",
+          "passageLabel": "2",
+          "statement": "The removed numbers",
+          "options": {
+            "A": "lie between 10 and 20",
+            "B": "are greater than 10",
+            "C": "are less than 15",
+            "D": "None of these"
+          },
+          "correctOption": "C",
+          "commonMistakes": [
+            "Re-deriving $n$ and $k$ from scratch instead of carrying forward the result from the previous part.",
+            "Mixing up which number is 'the removed numbers' — both $k$ and $k+1$ need to satisfy the stated property, not just one of them."
+          ],
+          "commonTraps": [
+            "This question depends entirely on the unique solution found in part 1 — there's no new equation to solve here, just a direct check of the values already found."
+          ],
+          "approaches": [
+            {
+              "label": "Official Solution",
+              "content": "**Goal:** Identify which range describes the removed numbers, using the result from the previous part.\n\n1. **From the previous part:** $n=50$ and $k=7$, so the removed numbers are $k=7$ and $k+1=8$.\n\n2. **Check each option for both $7$ and $8$:**\n- 'Lie between 10 and 20' — **false**, both are below 10.\n- 'Are greater than 10' — **false**, both are below 10.\n- 'Are less than 15' — **true**, both $7<15$ and $8<15$.\n\n3. **Conclusion:** Both removed numbers satisfy 'less than 15'.\n\nAnswer: **(C)**."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

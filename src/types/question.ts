@@ -11,7 +11,7 @@ export type Difficulty = 'easy' | 'medium' | 'hard' | 'advanced';
 /** MCQ option label — matches SRG / JEE workbook style (A–D). */
 export type McqOption = 'A' | 'B' | 'C' | 'D';
 
-export type QuestionFormat = 'subjective' | 'mcq' | 'paragraph-mcq';
+export type QuestionFormat = 'subjective' | 'mcq' | 'paragraph-mcq' | 'numerical';
 
 export interface Question {
   id: string;
@@ -38,7 +38,8 @@ export interface Question {
   correctOption?: McqOption;
   /** Multiple correct options (e.g. workbook "Ans. (A, B, C)"). Takes precedence over correctOption when set. */
   correctOptions?: McqOption[];
-  /** Array of Approach document IDs */
+  /** Numeric / integer answer for numerical-type questions */
+  correctAnswer?: string;
   approaches: string[];
   commonMistakes: string[];
   commonTraps: string[];

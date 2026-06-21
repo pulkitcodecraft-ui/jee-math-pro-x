@@ -12,6 +12,7 @@ import {
 import QuestionContent from './QuestionContent';
 import FigureImage from '@/components/question/FigureImage';
 import McqOptions from '@/components/question/McqOptions';
+import NumericalAnswer from '@/components/question/NumericalAnswer';
 import SolutionText from '@/components/question/SolutionText';
 import PassageBlock from '@/components/question/PassageBlock';
 
@@ -99,6 +100,11 @@ export default async function QuestionPage({ params }: QuestionPageProps) {
               {question.format === 'paragraph-mcq' ? 'Paragraph MCQ' : 'MCQ'}
             </span>
           )}
+          {question.format === 'numerical' && (
+            <span className="px-2.5 py-1 text-[11px] font-medium rounded-md bg-orange-500/10 border border-orange-500/20 text-orange-300">
+              Numerical
+            </span>
+          )}
         </div>
 
         {/* Question statement */}
@@ -117,6 +123,7 @@ export default async function QuestionPage({ params }: QuestionPageProps) {
           </h1>
 
           <McqOptions question={question} />
+          <NumericalAnswer question={question} />
 
           {/* Question figure(s) / diagram(s) — e.g. SRG Bank PDF crop */}
           {question.images && question.images.length > 0 && (

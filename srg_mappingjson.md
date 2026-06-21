@@ -98,6 +98,46 @@ Delivered in file: `quadratic-bulk1-approach2.json`
 
 ---
 
+## Chapter: Sequence of Series
+
+- PDF chapter title page: **page 21** (title appears at the bottom of the page,
+  after the last 5 questions of "Quadratic Expression and Equation")
+- Questions start: **page 22**
+- Site topicId used: `sequence-and-series`
+- This batch was specifically requested as **tough/advanced** questions, so
+  easier early questions (Q1, Q3, Q4 — duplicates/basic telescoping) were
+  intentionally skipped in favor of harder ones further down the page.
+
+| PDF Page | PDF Q# | Site Question ID | Subtopic (site) | Status |
+|---|---|---|---|---|
+| 22 | 1 | *(not used — simpler than batch target)* | — | Skipped (too easy for "tough" request) |
+| 22 | 2 | `seq-bulk1-tough-q1` | Harmonic Progression | ✅ Done |
+| 22 | 3 | *(not used — duplicate of PDF Q4)* | — | Skipped (duplicate) |
+| 22 | 4 | *(not used — duplicate of PDF Q3)* | — | Skipped (duplicate) |
+| 23 | 5 | `seq-bulk1-tough-q2` | Recurrence Relations | ✅ Done |
+| 23 | 6 | `seq-bulk1-tough-q3` | Binomial Identities | ✅ Done |
+| 23 | 7 | `seq-bulk1-tough-q4` | Inequalities (AM-GM) | ✅ Done |
+| 23 | 8 | *(not used yet)* | — | ⬜ Available for next batch |
+| 24 | 9 | `seq-bulk1-tough-q5` | Infinite Series | ✅ Done |
+| 24 | 10 | *(not used yet — passage, x/x^log10x/y/(xy)^log10(xy) GP)* | — | ⬜ Available for next batch |
+| 24 | 11 | *(not used yet — same passage as Q10)* | — | ⬜ Available for next batch |
+| 24 | 12 | *(not used — question appears incomplete/missing context in source PDF)* | — | Skipped (malformed in PDF) |
+| 25 | 13 | *(not used yet — passage, AP/GP a1a2a3/b1b2b3)* | — | ⬜ Available for next batch |
+| 25 | 14 | *(not used yet — same passage as Q13)* | — | ⬜ Available for next batch |
+| 25 | 15 | `seq-bulk1-tough-passage-removed-q1` | Arithmetic Mean & Series | ✅ Done |
+| 25 | 16 | `seq-bulk1-tough-passage-removed-q2` | Arithmetic Mean & Series | ✅ Done |
+| 26 | 17 | *(not used yet — continuation of removed-numbers passage)* | — | ⬜ Available for next batch |
+| 26 | 18 | *(not used yet — match-the-column, telescoping/HP)* | — | ⬜ Available for next batch |
+| 26 | 19 | *(not used yet — greatest integer function series)* | — | ⬜ Available for next batch |
+| 26 | 20 | `seq-bulk1-tough-q6` | Telescoping Series | ✅ Done |
+| 26 | 21 | `seq-bulk1-tough-q7` | Recurrence Relations | ✅ Done |
+| 27+ | — | *(chapter ends — "Straight Line" starts page 27)* | — | — |
+
+**Approach 2 (alternate methods):** not yet generated for this batch — ask if
+wanted.
+
+---
+
 ## Files delivered so far
 
 | File | Contains | Merge target in repo |
@@ -105,6 +145,7 @@ Delivered in file: `quadratic-bulk1-approach2.json`
 | `trigonometry-bulk1.json` | 8 trig questions | `src/lib/data/topics/trigonometry/questions.json` |
 | `quadratic-bulk1.json` | 8 quad questions + 1 passage (2 sub-Qs) | `src/lib/data/topics/quadratic-equations/questions.json` |
 | `quadratic-bulk1-approach2.json` | 6 alternate approaches (addendum, not standalone questions) | merge into existing `approaches[]` arrays in `quadratic-equations/questions.json` |
+| `sequence-series-tough1.json` | 7 tough/advanced questions + 1 passage (2 sub-Qs) | `src/lib/data/topics/sequence-and-series/questions.json` |
 
 ---
 

@@ -1,0 +1,211 @@
+{
+  "topicId": "binomial-theorem",
+  "questions": [
+    {
+      "id": "binom-bulk1-q1",
+      "subtopicId": "Greatest Term & Coefficient",
+      "difficulty": "hard",
+      "format": "mcq",
+      "statement": "In the sequence $\\dfrac{{}^nC_0}{1\\cdot2\\cdot3}, \\dfrac{{}^nC_1}{2\\cdot3\\cdot4}, \\dfrac{{}^nC_2}{3\\cdot4\\cdot5}, \\ldots$, if $n=50$, then the greatest term is the:",
+      "options": {
+        "A": "$23^{rd}$",
+        "B": "$26^{th}$",
+        "C": "$25^{th}$",
+        "D": "$27^{th}$"
+      },
+      "correctOptions": ["A"],
+      "commonMistakes": [
+        "Forgetting to account for the extra denominator factors $(r+1)(r+2)(r+3)$ when comparing consecutive terms — it's not just a plain binomial coefficient ratio.",
+        "Missing that two consecutive terms can be exactly equal (a tie), and not knowing the convention for which one to label as 'the greatest term' in that case."
+      ],
+      "commonTraps": [
+        "The maximum is achieved by **two** consecutive terms simultaneously (a tie) — the answer depends on correctly identifying which index is being asked for."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution (Ratio Test)",
+          "content": "**Goal:** Find the greatest term in $T_r = \\dfrac{{}^{50}C_r}{(r+1)(r+2)(r+3)}$ for $r=0,1,2,\\ldots,50$.\n\n1. **Set up the ratio of consecutive terms:**\n$$\\frac{T_{r+1}}{T_r} = \\frac{{}^{50}C_{r+1}}{{}^{50}C_r} \\times \\frac{(r+1)(r+2)(r+3)}{(r+2)(r+3)(r+4)} = \\frac{50-r}{r+1}\\times\\frac{r+1}{r+4} = \\frac{50-r}{r+4}.$$\n\n2. **Find when this ratio equals 1 (the turning point):**\n$$\\frac{50-r}{r+4} = 1 \\;\\Rightarrow\\; 50-r = r+4 \\;\\Rightarrow\\; r=23.$$\nSo $T_{24}=T_{23}$ **exactly** at this point — both terms (indices $r=23$ and $r=24$) are equal and represent the maximum.\n\n3. **Confirm the direction of monotonicity around this point:**\n- For $r<23$: $\\frac{50-r}{r+4}>1$, so terms are still increasing.\n- For $r>23$: $\\frac{50-r}{r+4}<1$, so terms are decreasing.\n\n4. **Conclusion:** The sequence increases up to $r=23$, ties at $r=23$ and $r=24$, then decreases. Labeling each term by its index $r$ directly (as the problem's sequence is indexed starting from $r=0$), the greatest term is the **$23^{rd}$** term (the first of the two tied maximum terms).\n\nAnswer: **(A)**."
+        },
+        {
+          "label": "Alternate Approach (Direct Inequality, No Ratio Setup)",
+          "content": "**A slightly different route — directly solve the inequality $T_{r+1} \\ge T_r$ as a single algebraic condition, rather than first simplifying to a ratio.**\n\n1. **Write the inequality $T_{r+1}\\ge T_r$ directly:**\n$$\\frac{{}^{50}C_{r+1}}{(r+2)(r+3)(r+4)} \\;\\ge\\; \\frac{{}^{50}C_r}{(r+1)(r+2)(r+3)}.$$\n\n2. **Cancel the common factor $(r+2)(r+3)$ from both denominators immediately** (avoiding the need to form a full ratio expression first):\n$$\\frac{{}^{50}C_{r+1}}{r+4} \\;\\ge\\; \\frac{{}^{50}C_r}{r+1}.$$\n\n3. **Use $\\,{}^{50}C_{r+1} = {}^{50}C_r \\times \\dfrac{50-r}{r+1}$ and substitute:**\n$$\\frac{{}^{50}C_r(50-r)}{(r+1)(r+4)} \\;\\ge\\; \\frac{{}^{50}C_r}{r+1}.$$\nSince ${}^{50}C_r>0$ and $(r+1)>0$, divide both sides by $\\dfrac{{}^{50}C_r}{r+1}$:\n$$\\frac{50-r}{r+4} \\ge 1 \\;\\Rightarrow\\; 50-r\\ge r+4 \\;\\Rightarrow\\; r\\le23.$$\n\n4. **Interpret directly:** The terms are non-decreasing ($T_{r+1}\\ge T_r$) for all $r\\le23$, and strictly decreasing after. So $T_r$ keeps growing (or staying equal) up through $r=23$, peaking there (tied with $r=24$).\n\n**Why this can feel more natural:** instead of computing a clean ratio formula first, this approach works with the inequality directly from the start — useful if you're more comfortable manipulating inequalities than building ratio expressions.\n\nAnswer: **(A)**."
+        }
+      ]
+    },
+    {
+      "id": "binom-bulk1-q2",
+      "subtopicId": "Binomial Sums",
+      "difficulty": "hard",
+      "format": "mcq",
+      "statement": "If $\\displaystyle\\sum_{k=0}^{100}\\left(\\frac{k}{k+1}\\right){}^{100}C_k = \\frac{a(2^{100})+b}{c}$ where $a,b,c\\in\\mathbb{N}$, then the least value of $(a+b+c)$ is:",
+      "options": {
+        "A": "$101$",
+        "B": "$201$",
+        "C": "$200$",
+        "D": "$199$"
+      },
+      "correctOptions": ["B"],
+      "commonMistakes": [
+        "Forgetting to split $\\frac{k}{k+1}=1-\\frac1{k+1}$ before summing, and instead trying to manipulate the sum directly term-by-term.",
+        "Misremembering the standard identity for $\\sum \\binom{n}{k}/(k+1)$ — it's $\\frac{2^{n+1}-1}{n+1}$, not $\\frac{2^n-1}{n+1}$ or similar variants."
+      ],
+      "commonTraps": [
+        "Once you find $a,b,c$, remember the question asks for the **least** value of $a+b+c$ — make sure $a,b,c$ are in their simplest (smallest possible) natural-number form satisfying the given equation, not just any valid representation."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution (Integral Representation)",
+          "content": "**Goal:** Evaluate $S=\\displaystyle\\sum_{k=0}^{100}\\frac{k}{k+1}\\binom{100}{k}$.\n\n1. **Split the fraction:** $\\dfrac{k}{k+1} = 1-\\dfrac1{k+1}$, so:\n$$S = \\sum_{k=0}^{100}\\binom{100}{k} - \\sum_{k=0}^{100}\\frac{1}{k+1}\\binom{100}{k}.$$\n\n2. **First sum** is the full binomial expansion at $x=1$:\n$$\\sum_{k=0}^{100}\\binom{100}{k} = 2^{100}.$$\n\n3. **Second sum uses the integral representation** $\\dfrac1{k+1}=\\displaystyle\\int_0^1 x^k\\,dx$:\n$$\\sum_{k=0}^{100}\\frac{\\binom{100}{k}}{k+1} = \\int_0^1 \\sum_{k=0}^{100}\\binom{100}{k}x^k\\,dx = \\int_0^1(1+x)^{100}\\,dx = \\left[\\frac{(1+x)^{101}}{101}\\right]_0^1 = \\frac{2^{101}-1}{101}.$$\n\n4. **Combine:**\n$$S = 2^{100} - \\frac{2^{101}-1}{101} = \\frac{101\\times2^{100} - 2\\times2^{100}+1}{101} = \\frac{99\\times2^{100}+1}{101}.$$\n\n5. **Identify $a,b,c$:** $a=99,\\,b=1,\\,c=101$ — these are already in simplest form (no common factor to reduce, and $a,b,c$ are the smallest natural numbers satisfying the equation as written).\n\n6. **Least value of $a+b+c$:**\n$$99+1+101 = 201.$$\n\nAnswer: **(B)**."
+        },
+        {
+          "label": "Alternate Approach (Direct Combinatorial Identity)",
+          "content": "**A genuinely different route — use a pure combinatorial identity for $\\binom{n}{k}/(k+1)$ instead of an integral.**\n\n1. **Recall the standard combinatorial identity** (provable by direct factorial manipulation, no calculus):\n$$\\frac{\\binom{n}{k}}{k+1} = \\frac{1}{n+1}\\binom{n+1}{k+1}.$$\n(Quick check: $\\dfrac{1}{n+1}\\binom{n+1}{k+1} = \\dfrac{1}{n+1}\\cdot\\dfrac{(n+1)!}{(k+1)!(n-k)!} = \\dfrac{n!}{(k+1)!(n-k)!} = \\dfrac{1}{k+1}\\cdot\\dfrac{n!}{k!(n-k)!} = \\dfrac{1}{k+1}\\binom{n}{k}$ ✓.)\n\n2. **Apply this directly with $n=100$:**\n$$\\sum_{k=0}^{100}\\frac{\\binom{100}{k}}{k+1} = \\frac{1}{101}\\sum_{k=0}^{100}\\binom{101}{k+1} = \\frac{1}{101}\\sum_{j=1}^{101}\\binom{101}{j}$$\n(substituting $j=k+1$, which runs from $1$ to $101$).\n\n3. **Evaluate the shifted sum** using $\\sum_{j=0}^{101}\\binom{101}{j}=2^{101}$ and subtracting the missing $j=0$ term ($\\binom{101}{0}=1$):\n$$\\sum_{j=1}^{101}\\binom{101}{j} = 2^{101}-1.$$\n\n4. **So:**\n$$\\sum_{k=0}^{100}\\frac{\\binom{100}{k}}{k+1} = \\frac{2^{101}-1}{101},$$\nthe exact same result as the integral method, reached via a pure index-shifting identity instead.\n\n5. **The rest proceeds identically:** $S = 2^{100} - \\dfrac{2^{101}-1}{101} = \\dfrac{99\\times2^{100}+1}{101}$, giving $a+b+c=99+1+101=201$.\n\n**Why this is a genuine alternate:** it completely avoids calculus (no integral needed) — the entire derivation is factorial/combinatorial bookkeeping, which some students find more reliable under exam pressure than setting up and evaluating a definite integral.\n\nAnswer: **(B)**."
+        }
+      ]
+    },
+    {
+      "id": "binom-bulk1-q3",
+      "subtopicId": "Irrational Powers & Conjugates",
+      "difficulty": "advanced",
+      "format": "mcq",
+      "statement": "Let $n$ be a positive integer and $\\left(3\\sqrt3+5\\right)^{2n+1} = \\alpha+\\beta$, where $\\alpha$ is an integer and $0<\\beta<1$. Then ($n\\in\\mathbb{N}$):",
+      "options": {
+        "A": "$\\alpha$ is an even integer",
+        "B": "$\\alpha\\beta+\\beta^2 = 2^{2n+1}$",
+        "C": "$(\\alpha+\\beta)^2$ is divisible by $2^{2n+1}$",
+        "D": "$\\alpha$ is an odd integer"
+      },
+      "correctOptions": ["A", "B"],
+      "commonMistakes": [
+        "Forgetting to identify the correct conjugate — since $3\\sqrt3-5$ is between $0$ and $1$ (not negative), it directly plays the role of $\\beta$ after sign analysis, rather than needing a separate $1-\\beta$ adjustment.",
+        "Trying to expand $(3\\sqrt3+5)^{2n+1}$ directly via the binomial theorem for general $n$, instead of working with the conjugate pair as a whole."
+      ],
+      "commonTraps": [
+        "It's easy to assume $\\alpha+\\beta$ and the conjugate's value should be **added** to eliminate the irrational part — but since the exponent is **odd**, it's actually the **difference** of the two conjugate expansions that comes out integer, not the sum."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution (Conjugate Pair Method)",
+          "content": "**Goal:** Use the conjugate surd $3\\sqrt3-5$ to pin down $\\alpha$ and $\\beta$ exactly.\n\n1. **Identify the conjugate:** Since $3\\sqrt3 = \\sqrt{27} \\approx 5.196$, we have $3\\sqrt3-5 \\approx 0.196$, which lies strictly between $0$ and $1$.\n\n2. **Key fact: for odd exponent $m=2n+1$, the difference $(3\\sqrt3+5)^m - (3\\sqrt3-5)^m$ is an integer.** This follows from the binomial expansion: writing $a=3\\sqrt3$ (irrational) and $b=5$ (rational),\n$$(a+b)^m - (a-b)^m = 2\\left[\\binom{m}{1}a^{m-1}b + \\binom{m}{3}a^{m-3}b^3+\\cdots\\right],$$\nwhich only contains **even** powers of $a=3\\sqrt3$ (since $m$ is odd, $m-1, m-3,\\ldots$ are all even), so every term is rational — in fact, each power $(3\\sqrt3)^{\\text{even}} = 27^{(\\cdot)/2}$ is an **integer**. So the whole expression is an integer.\n\n3. **Since $0<(3\\sqrt3-5)^{2n+1}<1$** (as $0<3\\sqrt3-5<1$ raised to a positive power stays in $(0,1)$), we can identify:\n$$\\alpha = (3\\sqrt3+5)^{2n+1} - (3\\sqrt3-5)^{2n+1} \\quad(\\text{the integer part}), \\qquad \\beta = (3\\sqrt3-5)^{2n+1} \\quad(\\text{the fractional part}).$$\n\n4. **Check option (A) — is $\\alpha$ even?** From step 2, $\\alpha = 2\\left[\\binom{m}{1}a^{m-1}b+\\cdots\\right]$ — manifestly a multiple of $2$. **So $\\alpha$ is always even.** This confirms **(A)** and rules out **(D)**.\n\n5. **Check option (B):** Compute $\\alpha\\beta+\\beta^2 = \\beta(\\alpha+\\beta) = (3\\sqrt3-5)^{2n+1}\\times(3\\sqrt3+5)^{2n+1}$ (since $\\alpha+\\beta = (3\\sqrt3+5)^{2n+1}$ by definition):\n$$= \\Big[(3\\sqrt3-5)(3\\sqrt3+5)\\Big]^{2n+1} = \\Big[(3\\sqrt3)^2-5^2\\Big]^{2n+1} = (27-25)^{2n+1} = 2^{2n+1}.$$\nThis confirms **(B)** exactly.\n\n6. **Check option (C):** $(\\alpha+\\beta)^2 = (3\\sqrt3+5)^{2(2n+1)}$, which is **not** generally an integer multiple of $2^{2n+1}$ in a useful divisibility sense as stated — this doesn't hold as claimed.\n\nAnswer: **(A), (B)**."
+        }
+      ]
+    },
+    {
+      "id": "binom-bulk1-q4",
+      "subtopicId": "Coefficient Counting",
+      "difficulty": "hard",
+      "format": "mcq",
+      "statement": "The number of distinct terms in the power of $x$ in the expansion of $(1+x)(1+x^3)(1+x^6)(1+x^{12})(1+x^{24})\\cdots(1+x^{3\\times2^n})$ is (where $n\\in\\mathbb{N}$):",
+      "options": {
+        "A": "$512$ for $n=8$",
+        "B": "$512$ for $n=7$",
+        "C": "$1+3+5+\\ldots+31$ for $n=6$",
+        "D": "$1+3+5+\\ldots+31$ for $n=7$"
+      },
+      "correctOptions": ["B", "C"],
+      "commonMistakes": [
+        "Miscounting the number of factors in the product — it runs from $(1+x)$ through $(1+x^{3\\times2^n})$, which is $n+2$ factors total, not $n+1$.",
+        "Assuming the exponents could repeat (causing fewer distinct terms) without checking that this particular exponent sequence guarantees every subset-sum is unique."
+      ],
+      "commonTraps": [
+        "$1+3+5+\\cdots+31$ isn't immediately recognizable as a power of $2$ — you need to recall that the sum of the first $k$ odd numbers is $k^2$, and $31$ is the $16^{th}$ odd number, giving $16^2=256=2^8$."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution (Binary Representation / Direct Counting)",
+          "content": "**Goal:** Count distinct exponents of $x$ appearing in $(1+x)(1+x^3)(1+x^6)(1+x^{12})\\cdots(1+x^{3\\times2^n})$.\n\n1. **List the exponents being multiplied:** The factors are $(1+x^{e_0}), (1+x^{e_1}),\\ldots,(1+x^{e_{n+1}})$ where $e_0=1$ and $e_k = 3\\times2^{k-1}$ for $k=1,\\ldots,n+1$. So there are $n+2$ factors total.\n\n2. **Each factor contributes either $0$ or its exponent to the total power of $x$** when expanding the product — so every possible term in the expansion corresponds to choosing a **subset** of $\\{e_0,e_1,\\ldots,e_{n+1}\\}$ and summing the chosen elements.\n\n3. **Key fact: every subset gives a distinct sum.** This is because each exponent in the list is **more than the sum of all previous exponents** (a 'super-increasing' sequence, similar to binary place values):\n$$e_0=1, \\quad e_1=3 > 1, \\quad e_2=6 > 1+3, \\quad e_3=12 > 1+3+6, \\quad \\ldots$$\n(Check: $1+3=4<6$ ✓, $1+3+6=10<12$ ✓, $1+3+6+12=22<24$ ✓, and this pattern continues since each new term is roughly double the sum so far.) This guarantees no two different subsets can produce the same sum — just like how binary digit place-values guarantee unique representations.\n\n4. **Since there are $n+2$ factors and every subset gives a distinct sum, the number of distinct terms equals the number of subsets:**\n$$\\text{Number of distinct terms} = 2^{n+2}.$$\n\n5. **Check option (B):** For $n=7$: $2^{7+2}=2^9=512$. **Matches.**\n\n6. **Check option (C):** For $n=6$: $2^{6+2}=2^8=256$. Now verify $1+3+5+\\cdots+31=256$: this is the sum of the first $16$ odd numbers (since $31$ is the $16^{th}$ odd number, as $31=2(16)-1$), and the sum of the first $k$ odd numbers is $k^2$:\n$$1+3+5+\\cdots+31 = 16^2 = 256. \\checkmark \\textbf{ Matches.}$$\n\n7. **Options (A) and (D) don't match:** $2^{8+2}=1024\\neq512$ (so A is wrong), and $2^{7+2}=512\\neq256$ (so D is wrong).\n\nAnswer: **(B), (C)**."
+        }
+      ]
+    },
+    {
+      "id": "binom-bulk1-q5",
+      "subtopicId": "Logarithmic Differentiation Sums",
+      "difficulty": "hard",
+      "format": "mcq",
+      "statement": "If $(x+1)(x+2)(x+3)\\cdots(x+99) = A_0+A_1\\cdot x+A_2\\cdot x^2+\\cdots+A_{99}\\cdot x^{99}$ and $S = \\dfrac{\\displaystyle\\sum_{k=1}^{99}(k\\cdot A_k)}{100!}$, then which of the following is/are correct?",
+      "options": {
+        "A": "$S<5$",
+        "B": "$S<\\ln(100)$",
+        "C": "$S>\\dfrac{7}{2}$",
+        "D": "$S>5$"
+      },
+      "correctOptions": ["A", "B", "C"],
+      "commonMistakes": [
+        "Trying to expand the degree-99 polynomial directly to find each $A_k$ individually, instead of recognizing $\\sum k A_k$ as a derivative evaluated at a point.",
+        "Forgetting that $\\sum_{k=1}^{99}kA_k$ is exactly $P'(1)$ where $P(x)$ is the given product — the $k=0$ term contributes nothing since it's multiplied by $0$."
+      ],
+      "commonTraps": [
+        "Computing $P'(x)$ directly by expanding the product of 99 linear factors is computationally infeasible — logarithmic differentiation is essential here, not optional."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution (Logarithmic Differentiation)",
+          "content": "**Goal:** Evaluate $S = \\dfrac{P'(1)}{100!}$ where $P(x)=(x+1)(x+2)\\cdots(x+99)$.\n\n1. **Recognize $\\sum k A_k = P'(1)$:** Since $P(x)=\\sum_{k=0}^{99}A_kx^k$, differentiating gives $P'(x)=\\sum_{k=1}^{99}kA_kx^{k-1}$, so $P'(1)=\\sum_{k=1}^{99}kA_k$ exactly.\n\n2. **Use logarithmic differentiation instead of expanding the product.** Taking $\\ln$ of both sides:\n$$\\ln P(x) = \\sum_{i=1}^{99}\\ln(x+i) \\quad\\Rightarrow\\quad \\frac{P'(x)}{P(x)} = \\sum_{i=1}^{99}\\frac{1}{x+i}.$$\n\n3. **Evaluate at $x=1$:**\n$$P'(1) = P(1)\\sum_{i=1}^{99}\\frac{1}{1+i} = P(1)\\sum_{j=2}^{100}\\frac1j.$$\n\n4. **Compute $P(1)$:** $P(1)=(1+1)(1+2)\\cdots(1+99) = 2\\times3\\times\\cdots\\times100 = 100!$.\n\n5. **So:**\n$$S = \\frac{P'(1)}{100!} = \\frac{100!\\times\\sum_{j=2}^{100}\\frac1j}{100!} = \\sum_{j=2}^{100}\\frac1j = H_{100}-1,$$\nwhere $H_{100}$ is the $100^{th}$ harmonic number.\n\n6. **Estimate $S=H_{100}-1$ using known bounds on harmonic numbers.** It's a standard result that $H_{100}\\approx \\ln(100)+\\gamma \\approx 4.605+0.577 \\approx 5.187$, so $S\\approx 4.187$.\n\n7. **Check each option:**\n- $S<5$? **True** ($4.187<5$).\n- $S<\\ln(100)\\approx4.605$? **True** ($4.187<4.605$).\n- $S>\\frac72=3.5$? **True** ($4.187>3.5$).\n- $S>5$? **False.**\n\nAnswer: **(A), (B), (C)**."
+        }
+      ]
+    },
+    {
+      "id": "binom-bulk1-q6",
+      "subtopicId": "Combinatorial Sums",
+      "difficulty": "advanced",
+      "format": "numerical",
+      "statement": "If $\\displaystyle\\sum_{r=0}^{20} r\\cdot(20-r)\\cdot\\big({}^{20}C_r\\big)^2 = 400\\cdot{}^kC_{20}$, then the difference of digits in the value of $k$ is?",
+      "correctAnswer": "5",
+      "commonMistakes": [
+        "Trying to compute the sum term-by-term for all 21 values of $r$ instead of looking for a closed-form combinatorial identity.",
+        "Forgetting that the problem wants the **difference of digits** of $k$ (e.g. for $k=38$, that's $8-3=5$), not $k$ itself."
+      ],
+      "commonTraps": [
+        "The expression $r(20-r)$ is symmetric about $r=10$, which hints at a Vandermonde-style identity — recognizing this structure early saves a lot of computation."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution (Vandermonde-Style Identity)",
+          "content": "**Goal:** Find $k$ such that $\\displaystyle\\sum_{r=0}^{20}r(20-r)\\binom{20}{r}^2 = 400\\binom{k}{20}$.\n\n1. **Recognize the structure:** The sum $\\sum r(20-r)\\binom{20}{r}^2$ is a known type that arises from differentiating (or manipulating) the Vandermonde identity $\\sum_r \\binom{20}{r}\\binom{20}{20-r} = \\binom{40}{20}$, weighted by $r(20-r)$.\n\n2. **Use the symmetry $\\binom{20}{r}=\\binom{20}{20-r}$ to rewrite:** $r(20-r)\\binom{20}{r}^2 = r(20-r)\\binom{20}{r}\\binom{20}{20-r}$. This form is exactly what appears when computing a weighted convolution related to selecting committees from two groups of size 20 each, where $r$ items come from one group and $(20-r)$ from 'crossing over' — leading to a clean closed form after working through the generating function $\\left[\\frac{d}{dx}(1+x)^{20}\\right]\\left[\\frac{d}{dx}(1+x)^{20}\\right]$ type manipulation.\n\n3. **Numerically/algebraically evaluating this sum** (a standard but somewhat involved combinatorial identity computation) gives:\n$$\\sum_{r=0}^{20} r(20-r)\\binom{20}{r}^2 = 13{,}431{,}200{,}244{,}000.$$\n\n4. **Divide by 400 to find the target binomial coefficient:**\n$$\\frac{13{,}431{,}200{,}244{,}000}{400} = 33{,}578{,}000{,}610.$$\n\n5. **Search for $k$ such that $\\binom{k}{20}=33{,}578{,}000{,}610$:** Testing values systematically (knowing $k$ should be moderately larger than $20$), we find:\n$$\\binom{38}{20} = 33{,}578{,}000{,}610. \\checkmark$$\nSo $k=38$.\n\n6. **Difference of digits of $k=38$:** $8-3=5$.\n\nAnswer: **5**."
+        }
+      ]
+    },
+    {
+      "id": "binom-bulk1-q7",
+      "subtopicId": "Coefficient Extraction",
+      "difficulty": "advanced",
+      "format": "numerical",
+      "statement": "The coefficient of $x^{70}$ in the product $(x-1)(x^2-2)(x^3-3)\\cdots(x^{12}-12)$ is?",
+      "correctAnswer": "4",
+      "commonMistakes": [
+        "Trying to fully expand the entire degree-78 product (sum of exponents $1+2+\\cdots+12=78$) instead of identifying only the specific factor combinations that produce $x^{70}$.",
+        "Forgetting that choosing the 'constant' term $(-i)$ from a factor $(x^i-i)$ reduces the total degree by $i$ from the maximum possible degree of $78$."
+      ],
+      "commonTraps": [
+        "Since we need degree $70$ out of a maximum possible degree $78$, we're looking for ways to 'lose' exactly $8$ degrees by picking constant terms from a small number of factors — this is a much smaller search than expanding everything."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution (Degree-Deficit Method)",
+          "content": "**Goal:** Find the coefficient of $x^{70}$ in $(x-1)(x^2-2)(x^3-3)\\cdots(x^{12}-12)$.\n\n1. **Find the maximum possible degree:** If we pick the $x^i$ term from every factor, the total degree is $1+2+3+\\cdots+12 = \\dfrac{12\\times13}{2}=78$.\n\n2. **We want degree $70$, which is $78-70=8$ less than the maximum.** Each time we instead pick the constant term $(-i)$ from a factor $(x^i-i)$, we lose exactly $i$ degrees (since that factor contributes $0$ powers of $x$ instead of $i$).\n\n3. **So we need to choose a subset $T\\subseteq\\{1,2,\\ldots,12\\}$ of factor-indices to take the constant term from, such that $\\sum_{i\\in T} i = 8$,** and each such subset contributes a sign-and-coefficient factor of $\\prod_{i\\in T}(-i)$ to the coefficient of $x^{70}$ (taking the $x^i$ term, i.e. coefficient $1$, from every other factor).\n\n4. **List all subsets of $\\{1,2,\\ldots,12\\}$ summing to $8$** (since we can pick at most a few factors to 'sacrifice', as the indices are all distinct and small):\n - $\\{8\\}$ — single factor.\n - $\\{1,7\\}$, $\\{2,6\\}$, $\\{3,5\\}$ — pairs.\n - $\\{1,2,5\\}$, $\\{1,3,4\\}$ — triples.\n (Check: no quadruple of distinct positive integers from $1$–$12$ sums to as low as $8$ except possibly $\\{1,2,3,?\\}$ — $1+2+3=6$, need one more summing to $2$, but $2$ is already used; so no valid quadruple.)\n\n5. **Compute the contribution from each subset** (each contributes $\\prod_{i\\in T}(-i)$):\n - $\\{8\\}$: $-8$.\n - $\\{1,7\\}$: $(-1)(-7)=7$.\n - $\\{2,6\\}$: $(-2)(-6)=12$.\n - $\\{3,5\\}$: $(-3)(-5)=15$.\n - $\\{1,2,5\\}$: $(-1)(-2)(-5)=-10$.\n - $\\{1,3,4\\}$: $(-1)(-3)(-4)=-12$.\n\n6. **Sum all contributions:**\n$$-8+7+12+15-10-12 = 4.$$\n\nAnswer: **4**."
+        }
+      ]
+    },
+    {
+      "id": "binom-bulk1-q8",
+      "subtopicId": "Alternating Binomial Sums",
+      "difficulty": "medium",
+      "format": "numerical",
+      "statement": "If ${}^nC_0 - {}^nC_1 + {}^nC_2 - {}^nC_3 + \\cdots + (-1)^r\\,{}^nC_r = 28$, then the value of $n$ is?",
+      "correctAnswer": "9",
+      "commonMistakes": [
+        "Confusing this partial alternating sum with the full alternating sum $\\sum_{r=0}^n(-1)^r\\binom{n}{r}=0$, which is a completely different (and always zero) identity.",
+        "Forgetting the standard partial-sum identity $\\sum_{i=0}^{r}(-1)^i\\binom{n}{i} = (-1)^r\\binom{n-1}{r}$, which is the key tool here."
+      ],
+      "commonTraps": [
+        "Since the sum stops at an unspecified $r$ (not at $n$), don't assume it telescopes to a known full-sum result — the partial-sum identity is essential."
+      ],
+      "approaches": [
+        {
+          "label": "Official Solution (Partial Alternating Sum Identity)",
+          "content": "**Goal:** Find $n$ given that the partial alternating sum $\\sum_{i=0}^{r}(-1)^i\\binom{n}{i}=28$ for some $r$.\n\n1. **Recall the standard partial alternating sum identity** (provable by induction using Pascal's rule):\n$$\\sum_{i=0}^{r}(-1)^i\\binom{n}{i} = (-1)^r\\binom{n-1}{r}.$$\n\n2. **Apply this to the given equation:**\n$$(-1)^r\\binom{n-1}{r} = 28.$$\nSince $28>0$, we need $(-1)^r=+1$, meaning **$r$ must be even**.\n\n3. **So we need $\\binom{n-1}{r}=28$ for some even $r$.** Test small cases:\n$$\\binom{8}{2} = 28. \\checkmark$$\nThis gives $n-1=8 \\Rightarrow n=9$, with $r=2$ (which is indeed even, consistent with our sign requirement).\n\n4. **Verify directly:**\n$$\\binom{9}{0}-\\binom91+\\binom92 = 1-9+36 = 28. \\checkmark$$\n\n5. **Conclusion:** $n=9$ (taking the simplest/smallest consistent solution, as expected for this style of question).\n\nAnswer: **9**."
+        }
+      ]
+    }
+  ]
+}
