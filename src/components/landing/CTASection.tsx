@@ -5,8 +5,8 @@ import Reveal from '@/components/ui/Reveal';
 
 export default function CTASection() {
   return (
-    <section className="py-28 relative">
-      <div className="max-w-4xl mx-auto px-6">
+    <section className="section-padding relative">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <Reveal direction="scale">
           <div className="relative rounded-3xl overflow-hidden">
             {/* Animated gradient backdrop */}

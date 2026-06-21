@@ -81,11 +81,11 @@ const colDirection = ['left', 'up', 'right'] as const;
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="py-28 relative">
+    <section id="features" className="section-padding relative">
       {/* Background accent */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section header */}
         <div className="text-center mb-16">
           <Reveal direction="up">

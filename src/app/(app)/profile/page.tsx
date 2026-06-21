@@ -24,7 +24,7 @@ export default function ProfilePage() {
   // Loading state
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto px-6 py-16 flex items-center justify-center">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16 flex items-center justify-center">
         <svg className="w-6 h-6 animate-spin text-primary-light" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -36,7 +36,7 @@ export default function ProfilePage() {
   // Not configured — explain why auth is unavailable
   if (!isConfigured) {
     return (
-      <div className="max-w-2xl mx-auto px-6 py-16 text-center">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16 text-center">
         <div className="inline-flex w-14 h-14 rounded-2xl bg-amber-500/10 items-center justify-center mb-4">
           <svg className="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.999L13.732 4.002c-.77-1.333-2.694-1.333-3.464 0L3.34 16.002c-.77 1.332.192 2.999 1.732 2.999z" />
@@ -56,7 +56,7 @@ export default function ProfilePage() {
 
   // Redirect in progress
   if (!firebaseUser) {
-    return <div className="max-w-2xl mx-auto px-6 py-16" />;
+    return <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16" />;
   }
 
   const name = profile?.displayName || firebaseUser.displayName || 'Student';
@@ -65,8 +65,8 @@ export default function ProfilePage() {
   const initial = name.charAt(0).toUpperCase();
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-10">
-      <h1 className="text-3xl font-bold tracking-tight mb-8">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
+      <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-6 sm:mb-8">
         Your <span className="gradient-text">Profile</span>
       </h1>
 

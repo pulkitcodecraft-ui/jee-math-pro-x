@@ -331,7 +331,7 @@ export default function ExplainTool({
           </div>
         )}
 
-        <div className="rounded-2xl bg-surface border border-border p-5">
+        <div className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
           <div className="flex items-center justify-between mb-4">
             <label htmlFor="explain-question" className="text-sm font-semibold text-foreground">
               Question <span className="text-rose-400">*</span>
@@ -426,7 +426,7 @@ export default function ExplainTool({
           )}
         </div>
 
-        <div className="rounded-2xl bg-surface border border-border p-5">
+        <div className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
           <label htmlFor="explain-solution" className="block text-sm font-semibold text-foreground mb-1">
             Solution <span className="text-text-dim font-normal">(optional)</span>
           </label>
@@ -445,7 +445,7 @@ export default function ExplainTool({
           />
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <button
             onClick={() => runSolve(false)}
             disabled={!canSubmit}
@@ -476,7 +476,7 @@ export default function ExplainTool({
           {hasInput && (
             <button
               onClick={handleClear}
-              className="px-5 py-3.5 rounded-2xl text-text-muted text-sm border border-border
+            className="w-full sm:w-auto px-5 py-3.5 rounded-2xl text-text-muted text-sm border border-border text-center
                          hover:border-border-light hover:text-foreground transition-all"
             >
               Clear
@@ -551,7 +551,7 @@ export default function ExplainTool({
         {!loading && result && method && (
           <div className="rounded-2xl glass border border-primary/20 p-6 animate-fade-in-up">
             {/* Topic + difficulty + actions */}
-            <div className="flex items-start justify-between gap-3 mb-5">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-5">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-xs font-semibold text-primary-light">
                   {result.topic}
@@ -564,7 +564,7 @@ export default function ExplainTool({
                   {result.difficulty}
                 </span>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-2 w-full sm:w-auto sm:shrink-0">
                 <button
                   onClick={handleCopy}
                   title="Copy as Markdown"

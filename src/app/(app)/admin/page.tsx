@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function AdminPage() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
       {/* Page header */}
       <div className="mb-8">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-light text-xs font-medium text-accent mb-4">
@@ -17,7 +17,7 @@ export default function AdminPage() {
           </svg>
           Admin only
         </div>
-        <h1 className="text-3xl font-bold tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
           Review <span className="gradient-text">Dashboard</span>
         </h1>
         <p className="text-text-muted mt-2 text-sm">

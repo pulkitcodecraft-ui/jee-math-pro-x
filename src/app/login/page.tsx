@@ -107,12 +107,12 @@ function LoginForm() {
   return (
     <main className="min-h-screen flex flex-col">
       {/* Minimal top bar */}
-      <header className="px-6 py-5">
+      <header className="px-4 sm:px-6 py-4 sm:py-5">
         <Logo size={32} />
       </header>
 
       {/* Centered card */}
-      <div className="flex-1 flex items-center justify-center px-6 py-10 relative overflow-hidden">
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-10 relative overflow-hidden">
         {/* Background orbs */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-glow" />
@@ -120,7 +120,7 @@ function LoginForm() {
         </div>
 
         <div className="relative z-10 w-full max-w-md">
-          <div className="rounded-2xl glass border border-border p-8">
+          <div className="rounded-2xl glass border border-border p-5 sm:p-8">
             {pendingEmail ? (
               /* ===== Verify-email panel ===== */
               <div className="text-center">

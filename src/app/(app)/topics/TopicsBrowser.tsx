@@ -40,7 +40,7 @@ export default function TopicsBrowser() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search topics (e.g. integration, parabola, complex numbers)…"
+          placeholder="Search topics… e.g. parabola, integration"
           aria-label="Search topics"
           className="w-full rounded-2xl bg-surface border border-border pl-11 pr-10 py-3.5
                      text-sm text-foreground placeholder:text-text-dim
@@ -111,7 +111,7 @@ export default function TopicsBrowser() {
                     {topic}
                   </span>
                   <svg
-                    className="w-4 h-4 text-text-dim opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all shrink-0"
+                    className="w-4 h-4 text-text-dim opacity-60 sm:opacity-0 sm:-translate-x-1 sm:group-hover:opacity-100 sm:group-hover:translate-x-0 transition-all shrink-0 touch-visible"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

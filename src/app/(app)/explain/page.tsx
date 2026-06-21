@@ -19,14 +19,14 @@ export default async function ExplainPage({
   const autoSolve = autosolve === '1' || autosolve === 'true';
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
       {/* Page header */}
       <div className="mb-8">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-light text-xs font-medium text-primary-light mb-4">
           <span className="w-1.5 h-1.5 rounded-full bg-accent-secondary animate-pulse" />
           AI-powered
         </div>
-        <h1 className="text-3xl font-bold tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
           Step-by-Step <span className="gradient-text">Explainer</span>
         </h1>
         <p className="text-text-muted mt-2 text-sm max-w-2xl">

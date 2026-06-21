@@ -58,7 +58,7 @@ export default function Navbar() {
 
         {/* Center nav pill (AI Fiesta bounded buttons) */}
         <nav
-          className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center rounded-full border border-border/80 bg-surface/50 backdrop-blur-md px-1.5 py-1.5 shadow-lg shadow-black/20"
+          className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center rounded-full border border-border/80 bg-surface/50 backdrop-blur-md px-1.5 py-1.5 shadow-lg shadow-black/20"
           aria-label="Main navigation"
         >
           {navLinks.map((link) => (

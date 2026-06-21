@@ -46,9 +46,9 @@ export default async function TopicPage({ params }: TopicPageProps) {
   const passages = getPassagesByTopic(topicId);
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs text-text-dim mb-6">
+      <nav className="flex items-center gap-2 text-xs text-text-dim mb-4 sm:mb-6 flex-wrap">
         <Link href="/topics" className="hover:text-text-muted transition-colors">
           Topics
         </Link>
@@ -59,20 +59,20 @@ export default async function TopicPage({ params }: TopicPageProps) {
       </nav>
 
       {/* Topic Header */}
-      <div className="flex items-start gap-5 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-5 mb-6 sm:mb-8">
         <div
-          className={`shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br ${
+          className={`shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${
             topicColors[topic.id] || 'from-primary to-accent'
-          } flex items-center justify-center text-white font-mono font-bold text-lg shadow-lg`}
+          } flex items-center justify-center text-white font-mono font-bold text-base sm:text-lg shadow-lg`}
         >
           {topicIcons[topic.id] || '∑'}
         </div>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">{topic.name}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight">{topic.name}</h1>
           <p className="text-sm text-text-muted mt-1 max-w-2xl leading-relaxed">
             {topic.description}
           </p>
-          <div className="flex items-center gap-4 mt-3 text-xs text-text-dim">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-3 text-xs text-text-dim">
             <span>{topic.subtopics.length} subtopics</span>
             <span className="w-1 h-1 rounded-full bg-border-light" />
             <span>{questions.length} questions</span>
@@ -86,12 +86,12 @@ export default async function TopicPage({ params }: TopicPageProps) {
       <div className="mb-8">
         <Link
           href={`/explain?topic=${encodeURIComponent(topic.name)}`}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white text-sm font-medium hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5 transition-all duration-200"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 sm:py-2.5 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white text-sm font-medium hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5 transition-all duration-200"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
           </svg>
-          Stuck on a {topic.name} problem? Solve it with AI Explain
+          Stuck on {topic.name}? Solve with AI
         </Link>
       </div>
 

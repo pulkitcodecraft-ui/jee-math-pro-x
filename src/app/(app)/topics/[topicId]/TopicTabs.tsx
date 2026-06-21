@@ -35,7 +35,7 @@ export default function TopicTabs({ topic, questions, passages }: TopicTabsProps
   return (
     <div>
       {/* Tab buttons */}
-      <div className="flex gap-1 border-b border-border mb-6 overflow-x-auto">
+      <div className="flex gap-1 border-b border-border mb-6 overflow-x-auto scroll-tabs scroll-tabs-fade -mx-1 px-1">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -53,7 +53,7 @@ export default function TopicTabs({ topic, questions, passages }: TopicTabsProps
       </div>
 
       {/* Tab content */}
-      <div className="min-h-[400px]">
+      <div className="min-h-[200px] sm:min-h-[400px]">
         {activeTab === 'overview' && (
           <OverviewTab topic={topic} questions={questions} />
         )}
@@ -73,7 +73,7 @@ function OverviewTab({ topic, questions }: { topic: Topic; questions: Question[]
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Theory section */}
       <div className="lg:col-span-2 space-y-6">
-        <section className="rounded-2xl bg-surface border border-border p-6">
+        <section className="rounded-2xl bg-surface border border-border p-4 sm:p-6">
           <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
             <svg className="w-4 h-4 text-primary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -101,7 +101,7 @@ function OverviewTab({ topic, questions }: { topic: Topic; questions: Question[]
         </section>
 
         {/* Common Mistakes */}
-        <section className="rounded-2xl bg-surface border border-border p-6">
+        <section className="rounded-2xl bg-surface border border-border p-4 sm:p-6">
           <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
             <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.999L13.732 4.002c-.77-1.333-2.694-1.333-3.464 0L3.34 16.002c-.77 1.332.192 2.999 1.732 2.999z" />
@@ -119,7 +119,7 @@ function OverviewTab({ topic, questions }: { topic: Topic; questions: Question[]
         </section>
 
         {/* Common Traps */}
-        <section className="rounded-2xl bg-surface border border-border p-6">
+        <section className="rounded-2xl bg-surface border border-border p-4 sm:p-6">
           <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
             <svg className="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />

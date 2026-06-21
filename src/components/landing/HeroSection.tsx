@@ -11,7 +11,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+      className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-16 sm:pt-20"
     >
       {/* Background effects */}
       <div className="absolute inset-0 pointer-events-none">
@@ -33,7 +33,7 @@ export default function HeroSection() {
         />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
         {/* Badge */}
         <Reveal direction="down" delay={0}>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-light text-xs font-medium text-primary-light mb-8">
@@ -44,7 +44,7 @@ export default function HeroSection() {
 
         {/* Headline */}
         <Reveal direction="up" delay={80}>
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight mb-6">
+          <h1 className="text-3xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.08] tracking-tight mb-4 sm:mb-6">
             Master Mathematics
             <br />
             <span className="gradient-text animate-gradient">the Smart Way</span>
@@ -53,7 +53,7 @@ export default function HeroSection() {
 
         {/* Subheadline */}
         <Reveal direction="up" delay={160}>
-          <p className="text-lg sm:text-xl text-text-muted max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-base sm:text-xl text-text-muted max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed px-1">
             Find the right resources, explore multiple solution approaches, learn
             from common mistakes, and get AI-powered explanations — all in one
             place.
@@ -104,17 +104,17 @@ export default function HeroSection() {
 
         {/* Stats — real, derived from the content library */}
         <Reveal direction="up" delay={420}>
-          <div className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto">
+          <div className="mt-10 sm:mt-16 grid grid-cols-3 gap-3 sm:gap-8 max-w-lg mx-auto">
             {[
               { value: stats.topicCount, label: 'Core Topics' },
               { value: stats.subtopicCount, label: 'Subtopics' },
-              { value: stats.questionCount, label: 'Worked Questions' },
+              { value: stats.questionCount, label: 'Worked Qs' },
             ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold gradient-text-primary">
+              <div key={stat.label} className="text-center px-1">
+                <div className="text-xl sm:text-3xl font-bold gradient-text-primary">
                   {stat.value}
                 </div>
-                <div className="text-xs text-text-dim mt-1">{stat.label}</div>
+                <div className="text-[10px] sm:text-xs text-text-dim mt-1 leading-tight">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -122,7 +122,7 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-fade-in delay-700">
+      <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 animate-fade-in delay-700 hidden sm:block">
         <div className="flex flex-col items-center gap-2 text-text-dim">
           <span className="text-xs">Scroll to explore</span>
           <div className="w-5 h-8 rounded-full border border-border-light flex justify-center pt-1.5">

@@ -130,14 +130,18 @@ export default function AIExplainPanel({
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, loading]);
 
-  // Close on Escape.
+  // Close on Escape + lock body scroll on mobile sheet.
   useEffect(() => {
     if (!open) return;
+    document.body.style.overflow = 'hidden';
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+    };
   }, [open, onClose]);
 
   function send(text: string) {
@@ -180,11 +184,17 @@ export default function AIExplainPanel({
         role="dialog"
         aria-label="AI Tutor"
         aria-hidden={!open}
-        className={`fixed top-0 right-0 z-50 h-full w-96 max-w-[92vw] flex flex-col
-                    bg-surface border-l border-border shadow-2xl shadow-black/40
+        className={`fixed z-50 flex flex-col bg-surface border-border shadow-2xl shadow-black/40
                     transition-transform duration-300 ease-out
-                    ${open ? 'translate-x-0' : 'translate-x-full'}`}
+                    inset-x-0 bottom-0 top-auto h-[min(92dvh,100%)] w-full rounded-t-2xl border-t
+                    sm:inset-x-auto sm:top-0 sm:right-0 sm:bottom-auto sm:h-full sm:w-96 sm:max-w-[92vw]
+                    sm:rounded-none sm:rounded-l-2xl sm:border-l sm:border-t-0
+                    ${open ? 'translate-y-0 sm:translate-y-0 sm:translate-x-0' : 'translate-y-full sm:translate-y-0 sm:translate-x-full'}`}
       >
+        {/* Mobile drag handle */}
+        <div className="sm:hidden flex justify-center pt-2 pb-1 shrink-0">
+          <div className="w-10 h-1 rounded-full bg-border-light" />
+        </div>
         {/* Header */}
         <div className="flex items-center gap-3 px-5 py-4 border-b border-border shrink-0">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white shadow-lg shadow-primary/20">
@@ -268,7 +278,7 @@ export default function AIExplainPanel({
         )}
 
         {/* Input */}
-        <div className="px-4 py-3 border-t border-border shrink-0">
+        <div className="px-4 sm:px-5 py-3 border-t border-border shrink-0 pb-safe">
           <div className="flex items-end gap-2 rounded-2xl bg-surface-light border border-border focus-within:border-primary/50 transition-colors px-3 py-2">
             <textarea
               value={input}

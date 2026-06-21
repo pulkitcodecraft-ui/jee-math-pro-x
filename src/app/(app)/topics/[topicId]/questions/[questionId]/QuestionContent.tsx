@@ -44,19 +44,21 @@ export default function QuestionContent({ question, approaches }: QuestionConten
     <div className="space-y-8">
       {/* ===== APPROACHES SECTION ===== */}
       <section>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white shrink-0">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </div>
+            <h2 className="text-base sm:text-lg font-bold">Solution Approaches</h2>
           </div>
-          <h2 className="text-lg font-bold">Solution Approaches</h2>
-          <span className="ml-auto text-xs text-text-dim">{approaches.length} approaches available</span>
+          <span className="sm:ml-auto text-xs text-text-dim">{approaches.length} approaches</span>
         </div>
 
         {/* Approach tabs */}
         {approaches.length > 0 && (
-          <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
+          <div className="flex gap-2 mb-4 overflow-x-auto scroll-tabs scroll-tabs-fade pb-1 -mx-1 px-1">
             {approaches.map((approach, index) => {
               const isSmartest = approach.id === smartestApproach?.id;
               return (
@@ -305,9 +307,9 @@ function ApproachCard({
         <div className="pointer-events-none absolute top-0 right-0 w-48 h-48 bg-accent-secondary/10 blur-3xl rounded-full" />
       )}
 
-      <div className="relative p-6 pb-14">
+      <div className="relative p-4 sm:p-6 pb-4 sm:pb-14">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-5 pb-4 border-b border-border/60">
+        <div className="flex flex-wrap items-start gap-3 mb-5 pb-4 border-b border-border/60">
           <div
             className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg ${
               isSmartest
@@ -319,28 +321,30 @@ function ApproachCard({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-base font-semibold text-foreground">{approach.label}</h3>
+          <div className="flex-1 min-w-0 basis-[min(100%,12rem)]">
+            <h3 className="text-sm sm:text-base font-semibold text-foreground">{approach.label}</h3>
             <p className="text-xs text-text-dim mt-0.5">
               Step-by-step breakdown — read setup, then each step, then final answer.
             </p>
           </div>
-          {isSmartest && (
-            <span className="shrink-0 px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-accent-secondary/15 text-accent-secondary border border-accent-secondary/20">
-              ★ Smartest
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            {isSmartest && (
+              <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-accent-secondary/15 text-accent-secondary border border-accent-secondary/20">
+                ★ Smartest
+              </span>
+            )}
+            <span
+              className={`px-2 py-0.5 text-[10px] font-medium rounded-md border ${
+                approach.status === 'official'
+                  ? 'bg-primary/10 text-primary-light border-primary/20'
+                  : approach.status === 'approved'
+                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                    : 'bg-surface-light text-text-dim border-border'
+              }`}
+            >
+              {approach.status}
             </span>
-          )}
-          <span
-            className={`shrink-0 px-2 py-0.5 text-[10px] font-medium rounded-md border ${
-              approach.status === 'official'
-                ? 'bg-primary/10 text-primary-light border-primary/20'
-                : approach.status === 'approved'
-                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                  : 'bg-surface-light text-text-dim border-border'
-            }`}
-          >
-            {approach.status}
-          </span>
+          </div>
         </div>
 
         {/* Premium structured solution (diagrams + steps) */}

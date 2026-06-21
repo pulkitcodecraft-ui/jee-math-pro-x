@@ -59,7 +59,7 @@ export default async function QuestionPage({ params }: QuestionPageProps) {
     : `Question ${questionIndex + 1}`;
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-xs text-text-dim mb-6 flex-wrap">
         <Link href="/topics" className="hover:text-text-muted transition-colors">
@@ -108,14 +108,14 @@ export default async function QuestionPage({ params }: QuestionPageProps) {
         </div>
 
         {/* Question statement */}
-        <div className="rounded-2xl bg-surface border border-border p-6 space-y-5">
+        <div className="rounded-2xl bg-surface border border-border p-4 sm:p-6 space-y-4 sm:space-y-5">
           {passage && (
             <PassageBlock
               title={passage.title ?? 'Paragraph'}
               passage={passage.passage}
             />
           )}
-          <h1 className="text-lg font-semibold leading-relaxed text-foreground">
+          <h1 className="text-base sm:text-lg font-semibold leading-relaxed text-foreground">
             {question.passageLabel && (
               <span className="text-violet-300 font-bold mr-2">{question.passageLabel}.</span>
             )}

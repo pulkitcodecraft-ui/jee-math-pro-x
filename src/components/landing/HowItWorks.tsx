@@ -47,10 +47,10 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-28 relative">
+    <section id="how-it-works" className="section-padding relative">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[1px] bg-gradient-to-r from-transparent via-accent-secondary/30 to-transparent" />
 
-      <div className="max-w-5xl mx-auto px-6">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-16">
           <Reveal direction="up">
             <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">How It Works</p>

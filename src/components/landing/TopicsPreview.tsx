@@ -21,8 +21,8 @@ const topics = mockTopics.map((t) => ({
 
 export default function TopicsPreview() {
   return (
-    <section id="topics" className="py-28 relative bg-surface/30">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="topics" className="section-padding relative bg-surface/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-16">
           <Reveal direction="up">
             <p className="text-xs font-semibold uppercase tracking-widest text-accent-secondary mb-3">Browse Topics</p>

@@ -129,8 +129,8 @@ export default function SearchBar() {
   return (
     <div className="w-full max-w-2xl mx-auto">
       {/* ── Search input row ── */}
-      <div className="flex items-center gap-3">
-        <div className="relative flex-1">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div className="relative flex-1 min-w-0">
           {/* Search icon */}
           <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-dim">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -149,8 +149,8 @@ export default function SearchBar() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={'Search a topic or type your doubt… e.g. "Probability" or "solve x²-5x+6=0"'}
-            className="w-full pl-12 pr-10 py-4 rounded-2xl bg-surface border border-border
+            placeholder="Search topic or doubt… e.g. Probability"
+            className="w-full pl-11 sm:pl-12 pr-10 py-3.5 sm:py-4 rounded-2xl bg-surface border border-border
                        focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20
                        text-foreground placeholder:text-text-dim text-sm transition-all"
           />
@@ -173,7 +173,7 @@ export default function SearchBar() {
         <button
           onClick={handleSearch}
           disabled={!query.trim() || loading}
-          className="shrink-0 px-6 py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-light
+          className="w-full sm:w-auto shrink-0 px-6 py-3.5 sm:py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-light
                      text-white font-medium text-sm
                      disabled:opacity-50 disabled:cursor-not-allowed
                      hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5
@@ -284,7 +284,7 @@ export default function SearchBar() {
               >
                 {option}
                 <svg
-                  className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="w-3.5 h-3.5 opacity-60 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

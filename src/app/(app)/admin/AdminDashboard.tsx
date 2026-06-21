@@ -70,7 +70,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8">
       {/* Stats bar */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         {[
           { label: 'Pending review', value: pending.length, color: 'text-amber-400' },
           { label: 'Approved today', value: Object.values(done).filter((v) => v === 'approved').length, color: 'text-accent-secondary' },
@@ -160,7 +160,7 @@ function PendingCard({
   return (
     <div className="rounded-2xl bg-surface border border-border overflow-hidden">
       {/* Header */}
-      <div className="flex items-start gap-4 p-5">
+      <div className="flex flex-col sm:flex-row sm:items-start gap-4 p-4 sm:p-5">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <span className="text-sm font-semibold text-foreground">{approach.label}</span>
@@ -176,7 +176,7 @@ function PendingCard({
         </div>
 
         {/* Action buttons */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
           <button
             onClick={onApprove}
             disabled={deciding}

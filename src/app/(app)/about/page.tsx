@@ -12,7 +12,7 @@ export default function AboutPage() {
   const stats = getPlatformStats();
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-14">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-light text-xs font-medium text-primary-light mb-5">
         About the platform
       </div>
@@ -30,7 +30,7 @@ export default function AboutPage() {
         get stuck.
       </p>
 
-      <div className="grid grid-cols-3 gap-4 my-10">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 my-8 sm:my-10">
         {[
           { value: stats.topicCount, label: 'Core topics' },
           { value: stats.subtopicCount, label: 'Subtopics' },
