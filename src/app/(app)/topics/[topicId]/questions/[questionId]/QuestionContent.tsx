@@ -5,7 +5,6 @@ import type { Question } from '@/types/question';
 import type { Approach } from '@/types/approach';
 import SubmitApproach from '@/components/question/SubmitApproach';
 import AIExplainButton from '@/components/AIExplainButton';
-import FigureImage from '@/components/question/FigureImage';
 import OfficialSolution from '@/components/question/OfficialSolution';
 import SolutionText from '@/components/question/SolutionText';
 import { getCommunityApproaches } from '@/lib/firebase/approachService';

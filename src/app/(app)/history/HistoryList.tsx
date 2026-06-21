@@ -14,30 +14,40 @@ export default function HistoryList() {
   const isLoggedIn = isConfigured && !!firebaseUser;
 
   const [items, setItems] = useState<HistoryItem[]>([]);
-  const [status, setStatus] = useState<Status>('loading');
+  const [fetchStatus, setFetchStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const status: Status = authLoading
+    ? 'loading'
+    : !isLoggedIn
+      ? 'ready'
+      : fetchStatus === 'idle'
+        ? 'loading'
+        : fetchStatus;
 
   const load = useCallback(async () => {
     if (!firebaseUser) return;
-    setStatus('loading');
+    setFetchStatus('loading');
     try {
       const data = await getHistory(firebaseUser.uid);
       setItems(data);
-      setStatus('ready');
+      setFetchStatus('ready');
     } catch (err) {
       console.error('[History] load failed:', err);
-      setStatus('error');
+      setFetchStatus('error');
     }
   }, [firebaseUser]);
 
   useEffect(() => {
-    if (authLoading) return;
-    if (isLoggedIn) {
-      load();
-    } else {
-      setStatus('ready');
-    }
-  }, [authLoading, isLoggedIn, load]);
+    if (authLoading || !isLoggedIn || !firebaseUser) return;
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (!cancelled) void load();
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [authLoading, isLoggedIn, firebaseUser, load]);
 
   async function handleDelete(item: HistoryItem) {
     if (!firebaseUser) return;

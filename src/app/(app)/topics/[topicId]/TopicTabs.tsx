@@ -61,7 +61,7 @@ export default function TopicTabs({ topic, questions, passages }: TopicTabsProps
           <QuestionsTab topic={topic} questions={questions} passages={passages} />
         )}
         {activeTab === 'pyq' && <PYQTab topic={topic} />}
-        {activeTab === 'resources' && <ResourcesTab topic={topic} />}
+        {activeTab === 'resources' && <ResourcesTab />}
       </div>
     </div>
   );
@@ -362,7 +362,7 @@ function PYQTab({ topic }: { topic: Topic }) {
 }
 
 // ===== Resources Tab =====
-function ResourcesTab({ topic }: { topic: Topic }) {
+function ResourcesTab() {
   const resources = [
     { type: 'Video Lectures', icon: '🎥', desc: 'Curated video explanations for each subtopic', count: '12 videos' },
     { type: 'Practice Sheets', icon: '📄', desc: 'Downloadable problem sets with solutions', count: '5 sheets' },

@@ -33,12 +33,19 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!loading && (!firebaseUser || !isAdmin)) {
       router.replace('/');
-      return;
     }
-    if (!loading && isAdmin) {
-      fetchPending();
-    }
-  }, [loading, firebaseUser, isAdmin, router, fetchPending]);
+  }, [loading, firebaseUser, isAdmin, router]);
+
+  useEffect(() => {
+    if (loading || !isAdmin) return;
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (!cancelled) void fetchPending();
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [loading, isAdmin, fetchPending]);
 
   async function handleReview(id: string, decision: 'approved' | 'rejected') {
     setActionId(id);

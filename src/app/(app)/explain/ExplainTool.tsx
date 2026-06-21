@@ -100,18 +100,23 @@ export default function ExplainTool({
   const autoSolvedRef = useRef(false);
   const [autoSolvePending, setAutoSolvePending] = useState(false);
 
-  // Sync when navigating to /explain?topic=… with the tool already mounted.
-  useEffect(() => {
+  // Sync props when navigating to /explain?topic=… or ?q=… without remounting.
+  const [prevInitialTopic, setPrevInitialTopic] = useState(initialTopic);
+  if (initialTopic !== prevInitialTopic) {
+    setPrevInitialTopic(initialTopic);
     setActiveTopic(initialTopic);
-  }, [initialTopic]);
+  }
 
-  // Pre-fill the question coming from the homepage smart search.
-  useEffect(() => {
+  const [prevInitialQuestion, setPrevInitialQuestion] = useState(initialQuestion);
+  const [prevAutoSolve, setPrevAutoSolve] = useState(autoSolve);
+  if (initialQuestion !== prevInitialQuestion || autoSolve !== prevAutoSolve) {
+    setPrevInitialQuestion(initialQuestion);
+    setPrevAutoSolve(autoSolve);
     if (initialQuestion && !autoSolvedRef.current) {
       setQuestion(initialQuestion);
       if (autoSolve) setAutoSolvePending(true);
     }
-  }, [initialQuestion, autoSolve]);
+  }
 
   // Once the pre-filled question is in state, auto-run the solve exactly once.
   useEffect(() => {

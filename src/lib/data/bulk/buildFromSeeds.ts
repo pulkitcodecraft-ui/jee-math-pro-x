@@ -159,7 +159,7 @@ export function buildTopicBulk(pack: TopicBulkPack): BuiltTopicBulk {
   const seenApproachIds = new Set<string>();
   const seenPassageIds = new Set<string>();
 
-  pack.questions?.forEach((seed, index) => {
+  pack.questions?.forEach((seed) => {
     pushQuestion(
       seed,
       topicId,

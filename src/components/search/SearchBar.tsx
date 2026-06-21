@@ -328,7 +328,7 @@ export default function SearchBar() {
       {/* ── No-match state (searched but result is empty suggestedOptions) ── */}
       {!loading && hasSearched && result && result.suggestedOptions.length === 0 && (
         <div className="mt-4 p-4 rounded-xl bg-surface border border-border text-sm text-text-muted text-center">
-          No matching topics found. Try a topic name like "Quadratic Equation", "Integration", "Circle", or "Trigonometry".
+          No matching topics found. Try a topic name like &ldquo;Quadratic Equation&rdquo;, &ldquo;Integration&rdquo;, &ldquo;Circle&rdquo;, or &ldquo;Trigonometry&rdquo;.
         </div>
       )}
     </div>

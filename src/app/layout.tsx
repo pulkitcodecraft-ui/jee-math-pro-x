@@ -50,7 +50,6 @@ export default function RootLayout({
             unveiled by an IntersectionObserver. If JS is disabled, force them
             visible so content can never get stuck invisible. */}
         <noscript>
-          {/* eslint-disable-next-line react/no-danger */}
           <style dangerouslySetInnerHTML={{ __html: '.animate-on-load{opacity:1 !important;}' }} />
         </noscript>
       </head>

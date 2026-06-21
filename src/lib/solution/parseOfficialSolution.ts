@@ -66,7 +66,7 @@ function tutorStepsToBlocks(steps: TutorStep[]): SolutionBlock[] {
 function parseNumberedSteps(text: string): SolutionBlock[] {
   const blocks: SolutionBlock[] = [];
   const lines = text.split('\n');
-  let introLines: string[] = [];
+  const introLines: string[] = [];
   let i = 0;
 
   while (i < lines.length && !/^\d+\.\s/.test(lines[i])) {
