@@ -18,7 +18,7 @@ export default function SolutionPanel({ rawResponse }: { rawResponse: string }) 
 
   if (isSingleBlob) {
     return (
-      <div className="rounded-2xl rounded-tl-sm bg-surface-light border border-border px-3.5 py-2.5 text-sm text-text-muted leading-relaxed">
+      <div className="rounded-2xl rounded-tl-sm bg-surface-light border border-border px-3.5 py-2.5 text-sm text-text-muted leading-relaxed max-w-full overflow-x-auto">
         <MathText text={steps[0].body} />
       </div>
     );

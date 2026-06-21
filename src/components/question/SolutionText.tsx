@@ -15,7 +15,7 @@ export default function SolutionText({
   const parts = (text ?? '').split(/(\*\*[^*]+\*\*)/g);
 
   return (
-    <span className={`whitespace-pre-wrap ${className}`}>
+    <span className={`math-content max-w-full whitespace-pre-wrap break-words ${className}`}>
       {parts.map((part, i) => {
         if (part.startsWith('**') && part.endsWith('**')) {
           return (

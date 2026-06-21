@@ -297,7 +297,7 @@ function ApproachCard({
 }) {
   return (
     <div
-      className={`relative rounded-2xl border overflow-hidden transition-all duration-200 ${
+      className={`relative rounded-2xl border transition-all duration-200 ${
         isSmartest
           ? 'border-accent-secondary/25 bg-gradient-to-br from-accent-secondary/[0.06] to-surface'
           : 'bg-surface border-border'

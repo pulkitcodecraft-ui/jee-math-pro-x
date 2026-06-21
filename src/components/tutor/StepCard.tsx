@@ -41,7 +41,7 @@ export default function StepCard({
 
       {/* Card */}
       <div
-        className={`flex-1 mb-2.5 rounded-xl border overflow-hidden transition-colors
+        className={`flex-1 min-w-0 mb-2.5 rounded-xl border transition-colors overflow-x-auto
           ${
             isAnswer
               ? 'border-primary/40 bg-primary/[0.07] shadow-lg shadow-primary/5'

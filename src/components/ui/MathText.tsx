@@ -83,19 +83,25 @@ export default function MathText({
   const segments = useMemo(() => parseSegments(text ?? ''), [text]);
 
   return (
-    <span className={className}>
+    <span className={`math-content max-w-full ${className ?? ''}`}>
       {segments.map((seg, i) => {
         if (seg.type === 'text') {
-          // Preserve line breaks present in plain-text portions.
-          return <span key={i} style={{ whiteSpace: 'pre-wrap' }}>{seg.value}</span>;
+          return (
+            <span key={i} className="whitespace-pre-wrap break-words">
+              {seg.value}
+            </span>
+          );
         }
         const isBlock = seg.type === 'block';
         const html = renderMath(seg.value, isBlock);
         return (
           <span
             key={i}
-            className={isBlock ? 'block my-2 overflow-x-auto' : 'inline'}
-            // KaTeX produces sanitized, self-contained markup (trust: false).
+            className={
+              isBlock
+                ? 'math-scroll block my-2 w-full'
+                : 'math-scroll inline-block max-w-full align-middle'
+            }
             dangerouslySetInnerHTML={{ __html: html }}
           />
         );

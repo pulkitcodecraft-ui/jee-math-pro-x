@@ -23,7 +23,7 @@ export default function SolutionRichContent({
   }
 
   return (
-    <div className={className}>
+    <div className={`max-w-full overflow-x-auto ${className}`}>
       {parts.map((part, i) => {
         if (part.type === 'text' && part.value.trim()) {
           return <SolutionText key={i} text={part.value} className="text-sm leading-relaxed text-text-muted" />;

@@ -30,7 +30,7 @@ export default function OfficialSolution({
     return (
       <div className="space-y-3">
         {diagrams.length > 0 && <SolutionDiagrams images={diagrams} />}
-        <div className="rounded-xl border border-border bg-surface-light/50 p-4 sm:p-5">
+        <div className="rounded-xl border border-border bg-surface-light/50 p-4 sm:p-5 overflow-x-auto">
           <SolutionRichContent text={blocks[0]?.body ?? content} className="text-sm leading-relaxed text-text-muted" />
         </div>
       </div>
@@ -80,7 +80,7 @@ function BlockView({
     case 'intro':
       return (
         <div
-          className="rounded-xl border border-border bg-surface-light/40 px-4 py-3.5 opacity-0 animate-fade-in-up"
+          className="rounded-xl border border-border bg-surface-light/40 px-4 py-3.5 opacity-0 animate-fade-in-up overflow-x-auto"
           style={{ animationDelay: `${index * 60}ms` }}
         >
           <p className="text-[11px] font-semibold uppercase tracking-widest text-text-dim mb-2">
@@ -93,7 +93,7 @@ function BlockView({
     case 'insight':
       return (
         <div
-          className="relative rounded-xl border border-accent-secondary/30 bg-gradient-to-br from-accent-secondary/10 to-teal-500/5 px-4 py-3.5 overflow-hidden opacity-0 animate-fade-in-up"
+          className="relative rounded-xl border border-accent-secondary/30 bg-gradient-to-br from-accent-secondary/10 to-teal-500/5 px-4 py-3.5 opacity-0 animate-fade-in-up overflow-x-auto"
           style={{ animationDelay: `${index * 60}ms` }}
         >
           <div className="pointer-events-none absolute -top-8 -right-8 w-24 h-24 bg-accent-secondary/20 blur-2xl rounded-full" />
@@ -125,7 +125,7 @@ function BlockView({
               <span className="w-px flex-1 my-1 min-h-[12px] bg-gradient-to-b from-border-light to-transparent" />
             </div>
           )}
-          <div className="flex-1 mb-1 rounded-xl border border-border bg-surface-light/60 px-4 py-3.5 hover:border-border-light transition-colors">
+          <div className="flex-1 min-w-0 mb-1 rounded-xl border border-border bg-surface-light/60 px-3 sm:px-4 py-3.5 hover:border-border-light transition-colors overflow-x-auto">
             <div className="text-[13px] font-semibold text-foreground mb-1.5">
               <SolutionText text={block.title} />
             </div>
@@ -140,7 +140,7 @@ function BlockView({
           className="glow-border rounded-xl opacity-0 animate-fade-in-up"
           style={{ animationDelay: `${index * 60}ms` }}
         >
-          <div className="rounded-xl bg-gradient-to-br from-primary/15 to-accent/10 border border-primary/25 px-4 py-4">
+          <div className="rounded-xl bg-gradient-to-br from-primary/15 to-accent/10 border border-primary/25 px-4 py-4 overflow-x-auto">
             <div className="flex items-center gap-2 mb-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-light text-white shadow-md shadow-primary/30">
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
@@ -158,7 +158,7 @@ function BlockView({
     default:
       return (
         <div
-          className="rounded-xl border border-border bg-surface-light/50 px-4 py-3.5 opacity-0 animate-fade-in-up"
+          className="rounded-xl border border-border bg-surface-light/50 px-4 py-3.5 opacity-0 animate-fade-in-up overflow-x-auto"
           style={{ animationDelay: `${index * 60}ms` }}
         >
           <SolutionRichContent text={block.body} className="text-sm leading-relaxed text-text-muted" />

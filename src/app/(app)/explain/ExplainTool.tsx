@@ -549,7 +549,7 @@ export default function ExplainTool({
 
         {/* Result */}
         {!loading && result && method && (
-          <div className="rounded-2xl glass border border-primary/20 p-6 animate-fade-in-up">
+          <div className="rounded-2xl glass border border-primary/20 p-4 sm:p-6 animate-fade-in-up overflow-x-auto">
             {/* Topic + difficulty + actions */}
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-5">
               <div className="flex flex-wrap items-center gap-2">
@@ -640,7 +640,7 @@ export default function ExplainTool({
                   <div className="shrink-0 w-8 h-8 rounded-lg bg-primary/15 border border-primary/20 flex items-center justify-center">
                     <span className="text-xs font-bold text-primary-light">{step.step_number}</span>
                   </div>
-                  <div className="flex-1 pb-1 min-w-0">
+                  <div className="flex-1 pb-1 min-w-0 overflow-x-auto">
                     <h3 className="text-sm font-semibold text-foreground mb-1">{step.title}</h3>
                     <div className="text-sm text-text-muted leading-relaxed">
                       <MathText text={step.explanation} />
